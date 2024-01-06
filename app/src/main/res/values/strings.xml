@@ -1,0 +1,45 @@
+<resources>
+    <string name="appName">OdinTools</string>
+    <string name="xbox">Xbox</string>
+    <string name="odin">Odin</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="controllerStyle">Controller Style</string>
+    <string name="unknown">Unknown</string>
+    <string name="l2r2mode">L2/R2 Mode</string>
+    <string name="analog">Analog</string>
+    <string name="digitial">Digital</string>
+    <string name="both">Both</string>
+    <string name="topBarVersions">Device version:\nApp version:</string>
+
+    <string name="quickstettings">Quick Settings</string>
+    <string name="controllerStyleDesc">Select which modes to cycle through in the Controller Style quick settings tile</string>
+    <string name="l2r2modeDesc">Select which modes to cycle through in the L2/R2 Mode quick settings tile</string>
+
+    <string name="buttons">Buttons</string>
+    <string name="doubleHomeTitle">Single press home button</string>
+    <string name="doubleHomeDescription">When enabled allows using the home button with a single press instead of a double press</string>
+
+    <string name="warning">Warning</string>
+    <string name="incompatibleDevice">This app was made for the Ayn Odin 2. Running it on an incompatible device may cause damage. The author of this app takes no responsibility for any damage caused!</string>
+    <string name="pServerNotAvailable">The app can\'t access your device settings. This might be caused by a change of functionality in a recent firmware update. If possible this will be fixed in an update. For now, the app can\'t be used. Sorry!</string>
+    <string name="accept">Accept</string>
+    <string name="close">Close app</string>
+    <string name="closeButSad">Close app 😢</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+
+    <string name="saturation">Display saturation</string>
+    <string name="display">Display</string>
+    <string name="saturationDescription">Change the saturation of the display. Will be re-applied on reboot. Default value is 1.0.</string>
+
+    <string name="a11yDescription">Used by OdinTools to detect running apps for dynamic switching of button settings</string>
+
+    <string name="appOverrides">App overrides</string>
+    <string name="appOverridesDescription">Set up overrides per app. Switch off to globally disable app overrides.</string>
+    <string name="addOverride">Add app override</string>
+    <string name="deleteOverride">Delete override</string>
+    <string name="deleteConfirm">Do you really want to delete this item?</string>
+    <string name="noChange">No change</string>
+    <string name="noOverrideCandidates">You already added overrides for all your apps</string>
+</resources>

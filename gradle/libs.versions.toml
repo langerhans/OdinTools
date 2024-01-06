@@ -1,0 +1,92 @@
+[versions]
+androidx-activity = "1.8.2"
+androidx-annotation-annotation-jvm = "1.7.1"
+androidx-compose-bom = "2024.01.00"
+androidx-hilt = "1.1.0"
+androidx-lifecycle = "2.7.0"
+androidx-navigation = "2.7.6"
+androidx-room = "2.6.1"
+androidx-test-espresso-espresso-core = "3.5.1"
+androidx-test-ext-junit = "1.1.5"
+com-android-application = "8.2.2"
+com-github-ben-manes-versions = "0.51.0"
+com-google-accompanist-accompanist-drawablepainter = "0.34.0"
+com-google-dagger = "2.50"
+com-google-dagger-hilt-android = "2.50"
+com-google-devtools-ksp = "1.9.22-1.0.17"
+junit = "4.13.2"
+nl-littlerobots-version-catalog-update = "0.8.4"
+org-jetbrains-kotlin-android = "1.9.22"
+
+[libraries]
+androidx-activity-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-annotation-annotation-jvm = { module = "androidx.annotation:annotation-jvm", version.ref = "androidx-annotation-annotation-jvm" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-material3-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-ui-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-compose-ui-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-compose-ui-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-hilt-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidx-hilt" }
+androidx-lifecycle-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-navigation-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+androidx-room-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+androidx-room-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
+androidx-room-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
+androidx-test-espresso-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso-espresso-core" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+com-google-accompanist-accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "com-google-accompanist-accompanist-drawablepainter" }
+com-google-dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "com-google-dagger" }
+com-google-dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "com-google-dagger" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+[plugins]
+androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
+com-android-application = { id = "com.android.application", version.ref = "com-android-application" }
+com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "com-github-ben-manes-versions" }
+com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger-hilt-android" }
+com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
+nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-update" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+
+[bundles]
+app = [
+    "androidx-activity-activity-compose",
+    "androidx-annotation-annotation-jvm",
+    "androidx-compose-material3-material3",
+    "androidx-compose-ui-ui",
+    "androidx-compose-ui-ui-graphics",
+    "androidx-compose-ui-ui-tooling-preview",
+    "androidx-hilt-hilt-navigation-compose",
+    "androidx-lifecycle-lifecycle-runtime-ktx",
+    "androidx-lifecycle-lifecycle-viewmodel-compose",
+    "androidx-lifecycle-lifecycle-viewmodel-ktx",
+    "androidx-navigation-navigation-compose",
+    "androidx-room-room-ktx",
+    "androidx-room-room-runtime",
+    "com-google-accompanist-accompanist-drawablepainter",
+    "com-google-dagger-hilt-android",
+]
+appAndroidTest = [
+    "androidx-compose-ui-ui-test-junit4",
+    "androidx-test-espresso-espresso-core",
+    "androidx-test-ext-junit",
+]
+appAnnotationProcessor = [
+    "androidx-room-room-compiler",
+]
+appDebug = [
+    "androidx-compose-ui-ui-test-manifest",
+    "androidx-compose-ui-ui-tooling",
+]
+appKsp = [
+    "androidx-room-room-compiler",
+    "com-google-dagger-hilt-android-compiler",
+]
+appUnitTest = [
+    "junit",
+]
