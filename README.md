@@ -1,6 +1,8 @@
 # OdinTools
 Collection of utilities for the AYN Odin 2. This is a release repo as the app is currently closed source until I clean it up a bit more :)
 
+![image](https://github.com/langerhans/OdinTools/assets/5160000/6e9c5c3b-b1b3-42fa-a4ab-3b2abdebc893)
+
 ### Features
 - Quick settings tile for switching the controller style with user selectable option for which styles to cycle through
 - Quick settings tile for switching the L2/R2 style with user selectable option for which styles to cycle through
