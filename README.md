@@ -1,8 +1,7 @@
 # OdinTools
 Collection of utilities for the AYN Odin 2. This is a release repo as the app is currently closed source until I clean it up a bit more :)
 
-Latest release:  
-![0.2.1](https://img.shields.io/github/v/release/langerhans/OdinTools)
+Latest release: **0.2.1**
 
 ### Features
 - Quick settings tile for switching the controller style with user selectable option for which styles to cycle through
