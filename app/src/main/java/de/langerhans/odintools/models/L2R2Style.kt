@@ -11,7 +11,7 @@ sealed class L2R2Style(
     @StringRes val textRes: Int
 ) {
     data object Analog : L2R2Style("analog", 0, R.string.analog)
-    data object Digital : L2R2Style("digital", 1, R.string.digitial)
+    data object Digital : L2R2Style("digital", 1, R.string.digital)
     data object Both : L2R2Style("both", 2, R.string.both)
     data object Unknown : L2R2Style("unknown", -1, R.string.unknown)
 

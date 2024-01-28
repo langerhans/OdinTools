@@ -7,6 +7,7 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle.*
 import de.langerhans.odintools.models.L2R2Style.*
+import de.langerhans.odintools.models.FanModes.*
 import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,10 @@ class MainViewModel @Inject constructor(
     private var _l2r2StyleOptions = getCurrentL2r2Styles().toMutableStateList()
     val l2r2StyleOptions: List<CheckboxPreferenceUiModel>
         get() = _l2r2StyleOptions
+
+    private var _fanModesOptions = getCurrentFanModes().toMutableStateList()
+    val fanModesOptions: List<CheckboxPreferenceUiModel>
+        get() = _fanModesOptions
 
     init {
         executor.enableA11yService()
@@ -108,13 +113,38 @@ class MainViewModel @Inject constructor(
         val disabled = prefs.disabledL2r2Style
         return listOf(
             CheckboxPreferenceUiModel(Analog.id, R.string.analog, disabled != Analog.id),
-            CheckboxPreferenceUiModel(Digital.id, R.string.digitial, disabled != Digital.id),
+            CheckboxPreferenceUiModel(Digital.id, R.string.digital, disabled != Digital.id),
             CheckboxPreferenceUiModel(Both.id, R.string.both, disabled != Both.id)
         )
     }
 
     fun updateL2r2Styles(models: List<CheckboxPreferenceUiModel>) {
         prefs.disabledL2r2Style = models.find { it.checked.not() }?.key
+    }
+    fun showFanModesPreference() {
+        _fanModesOptions = getCurrentFanModes().toMutableStateList()
+        _uiState.update { current ->
+            current.copy(showFanModesDialog = true)
+        }
+    }
+
+    fun hideFanModesPreference() {
+        _uiState.update { current ->
+            current.copy(showFanModesDialog = false)
+        }
+    }
+
+    private fun getCurrentFanModes(): List<CheckboxPreferenceUiModel> {
+        val disabled = prefs.disabledFanModes
+        return listOf(
+            CheckboxPreferenceUiModel(Quiet.id, R.string.quiet, disabled != Quiet.id),
+            CheckboxPreferenceUiModel(Smart.id, R.string.smart, disabled != Smart.id),
+            CheckboxPreferenceUiModel(Sport.id, R.string.sport, disabled != Sport.id)
+        )
+    }
+
+    fun updateFanModes(models: List<CheckboxPreferenceUiModel>) {
+        prefs.disabledFanModes = models.find { it.checked.not() }?.key
     }
 
     fun saturationClicked() {

@@ -8,6 +8,8 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.data.AppOverrideEntity
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.L2R2Style
+import de.langerhans.odintools.models.FanModes
+import de.langerhans.odintools.models.PerfModes
 import javax.inject.Inject
 
 class AppOverrideMapper @Inject constructor(
@@ -42,13 +44,18 @@ class AppOverrideMapper @Inject constructor(
 
         val controllerStyle = ControllerStyle.getById(app.controllerStyle)
         val l2R2Style = L2R2Style.getById(app.l2R2Style)
+        val perfModes = PerfModes.getById(app.perfModes)
+        val fanModes = FanModes.getById(app.fanModes)
+
         return AppUiModel(
             packageName = app.packageName,
             appName = context.packageManager.getApplicationLabel(appInfo).toString(),
             appIcon = context.packageManager.getApplicationIcon(appInfo),
-            subtitle = getSubtitle(controllerStyle, l2R2Style),
+            subtitle = getSubtitle(controllerStyle, l2R2Style, perfModes, fanModes),
             controllerStyle = controllerStyle,
-            l2r2Style = l2R2Style
+            l2r2Style = l2R2Style,
+            perfModes = perfModes,
+            fanModes = fanModes
         )
     }
 
@@ -65,7 +72,7 @@ class AppOverrideMapper @Inject constructor(
         )
     }
 
-    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style): String? {
+    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfModes: PerfModes, fanModes: FanModes): String? {
         return buildString {
             if (controllerStyle != ControllerStyle.Unknown) {
                 append(context.getString(R.string.controllerStyle))
@@ -77,6 +84,18 @@ class AppOverrideMapper @Inject constructor(
                 append(context.getString(R.string.l2r2mode))
                 append(": ")
                 append(context.getString(l2R2Style.textRes))
+                append(" | ")
+            }
+            if (perfModes != PerfModes.Unknown) {
+                append(context.getString(R.string.perfModes))
+                append(": ")
+                append(context.getString(perfModes.textRes))
+                append(" | ")
+            }
+            if (fanModes != FanModes.Unknown) {
+                append(context.getString(R.string.fanModes))
+                append(": ")
+                append(context.getString(fanModes.textRes))
                 append(" | ")
             }
         }.trimEnd(' ', '|').ifEmpty { null }

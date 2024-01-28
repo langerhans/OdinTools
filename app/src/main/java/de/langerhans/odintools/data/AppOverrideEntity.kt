@@ -8,5 +8,7 @@ data class AppOverrideEntity(
     @PrimaryKey
     val packageName: String,
     val controllerStyle: String?,
-    val l2R2Style: String?
+    val l2R2Style: String?,
+    val perfModes: String?,
+    val fanModes: String?
 )

@@ -15,6 +15,8 @@ import de.langerhans.odintools.data.AppOverrideDao
 import de.langerhans.odintools.data.AppOverrideEntity
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.L2R2Style
+import de.langerhans.odintools.models.PerfModes
+import de.langerhans.odintools.models.FanModes
 import de.langerhans.odintools.models.NoChange
 import de.langerhans.odintools.tools.DeviceUtils
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +42,9 @@ class AppOverridesViewModel @Inject constructor(
     private val packageName = checkNotNull(savedStateHandle.get<String>("packageName"))
     private var initialControllerStyle = NoChange.KEY
     private var initialL2R2Style = NoChange.KEY
+    private var initialPerfModes = NoChange.KEY
+    private var initialfanModes = NoChange.KEY
+
 
     init {
         viewModelScope.launch {
@@ -52,6 +57,8 @@ class AppOverridesViewModel @Inject constructor(
             } else {
                 initialControllerStyle = app.controllerStyle ?: NoChange.KEY
                 initialL2R2Style = app.l2R2Style ?: NoChange.KEY
+                initialfanModes = app.fanModes ?: NoChange.KEY
+
 
                 appOverrideMapper.mapAppOverride(app)
             }
@@ -68,7 +75,9 @@ class AppOverridesViewModel @Inject constructor(
                 appOverrideDao.save(AppOverrideEntity(
                     packageName = packageName,
                     controllerStyle = _uiState.value.app?.controllerStyle?.id,
-                    l2R2Style = _uiState.value.app?.l2r2Style?.id
+                    l2R2Style = _uiState.value.app?.l2r2Style?.id,
+                    perfModes = _uiState.value.app?.perfModes?.id,
+                    fanModes = _uiState.value.app?.fanModes?.id
                 ))
             }
         }
@@ -118,9 +127,28 @@ class AppOverridesViewModel @Inject constructor(
         }
     }
 
+    fun perfModesSelected(key: String) {
+        _uiState.update {
+            it.copy(
+                app = it.app?.copy(perfModes = PerfModes.getById(key)),
+                hasUnsavedChanges = hasUnsavedChanges(perfModes = key)
+            )
+        }
+    }
+    fun fanModesSelected(key: String) {
+        _uiState.update {
+            it.copy(
+                app = it.app?.copy(fanModes = FanModes.getById(key)),
+                hasUnsavedChanges = hasUnsavedChanges(fanModes = key)
+            )
+        }
+    }
+
     private fun hasUnsavedChanges(
         controllerStyle: String? = null,
-        l2R2Style: String? = null
+        l2R2Style: String? = null,
+        perfModes: String? = null,
+        fanModes: String? = null
     ): Boolean {
         // Cascade through all possibly changed options. One should hit. If none hit the dev was an idiot.
         controllerStyle?.let {
@@ -128,6 +156,12 @@ class AppOverridesViewModel @Inject constructor(
         }
         l2R2Style?.let {
             return it != initialL2R2Style
+        }
+        perfModes?.let {
+            return it != initialPerfModes
+        }
+        fanModes?.let {
+            return it != initialfanModes
         }
 
         return false
