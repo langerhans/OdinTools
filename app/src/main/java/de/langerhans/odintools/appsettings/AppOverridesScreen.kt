@@ -155,6 +155,7 @@ fun AppOverridesScreen(
                     label = R.string.fanModes,
                     spinnerItems = listOf(
                         NoChange.KEY to stringResource(id = NoChange.textRes),
+                        Off.id to stringResource(id = Off.textRes),
                         Quiet.id to stringResource(id = Quiet.textRes),
                         Smart.id to stringResource(id = Smart.textRes),
                         Sport.id to stringResource(id = Sport.textRes),

@@ -34,10 +34,6 @@ class MainViewModel @Inject constructor(
     val l2r2StyleOptions: List<CheckboxPreferenceUiModel>
         get() = _l2r2StyleOptions
 
-    private var _fanModesOptions = getCurrentFanModes().toMutableStateList()
-    val fanModesOptions: List<CheckboxPreferenceUiModel>
-        get() = _fanModesOptions
-
     init {
         executor.enableA11yService()
         executor.grantAllAppsPermission()
@@ -121,7 +117,7 @@ class MainViewModel @Inject constructor(
     fun updateL2r2Styles(models: List<CheckboxPreferenceUiModel>) {
         prefs.disabledL2r2Style = models.find { it.checked.not() }?.key
     }
-    
+
 
     fun saturationClicked() {
         _uiState.update {
