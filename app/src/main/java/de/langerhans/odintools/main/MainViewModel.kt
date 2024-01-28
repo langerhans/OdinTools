@@ -121,31 +121,7 @@ class MainViewModel @Inject constructor(
     fun updateL2r2Styles(models: List<CheckboxPreferenceUiModel>) {
         prefs.disabledL2r2Style = models.find { it.checked.not() }?.key
     }
-    fun showFanModesPreference() {
-        _fanModesOptions = getCurrentFanModes().toMutableStateList()
-        _uiState.update { current ->
-            current.copy(showFanModesDialog = true)
-        }
-    }
-
-    fun hideFanModesPreference() {
-        _uiState.update { current ->
-            current.copy(showFanModesDialog = false)
-        }
-    }
-
-    private fun getCurrentFanModes(): List<CheckboxPreferenceUiModel> {
-        val disabled = prefs.disabledFanModes
-        return listOf(
-            CheckboxPreferenceUiModel(Quiet.id, R.string.quiet, disabled != Quiet.id),
-            CheckboxPreferenceUiModel(Smart.id, R.string.smart, disabled != Smart.id),
-            CheckboxPreferenceUiModel(Sport.id, R.string.sport, disabled != Sport.id)
-        )
-    }
-
-    fun updateFanModes(models: List<CheckboxPreferenceUiModel>) {
-        prefs.disabledFanModes = models.find { it.checked.not() }?.key
-    }
+    
 
     fun saturationClicked() {
         _uiState.update {

@@ -57,6 +57,7 @@ class AppOverridesViewModel @Inject constructor(
             } else {
                 initialControllerStyle = app.controllerStyle ?: NoChange.KEY
                 initialL2R2Style = app.l2R2Style ?: NoChange.KEY
+                initialPerfModes = app.perfModes ?: NoChange.KEY
                 initialfanModes = app.fanModes ?: NoChange.KEY
 
 

@@ -86,15 +86,6 @@ fun SettingsScreen(
         }
     }
 
-    if (uiState.showFanModesDialog) {
-        CheckBoxDialogPreference(items = viewModel.fanModesOptions, onCancel = {
-            viewModel.hideFanModesPreference()
-        }) {
-            viewModel.updateFanModes(it)
-            viewModel.hideFanModesPreference()
-        }
-    }
-
     if (uiState.showSaturationDialog) {
         SaturationPreferenceDialog(
             initialValue = uiState.currentSaturation,
