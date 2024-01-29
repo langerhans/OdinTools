@@ -12,6 +12,8 @@ import de.langerhans.odintools.data.AppOverrideEntity
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.ControllerStyle.Unknown
+import de.langerhans.odintools.models.FanMode
+import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +45,9 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
     private var hasSetOverride = false
     private var savedControllerStyle: ControllerStyle? = null
     private var savedL2R2Style: L2R2Style? = null
+    private var savedPerfMode: PerfMode? = null
+    private var savedFanMode: FanMode? = null
+
 
     private var currentIme = ""
     private val imeObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
@@ -80,6 +85,9 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         if (!hasSetOverride) {
             savedControllerStyle = ControllerStyle.getStyle(shellExecutor)
             savedL2R2Style = L2R2Style.getStyle(shellExecutor)
+            savedPerfMode = PerfMode.getStyle(shellExecutor)
+            savedFanMode = FanMode.getStyle(shellExecutor)
+
         }
 
         ControllerStyle.getById(override.controllerStyle).takeIf {
@@ -96,6 +104,20 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             savedL2R2Style?.enable(shellExecutor)
         }
 
+        PerfMode.getById(override.perfMode).takeIf {
+            it != PerfMode.Unknown
+        }?.enable(shellExecutor) ?: run {
+            // Reset to default if we switch between override and NoChange app
+            savedPerfMode?.enable(shellExecutor)
+        }
+
+        FanMode.getById(override.fanMode).takeIf {
+            it != FanMode.Unknown
+        }?.enable(shellExecutor) ?: run {
+            // Reset to default if we switch between override and NoChange app
+            savedFanMode?.enable(shellExecutor)
+        }
+
         hasSetOverride = true
     }
 
@@ -107,6 +129,12 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
 
         savedL2R2Style?.enable(shellExecutor)
         savedL2R2Style = null
+
+        savedPerfMode?.enable(shellExecutor)
+        savedPerfMode = null
+
+        savedFanMode?.enable(shellExecutor)
+        savedFanMode = null
 
         hasSetOverride = false
     }

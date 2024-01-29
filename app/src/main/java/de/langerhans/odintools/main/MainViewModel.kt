@@ -108,7 +108,7 @@ class MainViewModel @Inject constructor(
         val disabled = prefs.disabledL2r2Style
         return listOf(
             CheckboxPreferenceUiModel(Analog.id, R.string.analog, disabled != Analog.id),
-            CheckboxPreferenceUiModel(Digital.id, R.string.digitial, disabled != Digital.id),
+            CheckboxPreferenceUiModel(Digital.id, R.string.digital, disabled != Digital.id),
             CheckboxPreferenceUiModel(Both.id, R.string.both, disabled != Both.id)
         )
     }
@@ -116,6 +116,7 @@ class MainViewModel @Inject constructor(
     fun updateL2r2Styles(models: List<CheckboxPreferenceUiModel>) {
         prefs.disabledL2r2Style = models.find { it.checked.not() }?.key
     }
+
 
     fun saturationClicked() {
         _uiState.update {

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b70c67b243e7ce05a249a9113faa20ea",
+    "identityHash": "19a7643ef6d27caf86e8962ba1e93370",
     "entities": [
       {
         "tableName": "appoverride",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `controllerStyle` TEXT, `l2R2Style` TEXT, PRIMARY KEY(`packageName`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `controllerStyle` TEXT, `l2R2Style` TEXT, `perfMode` TEXT, `fanMode` TEXT, PRIMARY KEY(`packageName`))",
         "fields": [
           {
             "fieldPath": "packageName",
@@ -25,6 +25,18 @@
             "columnName": "l2R2Style",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "perfMode",
+            "columnName": "perfMode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fanMode",
+            "columnName": "fanMode",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -40,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b70c67b243e7ce05a249a9113faa20ea')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '19a7643ef6d27caf86e8962ba1e93370')"
     ]
   }
 }
