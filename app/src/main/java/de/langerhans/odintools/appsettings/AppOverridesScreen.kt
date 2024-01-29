@@ -147,7 +147,7 @@ fun AppOverridesScreen(
                         HighPerformance.id to stringResource(id = HighPerformance.textRes),
                     ),
                     initialSelection = uiState.app?.perfMode?.id ?: NoChange.KEY,
-                    onSelectionChanged = { viewModel.perfModesSelected(it) },
+                    onSelectionChanged = { viewModel.perfModeSelected(it) },
                     modifier = Modifier.padding(bottom = 16.dp)
 
                 )
@@ -161,7 +161,7 @@ fun AppOverridesScreen(
                         Sport.id to stringResource(id = Sport.textRes),
                     ),
                     initialSelection = uiState.app?.fanMode?.id ?: NoChange.KEY,
-                    onSelectionChanged = { viewModel.fanModesSelected(it) },
+                    onSelectionChanged = { viewModel.fanModeSelected(it) },
                 )
             }
         }

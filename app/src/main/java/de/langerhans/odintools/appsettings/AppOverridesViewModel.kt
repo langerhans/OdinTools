@@ -128,7 +128,7 @@ class AppOverridesViewModel @Inject constructor(
         }
     }
 
-    fun perfModesSelected(key: String) {
+    fun perfModeSelected(key: String) {
         _uiState.update {
             it.copy(
                 app = it.app?.copy(perfMode = PerfMode.getById(key)),
@@ -136,7 +136,7 @@ class AppOverridesViewModel @Inject constructor(
             )
         }
     }
-    fun fanModesSelected(key: String) {
+    fun fanModeSelected(key: String) {
         _uiState.update {
             it.copy(
                 app = it.app?.copy(fanMode = FanMode.getById(key)),
