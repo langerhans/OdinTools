@@ -12,8 +12,8 @@ import de.langerhans.odintools.data.AppOverrideEntity
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.ControllerStyle.Unknown
-import de.langerhans.odintools.models.FanModes
-import de.langerhans.odintools.models.PerfModes
+import de.langerhans.odintools.models.FanMode
+import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.CoroutineScope
@@ -45,8 +45,8 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
     private var hasSetOverride = false
     private var savedControllerStyle: ControllerStyle? = null
     private var savedL2R2Style: L2R2Style? = null
-    private var savedPerfModes: PerfModes? = null
-    private var savedFanModes: FanModes? = null
+    private var savedPerfMode: PerfMode? = null
+    private var savedFanMode: FanMode? = null
 
 
     private var currentIme = ""
@@ -85,8 +85,8 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         if (!hasSetOverride) {
             savedControllerStyle = ControllerStyle.getStyle(shellExecutor)
             savedL2R2Style = L2R2Style.getStyle(shellExecutor)
-            savedPerfModes = PerfModes.getStyle(shellExecutor)
-            savedFanModes = FanModes.getStyle(shellExecutor)
+            savedPerfMode = PerfMode.getStyle(shellExecutor)
+            savedFanMode = FanMode.getStyle(shellExecutor)
 
         }
 
@@ -104,18 +104,18 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             savedL2R2Style?.enable(shellExecutor)
         }
 
-        PerfModes.getById(override.perfModes).takeIf {
-            it != PerfModes.Unknown
+        PerfMode.getById(override.perfMode).takeIf {
+            it != PerfMode.Unknown
         }?.enable(shellExecutor) ?: run {
             // Reset to default if we switch between override and NoChange app
-            savedPerfModes?.enable(shellExecutor)
+            savedPerfMode?.enable(shellExecutor)
         }
 
-        FanModes.getById(override.fanModes).takeIf {
-            it != FanModes.Unknown
+        FanMode.getById(override.fanMode).takeIf {
+            it != FanMode.Unknown
         }?.enable(shellExecutor) ?: run {
             // Reset to default if we switch between override and NoChange app
-            savedFanModes?.enable(shellExecutor)
+            savedFanMode?.enable(shellExecutor)
         }
 
         hasSetOverride = true
@@ -130,11 +130,11 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         savedL2R2Style?.enable(shellExecutor)
         savedL2R2Style = null
 
-        savedPerfModes?.enable(shellExecutor)
-        savedPerfModes = null
+        savedPerfMode?.enable(shellExecutor)
+        savedPerfMode = null
 
-        savedFanModes?.enable(shellExecutor)
-        savedFanModes = null
+        savedFanMode?.enable(shellExecutor)
+        savedFanMode = null
 
         hasSetOverride = false
     }

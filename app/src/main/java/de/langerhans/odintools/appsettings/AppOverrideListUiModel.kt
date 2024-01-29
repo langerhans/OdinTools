@@ -3,8 +3,8 @@ package de.langerhans.odintools.appsettings
 import android.graphics.drawable.Drawable
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.L2R2Style
-import de.langerhans.odintools.models.FanModes
-import de.langerhans.odintools.models.PerfModes
+import de.langerhans.odintools.models.FanMode
+import de.langerhans.odintools.models.PerfMode
 
 data class AppOverrideListUiModel(
     val deviceVersion: String = "",
@@ -30,7 +30,7 @@ data class AppUiModel(
     val subtitle: String? = null,
     val controllerStyle: ControllerStyle? = null,
     val l2r2Style: L2R2Style? = null,
-    val fanModes: FanModes? = null,
-    val perfModes: PerfModes? = null
+    val fanMode: FanMode? = null,
+    val perfMode: PerfMode? = null
 
 )

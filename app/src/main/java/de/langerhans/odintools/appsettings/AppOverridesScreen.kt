@@ -15,8 +15,8 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.langerhans.odintools.R
 import de.langerhans.odintools.models.ControllerStyle.*
 import de.langerhans.odintools.models.L2R2Style.*
-import de.langerhans.odintools.models.PerfModes.*
-import de.langerhans.odintools.models.FanModes.*
+import de.langerhans.odintools.models.PerfMode.*
+import de.langerhans.odintools.models.FanMode.*
 import de.langerhans.odintools.models.NoChange
 import de.langerhans.odintools.ui.composables.DeleteConfirmDialog
 import de.langerhans.odintools.ui.composables.LargeDropdownMenu
@@ -139,20 +139,20 @@ fun AppOverridesScreen(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 OverrideSpinnerRow(
-                    label = R.string.perfModes,
+                    label = R.string.perfMode,
                     spinnerItems = listOf(
                         NoChange.KEY to stringResource(id = NoChange.textRes),
                         Standard.id to stringResource(id = Standard.textRes),
                         Performance.id to stringResource(id = Performance.textRes),
                         HighPerformance.id to stringResource(id = HighPerformance.textRes),
                     ),
-                    initialSelection = uiState.app?.perfModes?.id ?: NoChange.KEY,
+                    initialSelection = uiState.app?.perfMode?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.perfModesSelected(it) },
                     modifier = Modifier.padding(bottom = 16.dp)
 
                 )
                 OverrideSpinnerRow(
-                    label = R.string.fanModes,
+                    label = R.string.fanMode,
                     spinnerItems = listOf(
                         NoChange.KEY to stringResource(id = NoChange.textRes),
                         Off.id to stringResource(id = Off.textRes),
@@ -160,7 +160,7 @@ fun AppOverridesScreen(
                         Smart.id to stringResource(id = Smart.textRes),
                         Sport.id to stringResource(id = Sport.textRes),
                     ),
-                    initialSelection = uiState.app?.fanModes?.id ?: NoChange.KEY,
+                    initialSelection = uiState.app?.fanMode?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.fanModesSelected(it) },
                 )
             }

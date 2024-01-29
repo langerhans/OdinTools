@@ -6,7 +6,7 @@
     "entities": [
       {
         "tableName": "appoverride",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `controllerStyle` TEXT, `l2R2Style` TEXT, `perfModes` TEXT, `fanModes` TEXT, PRIMARY KEY(`packageName`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `controllerStyle` TEXT, `l2R2Style` TEXT, `perfMode` TEXT, `fanMode` TEXT, PRIMARY KEY(`packageName`))",
         "fields": [
           {
             "fieldPath": "packageName",
@@ -27,14 +27,14 @@
             "notNull": false
           },
           {
-            "fieldPath": "perfModes",
-            "columnName": "perfModes",
+            "fieldPath": "perfMode",
+            "columnName": "perfMode",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "fanModes",
-            "columnName": "fanModes",
+            "fieldPath": "fanMode",
+            "columnName": "fanMode",
             "affinity": "TEXT",
             "notNull": false
           }

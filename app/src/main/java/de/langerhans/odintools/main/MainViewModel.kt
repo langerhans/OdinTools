@@ -7,7 +7,6 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle.*
 import de.langerhans.odintools.models.L2R2Style.*
-import de.langerhans.odintools.models.FanModes.*
 import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.flow.MutableStateFlow

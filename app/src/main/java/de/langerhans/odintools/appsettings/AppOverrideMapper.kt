@@ -8,8 +8,8 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.data.AppOverrideEntity
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.L2R2Style
-import de.langerhans.odintools.models.FanModes
-import de.langerhans.odintools.models.PerfModes
+import de.langerhans.odintools.models.FanMode
+import de.langerhans.odintools.models.PerfMode
 import javax.inject.Inject
 
 class AppOverrideMapper @Inject constructor(
@@ -44,18 +44,18 @@ class AppOverrideMapper @Inject constructor(
 
         val controllerStyle = ControllerStyle.getById(app.controllerStyle)
         val l2R2Style = L2R2Style.getById(app.l2R2Style)
-        val perfModes = PerfModes.getById(app.perfModes)
-        val fanModes = FanModes.getById(app.fanModes)
+        val perfMode = PerfMode.getById(app.perfMode)
+        val fanMode = FanMode.getById(app.fanMode)
 
         return AppUiModel(
             packageName = app.packageName,
             appName = context.packageManager.getApplicationLabel(appInfo).toString(),
             appIcon = context.packageManager.getApplicationIcon(appInfo),
-            subtitle = getSubtitle(controllerStyle, l2R2Style, perfModes, fanModes),
+            subtitle = getSubtitle(controllerStyle, l2R2Style, perfMode, fanMode),
             controllerStyle = controllerStyle,
             l2r2Style = l2R2Style,
-            perfModes = perfModes,
-            fanModes = fanModes
+            perfMode = perfMode,
+            fanMode = fanMode
         )
     }
 
@@ -72,7 +72,7 @@ class AppOverrideMapper @Inject constructor(
         )
     }
 
-    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfModes: PerfModes, fanModes: FanModes): String? {
+    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfMode: PerfMode, fanMode: FanMode): String? {
         return buildString {
             if (controllerStyle != ControllerStyle.Unknown) {
                 append(context.getString(R.string.controllerStyle))
@@ -86,16 +86,16 @@ class AppOverrideMapper @Inject constructor(
                 append(context.getString(l2R2Style.textRes))
                 append(" | ")
             }
-            if (perfModes != PerfModes.Unknown) {
-                append(context.getString(R.string.perfModes))
+            if (perfMode != PerfMode.Unknown) {
+                append(context.getString(R.string.perfMode))
                 append(": ")
-                append(context.getString(perfModes.textRes))
+                append(context.getString(perfMode.textRes))
                 append(" | ")
             }
-            if (fanModes != FanModes.Unknown) {
-                append(context.getString(R.string.fanModes))
+            if (fanMode != FanMode.Unknown) {
+                append(context.getString(R.string.fanMode))
                 append(": ")
-                append(context.getString(fanModes.textRes))
+                append(context.getString(fanMode.textRes))
                 append(" | ")
             }
         }.trimEnd(' ', '|').ifEmpty { null }
