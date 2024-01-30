@@ -159,7 +159,7 @@ fun AppOverridesScreen(
                         Quiet.id to stringResource(id = Quiet.textRes),
                         Smart.id to stringResource(id = Smart.textRes),
                         Sport.id to stringResource(id = Sport.textRes),
-                    ),
+                    ).filterNot { it.first in uiState.disabledFanModeKeys },
                     initialSelection = uiState.app?.fanMode?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.fanModeSelected(it) },
                 )
@@ -176,6 +176,13 @@ fun Spinner(
 ) {
     val initial = options.indexOfFirst { it.first == initialSelection }.coerceAtLeast(0)
     var selectedIndex by remember { mutableIntStateOf(initial) }
+
+    var optionsCount by remember { mutableIntStateOf(options.size) }
+    if (optionsCount != options.size) {
+        // Reset if our options have changed
+        optionsCount = options.size
+        selectedIndex = options.indexOfFirst { it.first == initialSelection }.coerceAtLeast(0)
+    }
 
     LargeDropdownMenu(
         items = options,

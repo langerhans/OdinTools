@@ -10,8 +10,8 @@ sealed class PerfMode(
     @StringRes val textRes: Int
 ) {
     data object Standard : PerfMode("standard", 0, R.string.standard)
-    data object Performance : PerfMode("smart", 1, R.string.performance)
-    data object HighPerformance : PerfMode("sport", 2, R.string.highperformance)
+    data object Performance : PerfMode("performance", 1, R.string.performance)
+    data object HighPerformance : PerfMode("highPerformance", 2, R.string.highperformance)
     data object Unknown : PerfMode("unknown", -1, R.string.unknown)
 
     fun enable(executor: ShellExecutor) {

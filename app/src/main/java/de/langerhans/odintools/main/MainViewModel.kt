@@ -117,7 +117,6 @@ class MainViewModel @Inject constructor(
         prefs.disabledL2r2Style = models.find { it.checked.not() }?.key
     }
 
-
     fun saturationClicked() {
         _uiState.update {
             it.copy(showSaturationDialog = true, currentSaturation = prefs.saturationOverride)

@@ -146,5 +146,3 @@ fun SettingsScreen(
         }
     }
 }
-
-

@@ -21,6 +21,7 @@ data class AppOverridesUiModel(
     val showDeleteConfirmDialog: Boolean = false,
     val navigateBack: Boolean = false,
     val isNewApp: Boolean = false,
+    val disabledFanModeKeys: List<String> = emptyList()
 )
 
 data class AppUiModel(
@@ -32,5 +33,4 @@ data class AppUiModel(
     val l2r2Style: L2R2Style? = null,
     val fanMode: FanMode? = null,
     val perfMode: PerfMode? = null
-
 )

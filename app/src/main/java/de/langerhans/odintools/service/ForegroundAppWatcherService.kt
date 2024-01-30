@@ -48,7 +48,6 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
     private var savedPerfMode: PerfMode? = null
     private var savedFanMode: FanMode? = null
 
-
     private var currentIme = ""
     private val imeObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean) {
@@ -111,6 +110,7 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             savedPerfMode?.enable(shellExecutor)
         }
 
+        // TODO if the user selected e.g. "off" via quicksettings we need to make sure to set an allowed value here even if NoChange was selected in the override
         FanMode.getById(override.fanMode).takeIf {
             it != FanMode.Unknown
         }?.enable(shellExecutor) ?: run {
