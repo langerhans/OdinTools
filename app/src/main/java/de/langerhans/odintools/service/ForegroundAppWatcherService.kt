@@ -13,8 +13,9 @@ import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.ControllerStyle.Unknown
 import de.langerhans.odintools.models.FanMode
-import de.langerhans.odintools.models.PerfMode
+import de.langerhans.odintools.models.FanMode.Companion.getDisabledFanModes
 import de.langerhans.odintools.models.L2R2Style
+import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -84,9 +85,8 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         if (!hasSetOverride) {
             savedControllerStyle = ControllerStyle.getStyle(shellExecutor)
             savedL2R2Style = L2R2Style.getStyle(shellExecutor)
-            savedPerfMode = PerfMode.getStyle(shellExecutor)
-            savedFanMode = FanMode.getStyle(shellExecutor)
-
+            savedPerfMode = PerfMode.getMode(shellExecutor)
+            savedFanMode = FanMode.getMode(shellExecutor)
         }
 
         ControllerStyle.getById(override.controllerStyle).takeIf {
@@ -103,22 +103,53 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             savedL2R2Style?.enable(shellExecutor)
         }
 
-        PerfMode.getById(override.perfMode).takeIf {
+        val selectedPerfMode = PerfMode.getById(override.perfMode)
+        selectedPerfMode.takeIf {
             it != PerfMode.Unknown
         }?.enable(shellExecutor) ?: run {
             // Reset to default if we switch between override and NoChange app
             savedPerfMode?.enable(shellExecutor)
         }
 
-        // TODO if the user selected e.g. "off" via quicksettings we need to make sure to set an allowed value here even if NoChange was selected in the override
-        FanMode.getById(override.fanMode).takeIf {
-            it != FanMode.Unknown
-        }?.enable(shellExecutor) ?: run {
-            // Reset to default if we switch between override and NoChange app
-            savedFanMode?.enable(shellExecutor)
-        }
+        /* Cases for fan mode:
+        1) User did not select an override
+            1.1) We have a previously set an override
+                -> Switch back to default
+            1.2) We have no override saved
+                -> Let the system handle the setting
+        2) User selected an override the system would have selected anyway
+            -> Apply anyway cause system doesn't move to higher fan modes if a valid one is selected already
+        3) User selected something else
+            -> Fix possibly illegal selection and apply override
+         */
+        val selectedFanMode = FanMode.getById(override.fanMode)
+        if (selectedFanMode != FanMode.Unknown) {
+            if (systemFanPerfModeMapping[selectedPerfMode] != selectedFanMode) {
+                // Case 3
+                val perfMode = if (selectedPerfMode !is PerfMode.Unknown) {
+                    selectedPerfMode
+                } else {
+                    PerfMode.getMode(shellExecutor) // Fall back to check against current mode
+                }
+                getFixedFanMode(perfMode, selectedFanMode).enable(shellExecutor)
+            } else {
+                // Case 2
+                selectedFanMode.enable(shellExecutor)
+            }
+        } else if (hasSetOverride) {
+            // Case 1.1
+            getFixedFanMode(selectedPerfMode, savedFanMode!!).enable(shellExecutor)
+        } // selectedFanMode == FanMode.Unknown && !hasSetOverride -> Case 1.2
 
         hasSetOverride = true
+    }
+
+    private fun getFixedFanMode(selectedPerfMode: PerfMode, selectedFanMode: FanMode): FanMode {
+        return if (selectedFanMode.id in getDisabledFanModes(selectedPerfMode.id)) {
+            systemFanPerfModeMapping[selectedPerfMode] ?: FanMode.Smart // Lowest common denominator
+        } else {
+            selectedFanMode
+        }
     }
 
     private fun resetOverrides() {
@@ -180,6 +211,12 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             "com.odin2.gameassistant",
             "com.android.systemui",
             "android"
+        )
+
+        val systemFanPerfModeMapping = mapOf(
+            PerfMode.Standard to FanMode.Off,
+            PerfMode.Performance to FanMode.Quiet,
+            PerfMode.HighPerformance to FanMode.Sport
         )
     }
 }

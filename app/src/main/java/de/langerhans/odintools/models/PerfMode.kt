@@ -23,7 +23,7 @@ sealed class PerfMode(
     companion object {
         private const val PERFORMANCE_MODE = "performance_mode"
 
-        fun getStyle(executor: ShellExecutor) =
+        fun getMode(executor: ShellExecutor) =
             when (executor.getSystemSetting(PERFORMANCE_MODE, Standard.settingsValue)) {
                 Standard.settingsValue -> Standard
                 Performance.settingsValue -> Performance

@@ -6,15 +6,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.data.AppOverrideDao
 import de.langerhans.odintools.data.AppOverrideEntity
-import de.langerhans.odintools.models.ControllerStyle
-import de.langerhans.odintools.models.L2R2Style
-import de.langerhans.odintools.models.PerfMode
-import de.langerhans.odintools.models.FanMode
-import de.langerhans.odintools.models.FanMode.Off
-import de.langerhans.odintools.models.FanMode.Quiet
-import de.langerhans.odintools.models.NoChange
-import de.langerhans.odintools.models.PerfMode.HighPerformance
-import de.langerhans.odintools.models.PerfMode.Performance
+import de.langerhans.odintools.models.*
+import de.langerhans.odintools.models.FanMode.Companion.getDisabledFanModes
 import de.langerhans.odintools.tools.DeviceUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -168,13 +161,5 @@ class AppOverridesViewModel @Inject constructor(
             (perfMode ?: _uiState.value.app?.perfMode?.id) != initialPerfMode,
             (fanMode ?: _uiState.value.app?.fanMode?.id) != initialFanMode
         ).any { it }
-    }
-
-    private fun getDisabledFanModes(perfModeKey: String): List<String> {
-        return when(perfModeKey) {
-            Performance.id -> listOf(Off.id)
-            HighPerformance.id -> listOf(Off.id, Quiet.id)
-            else -> emptyList()
-        }
     }
 }

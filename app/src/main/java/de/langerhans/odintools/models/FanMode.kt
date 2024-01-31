@@ -24,7 +24,7 @@ sealed class FanMode(
     companion object {
         private const val FAN_MODE = "fan_mode"
 
-        fun getStyle(executor: ShellExecutor) =
+        fun getMode(executor: ShellExecutor) =
             when (executor.getSystemSetting(FAN_MODE, Quiet.settingsValue)) {
                 Quiet.settingsValue -> Quiet
                 Smart.settingsValue -> Smart
@@ -39,6 +39,14 @@ sealed class FanMode(
             Sport.id -> Sport
             Off.id -> Off
             else -> Unknown
+        }
+
+        fun getDisabledFanModes(perfModeKey: String?): List<String> {
+            return when(perfModeKey) {
+                PerfMode.Performance.id -> listOf(Off.id)
+                PerfMode.HighPerformance.id -> listOf(Off.id, Quiet.id)
+                else -> emptyList()
+            }
         }
     }
 }
