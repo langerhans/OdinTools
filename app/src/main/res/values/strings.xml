@@ -52,4 +52,8 @@
     <string name="noChange">No change</string>
     <string name="noOverrideCandidates">You already added overrides for all your apps</string>
     <string name="fanModeRequired">Fan mode is required when setting a Performance mode</string>
+    <string name="overrideDelay">Override delay</string>
+    <string name="overrideDelayDesc">Delay applying overrides by 0.5s. This can help if apps crash when applying an
+        override.
+    </string>
 </resources>

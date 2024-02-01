@@ -45,7 +45,8 @@ class MainViewModel @Inject constructor(
                 deviceVersion = deviceUtils.getDeviceVersion(),
                 showNotAnOdinDialog = !isOdin2,
                 singleHomeEnabled = !preventHomePressSetting,
-                showPServerNotAvailableDialog = !deviceUtils.isPServerAvailable()
+                showPServerNotAvailableDialog = !deviceUtils.isPServerAvailable(),
+                overrideDelayEnabled = prefs.overrideDelay
             )
         }
     }
@@ -141,6 +142,13 @@ class MainViewModel @Inject constructor(
         prefs.appOverridesEnabled = newValue
         _uiState.update {
             it.copy(appOverridesEnabled = newValue)
+        }
+    }
+
+    fun overrideDelayEnabled(newValue: Boolean) {
+        prefs.overrideDelay = newValue
+        _uiState.update {
+            it.copy(overrideDelayEnabled = newValue)
         }
     }
 }

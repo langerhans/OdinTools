@@ -111,6 +111,14 @@ fun SettingsScreen(
             ) { newValue ->
                 viewModel.appOverridesEnabled(newValue)
             }
+            SwitchPreference(
+                icon = R.drawable.ic_more_time,
+                title = R.string.overrideDelay,
+                description = R.string.overrideDelayDesc,
+                state = uiState.overrideDelayEnabled
+            ) {
+                viewModel.overrideDelayEnabled(it)
+            }
             SettingsHeader(R.string.quicksettings)
             TriggerPreference(
                 icon = R.drawable.ic_controllerstyle,

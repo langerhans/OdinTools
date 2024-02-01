@@ -27,12 +27,21 @@ class SharedPrefsRepo @Inject constructor(
         get() = prefs.getBoolean(KEY_APP_OVERRIDE_ENABLED, true)
         set(value) = prefs.edit().putBoolean(KEY_APP_OVERRIDE_ENABLED, value).apply()
 
+    var overrideDelay
+        get() = prefs.getBoolean(KEY_OVERRIDE_DELAY, false)
+        set(value) = prefs.edit().putBoolean(KEY_OVERRIDE_DELAY, value).apply()
+
     private var appOverrideEnabledListener: OnSharedPreferenceChangeListener? = null
 
-    fun observeAppOverrideEnabledState(onChange: (newState: Boolean) -> Unit) {
+    fun observeAppOverrideEnabledState(
+        overridesEnabled: (newState: Boolean) -> Unit,
+        overrideDelayEnabled: (newState: Boolean) -> Unit
+    ) {
         appOverrideEnabledListener = OnSharedPreferenceChangeListener { _, key ->
             if (key == KEY_APP_OVERRIDE_ENABLED) {
-                onChange(appOverridesEnabled)
+                overridesEnabled(appOverridesEnabled)
+            } else if (key == KEY_OVERRIDE_DELAY) {
+                overrideDelayEnabled(overrideDelay)
             }
         }
         prefs.registerOnSharedPreferenceChangeListener(appOverrideEnabledListener)
@@ -50,5 +59,6 @@ class SharedPrefsRepo @Inject constructor(
         private const val KEY_DISABLED_L2R2_STYLE = "disabled_l2r2_style"
         private const val KEY_SATURATION_OVERRIDE = "saturation_override"
         private const val KEY_APP_OVERRIDE_ENABLED = "app_override_enabled"
+        private const val KEY_OVERRIDE_DELAY = "override_delay"
     }
 }

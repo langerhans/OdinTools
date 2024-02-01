@@ -13,7 +13,6 @@ import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.ControllerStyle.Unknown
 import de.langerhans.odintools.models.FanMode
-import de.langerhans.odintools.models.FanMode.Companion.getDisabledFanModes
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.tools.ShellExecutor
@@ -42,6 +41,7 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
     private var currentForegroundPackage: CharSequence = ""
     private lateinit var overrides: List<AppOverrideEntity>
     private var overridesEnabled = true
+    private var overridesDelay = false
 
     private var hasSetOverride = false
     private var savedControllerStyle: ControllerStyle? = null
@@ -61,8 +61,15 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         if (shouldIgnore(event)) return
 
-        currentForegroundPackage = event.packageName
+        if (overridesDelay) {
+            Handler(Looper.getMainLooper()).postDelayed({ handleEvent(event)}, OVERRIDE_DELAY)
+        } else {
+            handleEvent(event)
+        }
+    }
 
+    private fun handleEvent(event: AccessibilityEvent) {
+        currentForegroundPackage = event.packageName
         overrides.find { it.packageName == currentForegroundPackage }?.let { override ->
             applyOverride(override)
         } ?: run {
@@ -155,7 +162,10 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         )
 
         overridesEnabled = sharedPrefsRepo.appOverridesEnabled
-        sharedPrefsRepo.observeAppOverrideEnabledState { overridesEnabled = it }
+        sharedPrefsRepo.observeAppOverrideEnabledState(
+            { overridesEnabled = it },
+            { overridesDelay = it }
+        )
 
         scope.launch {
             appOverrideDao.getAll()
@@ -180,5 +190,7 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             "com.android.systemui",
             "android"
         )
+
+        const val OVERRIDE_DELAY = 500L
     }
 }
