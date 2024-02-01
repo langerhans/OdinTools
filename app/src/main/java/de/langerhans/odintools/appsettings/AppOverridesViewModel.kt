@@ -122,19 +122,25 @@ class AppOverridesViewModel @Inject constructor(
     }
 
     fun perfModeSelected(key: String) {
+        val perfMode = PerfMode.getById(key)
         val disabledFanModes = getDisabledFanModes(key)
 
-        val currentFanMode = _uiState.value.app?.fanMode
-        val fixedFanMode = if (currentFanMode?.id in disabledFanModes) {
-            FanMode.Smart // Lowest common denominator
+        val currentFanMode = if (key == NoChange.KEY) {
+            null
+        } else {
+            _uiState.value.app?.fanMode
+        }
+
+        val fixedFanMode = if (currentFanMode == null || currentFanMode.id in disabledFanModes) {
+            systemFanPerfModeMapping[perfMode]
         } else {
             currentFanMode
         }
 
         _uiState.update {
             it.copy(
-                app = it.app?.copy(perfMode = PerfMode.getById(key), fanMode = fixedFanMode),
-                hasUnsavedChanges = hasUnsavedChanges(perfMode = key),
+                app = it.app?.copy(perfMode = perfMode, fanMode = fixedFanMode),
+                hasUnsavedChanges = hasUnsavedChanges(perfMode = key, fanMode = fixedFanMode?.id),
                 disabledFanModeKeys = disabledFanModes
             )
         }
@@ -161,5 +167,13 @@ class AppOverridesViewModel @Inject constructor(
             (perfMode ?: _uiState.value.app?.perfMode?.id) != initialPerfMode,
             (fanMode ?: _uiState.value.app?.fanMode?.id) != initialFanMode
         ).any { it }
+    }
+
+    companion object {
+        private val systemFanPerfModeMapping = mapOf(
+            PerfMode.Standard to FanMode.Off,
+            PerfMode.Performance to FanMode.Quiet,
+            PerfMode.HighPerformance to FanMode.Sport
+        )
     }
 }

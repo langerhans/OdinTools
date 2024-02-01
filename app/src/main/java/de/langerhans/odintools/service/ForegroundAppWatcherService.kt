@@ -103,43 +103,19 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             savedL2R2Style?.enable(shellExecutor)
         }
 
-        val selectedPerfMode = PerfMode.getById(override.perfMode)
-        selectedPerfMode.takeIf {
+        PerfMode.getById(override.perfMode).takeIf {
             it != PerfMode.Unknown
         }?.enable(shellExecutor) ?: run {
             // Reset to default if we switch between override and NoChange app
             savedPerfMode?.enable(shellExecutor)
         }
 
-        /* Cases for fan mode:
-        1) User did not select an override
-            1.1) We have a previously set an override
-                -> Switch back to default
-            1.2) We have no override saved
-                -> Let the system handle the setting
-        2) User selected an override the system would have selected anyway
-            -> Apply anyway cause system doesn't move to higher fan modes if a valid one is selected already
-        3) User selected something else
-            -> Fix possibly illegal selection and apply override
-         */
-        val selectedFanMode = FanMode.getById(override.fanMode)
-        if (selectedFanMode != FanMode.Unknown) {
-            if (systemFanPerfModeMapping[selectedPerfMode] != selectedFanMode) {
-                // Case 3
-                val perfMode = if (selectedPerfMode !is PerfMode.Unknown) {
-                    selectedPerfMode
-                } else {
-                    PerfMode.getMode(shellExecutor) // Fall back to check against current mode
-                }
-                getFixedFanMode(perfMode, selectedFanMode).enable(shellExecutor)
-            } else {
-                // Case 2
-                selectedFanMode.enable(shellExecutor)
-            }
-        } else if (hasSetOverride) {
-            // Case 1.1
-            getFixedFanMode(selectedPerfMode, savedFanMode!!).enable(shellExecutor)
-        } // selectedFanMode == FanMode.Unknown && !hasSetOverride -> Case 1.2
+        FanMode.getById(override.fanMode).takeIf {
+            it != FanMode.Unknown
+        }?.enable(shellExecutor) ?: run {
+            // Reset to default if we switch between override and NoChange app
+            savedFanMode?.enable(shellExecutor)
+        }
 
         hasSetOverride = true
     }

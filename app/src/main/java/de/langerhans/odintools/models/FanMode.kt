@@ -43,8 +43,9 @@ sealed class FanMode(
 
         fun getDisabledFanModes(perfModeKey: String?): List<String> {
             return when(perfModeKey) {
-                PerfMode.Performance.id -> listOf(Off.id)
-                PerfMode.HighPerformance.id -> listOf(Off.id, Quiet.id)
+                PerfMode.Standard.id -> listOf(NoChange.KEY, Unknown.id)
+                PerfMode.Performance.id -> listOf(NoChange.KEY, Unknown.id, Off.id)
+                PerfMode.HighPerformance.id -> listOf(NoChange.KEY, Unknown.id, Off.id, Quiet.id)
                 else -> emptyList()
             }
         }
