@@ -12,6 +12,7 @@ data class MainUiModel(
 
     val singleHomeEnabled: Boolean = false,
     val appOverridesEnabled: Boolean = true,
+    val overrideDelayEnabled: Boolean = false,
 
     val showControllerStyleDialog: Boolean = false,
     val showL2r2StyleDialog: Boolean = false,
