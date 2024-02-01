@@ -120,14 +120,6 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         hasSetOverride = true
     }
 
-    private fun getFixedFanMode(selectedPerfMode: PerfMode, selectedFanMode: FanMode): FanMode {
-        return if (selectedFanMode.id in getDisabledFanModes(selectedPerfMode.id)) {
-            systemFanPerfModeMapping[selectedPerfMode] ?: FanMode.Smart // Lowest common denominator
-        } else {
-            selectedFanMode
-        }
-    }
-
     private fun resetOverrides() {
         if (!hasSetOverride) return
 
@@ -187,12 +179,6 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             "com.odin2.gameassistant",
             "com.android.systemui",
             "android"
-        )
-
-        val systemFanPerfModeMapping = mapOf(
-            PerfMode.Standard to FanMode.Off,
-            PerfMode.Performance to FanMode.Quiet,
-            PerfMode.HighPerformance to FanMode.Sport
         )
     }
 }
