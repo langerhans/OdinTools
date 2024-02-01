@@ -111,7 +111,7 @@ fun SettingsScreen(
             ) { newValue ->
                 viewModel.appOverridesEnabled(newValue)
             }
-            SettingsHeader(R.string.quickstettings)
+            SettingsHeader(R.string.quicksettings)
             TriggerPreference(
                 icon = R.drawable.ic_controllerstyle,
                 title = R.string.controllerStyle,
@@ -120,7 +120,9 @@ fun SettingsScreen(
                 viewModel.showControllerStylePreference()
             }
             TriggerPreference(
-                icon = R.drawable.ic_sliders, title = R.string.l2r2mode, description = R.string.l2r2modeDesc
+                icon = R.drawable.ic_sliders,
+                title = R.string.l2r2mode,
+                description = R.string.l2r2modeDesc
             ) {
                 viewModel.showL2r2StylePreference()
             }
@@ -144,5 +146,3 @@ fun SettingsScreen(
         }
     }
 }
-
-

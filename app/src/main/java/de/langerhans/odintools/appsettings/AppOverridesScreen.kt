@@ -3,22 +3,29 @@ package de.langerhans.odintools.appsettings
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.langerhans.odintools.R
 import de.langerhans.odintools.models.ControllerStyle.*
+import de.langerhans.odintools.models.FanMode.*
 import de.langerhans.odintools.models.L2R2Style.*
 import de.langerhans.odintools.models.NoChange
+import de.langerhans.odintools.models.PerfMode
+import de.langerhans.odintools.models.PerfMode.*
 import de.langerhans.odintools.ui.composables.DeleteConfirmDialog
 import de.langerhans.odintools.ui.composables.LargeDropdownMenu
 import de.langerhans.odintools.ui.composables.OdinTopAppBar
+import de.langerhans.odintools.ui.theme.Typography
 
 @Composable
 fun AppOverridesScreen(
@@ -110,7 +117,9 @@ fun AppOverridesScreen(
                     .width(1.dp)
             )
             Column(
-                modifier = Modifier.weight(0.7f)
+                modifier = Modifier
+                    .weight(0.7f)
+                    .verticalScroll(rememberScrollState())
             ) {
                 OverrideSpinnerRow(
                     label = R.string.controllerStyle,
@@ -134,7 +143,53 @@ fun AppOverridesScreen(
                     ),
                     initialSelection = uiState.app?.l2r2Style?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.l2R2StyleSelected(it) },
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
+                OverrideSpinnerRow(
+                    label = R.string.perfMode,
+                    spinnerItems = listOf(
+                        NoChange.KEY to stringResource(id = NoChange.textRes),
+                        Standard.id to stringResource(id = Standard.textRes),
+                        Performance.id to stringResource(id = Performance.textRes),
+                        HighPerformance.id to stringResource(id = HighPerformance.textRes),
+                    ),
+                    initialSelection = uiState.app?.perfMode?.id ?: NoChange.KEY,
+                    onSelectionChanged = { viewModel.perfModeSelected(it) },
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                if (uiState.app?.perfMode != null && uiState.app?.perfMode != PerfMode.Unknown) {
+                    OverrideSpinnerRow(
+                        label = R.string.fanMode,
+                        spinnerItems = listOf(
+                            Off.id to stringResource(id = Off.textRes),
+                            Quiet.id to stringResource(id = Quiet.textRes),
+                            Smart.id to stringResource(id = Smart.textRes),
+                            Sport.id to stringResource(id = Sport.textRes),
+                        ).filterNot { it.first in uiState.disabledFanModeKeys },
+                        initialSelection = uiState.app?.fanMode?.id ?: Smart.id,
+                        onSelectionChanged = { viewModel.fanModeSelected(it) },
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding()
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_info),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(18.dp)
+                                .padding(end = 4.dp)
+                        )
+                        Text(
+                            style = Typography.labelSmall,
+                            text = stringResource(id = R.string.fanModeRequired)
+                        )
+                    }
+                }
             }
         }
     }
@@ -148,6 +203,13 @@ fun Spinner(
 ) {
     val initial = options.indexOfFirst { it.first == initialSelection }.coerceAtLeast(0)
     var selectedIndex by remember { mutableIntStateOf(initial) }
+
+    var optionsCount by remember { mutableIntStateOf(options.size) }
+    if (optionsCount != options.size) {
+        // Reset if our options have changed
+        optionsCount = options.size
+        selectedIndex = options.indexOfFirst { it.first == initialSelection }.coerceAtLeast(0)
+    }
 
     LargeDropdownMenu(
         items = options,

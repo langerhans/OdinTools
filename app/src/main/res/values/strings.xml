@@ -7,11 +7,20 @@
     <string name="unknown">Unknown</string>
     <string name="l2r2mode">L2/R2 Mode</string>
     <string name="analog">Analog</string>
-    <string name="digitial">Digital</string>
+    <string name="digital">Digital</string>
     <string name="both">Both</string>
+    <string name="perfMode">Performance Mode</string>
+    <string name="standard">Standard</string>
+    <string name="performance">Performance</string>
+    <string name="highperformance">High Performance</string>
+    <string name="fanMode">Fan Mode</string>
+    <string name="fanOff">Off</string>
+    <string name="quiet">Quiet</string>
+    <string name="smart">Smart</string>
+    <string name="sport">Sport</string>
     <string name="topBarVersions">Device version:\nApp version:</string>
 
-    <string name="quickstettings">Quick Settings</string>
+    <string name="quicksettings">Quick Settings</string>
     <string name="controllerStyleDesc">Select which modes to cycle through in the Controller Style quick settings tile</string>
     <string name="l2r2modeDesc">Select which modes to cycle through in the L2/R2 Mode quick settings tile</string>
 
@@ -42,4 +51,5 @@
     <string name="deleteConfirm">Do you really want to delete this item?</string>
     <string name="noChange">No change</string>
     <string name="noOverrideCandidates">You already added overrides for all your apps</string>
+    <string name="fanModeRequired">Fan mode is required when setting a Performance mode</string>
 </resources>

@@ -2,20 +2,12 @@ package de.langerhans.odintools.appsettings
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import dagger.Module
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.data.AppOverrideDao
 import de.langerhans.odintools.data.AppOverrideEntity
-import de.langerhans.odintools.models.ControllerStyle
-import de.langerhans.odintools.models.L2R2Style
-import de.langerhans.odintools.models.NoChange
+import de.langerhans.odintools.models.*
+import de.langerhans.odintools.models.FanMode.Companion.getDisabledFanModes
 import de.langerhans.odintools.tools.DeviceUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +32,8 @@ class AppOverridesViewModel @Inject constructor(
     private val packageName = checkNotNull(savedStateHandle.get<String>("packageName"))
     private var initialControllerStyle = NoChange.KEY
     private var initialL2R2Style = NoChange.KEY
+    private var initialPerfMode = NoChange.KEY
+    private var initialFanMode = NoChange.KEY
 
     init {
         viewModelScope.launch {
@@ -52,12 +46,19 @@ class AppOverridesViewModel @Inject constructor(
             } else {
                 initialControllerStyle = app.controllerStyle ?: NoChange.KEY
                 initialL2R2Style = app.l2R2Style ?: NoChange.KEY
+                initialPerfMode = app.perfMode ?: NoChange.KEY
+                initialFanMode = app.fanMode ?: NoChange.KEY
 
                 appOverrideMapper.mapAppOverride(app)
             }
 
             _uiState.update {
-                it.copy(app = uiModel, isNewApp = app == null, deviceVersion = deviceUtils.getDeviceVersion())
+                it.copy(
+                    app = uiModel,
+                    isNewApp = app == null,
+                    disabledFanModeKeys = getDisabledFanModes(initialPerfMode),
+                    deviceVersion = deviceUtils.getDeviceVersion()
+                )
             }
         }
     }
@@ -68,7 +69,9 @@ class AppOverridesViewModel @Inject constructor(
                 appOverrideDao.save(AppOverrideEntity(
                     packageName = packageName,
                     controllerStyle = _uiState.value.app?.controllerStyle?.id,
-                    l2R2Style = _uiState.value.app?.l2r2Style?.id
+                    l2R2Style = _uiState.value.app?.l2r2Style?.id,
+                    perfMode = _uiState.value.app?.perfMode?.id,
+                    fanMode = _uiState.value.app?.fanMode?.id
                 ))
             }
         }
@@ -118,18 +121,59 @@ class AppOverridesViewModel @Inject constructor(
         }
     }
 
-    private fun hasUnsavedChanges(
-        controllerStyle: String? = null,
-        l2R2Style: String? = null
-    ): Boolean {
-        // Cascade through all possibly changed options. One should hit. If none hit the dev was an idiot.
-        controllerStyle?.let {
-            return it != initialControllerStyle
-        }
-        l2R2Style?.let {
-            return it != initialL2R2Style
+    fun perfModeSelected(key: String) {
+        val perfMode = PerfMode.getById(key)
+        val disabledFanModes = getDisabledFanModes(key)
+
+        val currentFanMode = if (key == NoChange.KEY) {
+            null
+        } else {
+            _uiState.value.app?.fanMode
         }
 
-        return false
+        val fixedFanMode = if (currentFanMode == null || currentFanMode.id in disabledFanModes) {
+            systemFanPerfModeMapping[perfMode]
+        } else {
+            currentFanMode
+        }
+
+        _uiState.update {
+            it.copy(
+                app = it.app?.copy(perfMode = perfMode, fanMode = fixedFanMode),
+                hasUnsavedChanges = hasUnsavedChanges(perfMode = key, fanMode = fixedFanMode?.id),
+                disabledFanModeKeys = disabledFanModes
+            )
+        }
+    }
+
+    fun fanModeSelected(key: String) {
+        _uiState.update {
+            it.copy(
+                app = it.app?.copy(fanMode = FanMode.getById(key)),
+                hasUnsavedChanges = hasUnsavedChanges(fanMode = key)
+            )
+        }
+    }
+
+    private fun hasUnsavedChanges(
+        controllerStyle: String? = null,
+        l2R2Style: String? = null,
+        perfMode: String? = null,
+        fanMode: String? = null
+    ): Boolean {
+        return listOf(
+            (controllerStyle ?: _uiState.value.app?.controllerStyle?.id) != initialControllerStyle,
+            (l2R2Style ?: _uiState.value.app?.l2r2Style?.id) != initialL2R2Style,
+            (perfMode ?: _uiState.value.app?.perfMode?.id) != initialPerfMode,
+            (fanMode ?: _uiState.value.app?.fanMode?.id) != initialFanMode
+        ).any { it }
+    }
+
+    companion object {
+        private val systemFanPerfModeMapping = mapOf(
+            PerfMode.Standard to FanMode.Off,
+            PerfMode.Performance to FanMode.Quiet,
+            PerfMode.HighPerformance to FanMode.Sport
+        )
     }
 }

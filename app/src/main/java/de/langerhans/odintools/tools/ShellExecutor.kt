@@ -62,7 +62,9 @@ class ShellExecutor @Inject constructor() {
     fun enableA11yService() {
         val currentServices =
             executeAsRoot("settings get secure enabled_accessibility_services")
-                .map { it ?: "" }
+                .map {
+                    if (it == null || it == "null") "" else it
+                }
                 .getOrDefault("")
 
         if (currentServices.contains("de.langerhans.odintools")) return
