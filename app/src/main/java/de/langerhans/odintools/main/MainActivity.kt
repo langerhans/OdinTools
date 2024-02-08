@@ -94,6 +94,14 @@ fun SettingsScreen(
         )
     }
 
+    if (uiState.showVibrationDialog) {
+        VibrationPreferenceDialog(
+            initialValue = uiState.currentVibration,
+            onCancel = { viewModel.vibrationDialogDismissed() },
+            onSave = { viewModel.saveVibration(it) }
+        )
+    }
+
     Scaffold(topBar = {OdinTopAppBar(deviceVersion = uiState.deviceVersion)}) { contentPadding ->
         Column(
             modifier = Modifier
@@ -150,6 +158,16 @@ fun SettingsScreen(
                 description = R.string.saturationDescription
             ) {
                 viewModel.saturationClicked()
+            }
+            SettingsHeader(name = R.string.haptics)
+            SwitchableTriggerPreference(
+                icon = R.drawable.ic_vibration,
+                title = R.string.vibrationStrength,
+                description = R.string.vibrationStrengthDescription,
+                state = uiState.vibrationEnabled,
+                onClick = { viewModel.vibrationClicked() }
+            ) {
+                viewModel.updateVibrationPreference(it)
             }
         }
     }

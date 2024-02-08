@@ -18,7 +18,11 @@ data class MainUiModel(
     val showL2r2StyleDialog: Boolean = false,
 
     val showSaturationDialog: Boolean = false,
-    val currentSaturation: Float = 1.0f
+    val currentSaturation: Float = 1.0f,
+
+    val showVibrationDialog: Boolean = false,
+    val vibrationEnabled: Boolean = false,
+    val currentVibration: Int = 0
 )
 
 class CheckboxPreferenceUiModel(

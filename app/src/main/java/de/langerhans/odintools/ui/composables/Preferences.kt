@@ -237,3 +237,44 @@ fun SaturationPreferenceDialog(
         }
     })
 }
+
+@Composable
+fun VibrationPreferenceDialog(
+    initialValue: Int,
+    onCancel: () -> Unit,
+    onSave: (newValue: Int) -> Unit
+) {
+    var userValue: Int by remember {
+        mutableIntStateOf(initialValue)
+    }
+
+    AlertDialog(onDismissRequest = {}, confirmButton = {
+        DialogButton(text = stringResource(id = R.string.save)) {
+            onSave(userValue)
+        }
+    }, dismissButton = {
+        DialogButton(text = stringResource(id = R.string.cancel), onCancel)
+    }, title = {
+        Text(text = stringResource(id = R.string.vibrationStrength))
+    }, text = {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Slider(
+                value = userValue.toFloat(),
+                valueRange = 1000f..5800f,
+                steps = 23,
+                onValueChange = {
+                    userValue = it.toInt()
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 4.dp)
+            )
+            Text(
+                text = String.format("$userValue"),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+    })
+}

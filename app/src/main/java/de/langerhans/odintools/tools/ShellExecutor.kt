@@ -79,6 +79,18 @@ class ShellExecutor @Inject constructor() {
         executeAsRoot("service call SurfaceFlinger 1022 f ${String.format("%.1f", saturation)}")
     }
 
+    fun setVibrationStrength(newValue: Int) {
+        executeAsRoot("echo $newValue > /d/haptics/user_vmax_mv")
+    }
+
+    fun getVibrationStrength(): Int {
+        val defaultValue = 0
+
+        return executeAsRoot("cat /d/haptics/user_vmax_mv")
+            .map { it?.toInt() ?: defaultValue }
+            .getOrDefault(defaultValue)
+    }
+
     fun grantAllAppsPermission() {
         executeAsRoot("pm grant $PACKAGE android.permission.QUERY_ALL_PACKAGES")
     }

@@ -56,4 +56,8 @@
     <string name="overrideDelayDesc">Delay applying overrides by 0.5s. This can help if apps crash when applying an
         override.
     </string>
+
+    <string name="haptics">Haptics</string>
+    <string name="vibrationStrength">Vibration strength</string>
+    <string name="vibrationStrengthDescription">Adjust the maximum strength of vibrations &amp; haptics. Switch off to disable vibrations.</string>
 </resources>
