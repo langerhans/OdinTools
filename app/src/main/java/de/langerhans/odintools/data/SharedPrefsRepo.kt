@@ -23,6 +23,10 @@ class SharedPrefsRepo @Inject constructor(
         get() = prefs.getFloat(KEY_SATURATION_OVERRIDE, 1.0f)
         set(value) = prefs.edit().putFloat(KEY_SATURATION_OVERRIDE, value).apply()
 
+    var vibrationStrength
+        get() = prefs.getInt(KEY_VIBRATION_STRENGTH, 0)
+        set(value) = prefs.edit().putInt(KEY_VIBRATION_STRENGTH, value).apply()
+
     var appOverridesEnabled
         get() = prefs.getBoolean(KEY_APP_OVERRIDE_ENABLED, true)
         set(value) = prefs.edit().putBoolean(KEY_APP_OVERRIDE_ENABLED, value).apply()
@@ -58,6 +62,7 @@ class SharedPrefsRepo @Inject constructor(
         private const val KEY_DISABLED_CONTROLLER_STYLE = "disabled_controller_style"
         private const val KEY_DISABLED_L2R2_STYLE = "disabled_l2r2_style"
         private const val KEY_SATURATION_OVERRIDE = "saturation_override"
+        private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
         private const val KEY_APP_OVERRIDE_ENABLED = "app_override_enabled"
         private const val KEY_OVERRIDE_DELAY = "override_delay"
     }

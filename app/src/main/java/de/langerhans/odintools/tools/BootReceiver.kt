@@ -25,5 +25,9 @@ class BootReceiver : BroadcastReceiver() {
         if (saturation != 1.0f) {
             executor.setSfSaturation(saturation)
         }
+        val vibrationStrength = sharedPrefsRepo.vibrationStrength
+        if (vibrationStrength != 0) {
+            executor.setVibrationStrength(vibrationStrength)
+        }
     }
 }
