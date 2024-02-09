@@ -152,7 +152,7 @@ class MainViewModel @Inject constructor(
 
     fun vibrationClicked() {
         _uiState.update {
-            it.copy(showVibrationDialog = true)
+            it.copy(showVibrationDialog = true, currentVibration = executor.getVibrationStrength())
         }
     }
 
