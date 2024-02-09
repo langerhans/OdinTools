@@ -280,7 +280,7 @@ fun VibrationPreferenceDialog(
                     .padding(end = 4.dp)
             )
             Text(
-                text = String.format("$userValue"),
+                text = "$userValue",
                 style = MaterialTheme.typography.bodyLarge
             )
         }
