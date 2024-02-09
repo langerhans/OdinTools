@@ -22,7 +22,11 @@ data class MainUiModel(
 
     val showVibrationDialog: Boolean = false,
     val vibrationEnabled: Boolean = false,
-    val currentVibration: Int = 0
+    val currentVibration: Int = 0,
+
+    val showRemapButtonDialog: Boolean = false,
+    val currentButtonSetting: String = "",
+    val currentButtonKeyCode: Int = 0
 )
 
 class CheckboxPreferenceUiModel(

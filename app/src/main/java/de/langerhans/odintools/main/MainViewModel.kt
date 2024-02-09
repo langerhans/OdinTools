@@ -170,6 +170,47 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun remapButtonClicked(setting: String) {
+        _uiState.update {
+            it.copy(
+                showRemapButtonDialog = true,
+                currentButtonSetting = setting,
+                currentButtonKeyCode = executor.getSystemSetting(setting, 0)
+            )
+        }
+    }
+
+    fun remapButtonDialogDismissed() {
+        _uiState.update {
+            it.copy(showRemapButtonDialog = false)
+        }
+    }
+
+    private fun getDefaultKeyCode(setting: String): Int {
+        if (setting == "remap_custom_to_m1_value")
+            return 98
+
+        if (setting == "remap_custom_to_m2_value")
+            return 101
+
+        return 0
+    }
+
+    fun resetButtonKeyCode(setting: String) {
+        val newValue: Int = getDefaultKeyCode(setting)
+        executor.setSystemSetting(setting, newValue)
+        _uiState.update {
+            it.copy(showRemapButtonDialog = false)
+        }
+    }
+
+    fun saveButtonKeyCode(setting: String, newValue: Int) {
+        executor.setSystemSetting(setting, newValue)
+        _uiState.update {
+            it.copy(showRemapButtonDialog = false)
+        }
+    }
+
     fun appOverridesEnabled(newValue: Boolean) {
         prefs.appOverridesEnabled = newValue
         _uiState.update {

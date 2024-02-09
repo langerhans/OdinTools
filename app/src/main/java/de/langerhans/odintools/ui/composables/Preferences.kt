@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,9 +13,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import android.view.KeyEvent
 import de.langerhans.odintools.R
 import de.langerhans.odintools.main.CheckboxPreferenceUiModel
 
@@ -277,4 +285,78 @@ fun VibrationPreferenceDialog(
             )
         }
     })
+}
+
+@Composable
+fun RemapButtonDialog(
+    initialValue: Int,
+    onCancel: () -> Unit,
+    onReset: () -> Unit,
+    onSave: (newValue: Int) -> Unit
+) {
+    val focusRequester = remember { FocusRequester() }
+    var userValue: Int by remember {
+        mutableIntStateOf(initialValue)
+    }
+
+    Dialog(onDismissRequest = {}) {
+        Box (
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .focusable()
+                .onKeyEvent {
+                    if (it.type == KeyEventType.KeyUp) {
+                        userValue = it.nativeKeyEvent.keyCode
+                    }
+                    return@onKeyEvent true
+                }
+        ) {
+            Card {
+                Column(
+                    modifier = Modifier
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.remapButton),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = stringResource(id = R.string.pressAnyButton),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier
+                    )
+                    Text(
+                        text = KeyEvent.keyCodeToString(userValue),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        TextButton(onClick = onReset) {
+                            Text(text = stringResource(id = R.string.setDefault))
+                        }
+                        Row {
+                            TextButton(onClick = onCancel) {
+                                Text(text = stringResource(id = R.string.cancel))
+                            }
+                            TextButton(onClick = { onSave(userValue) }) {
+                                Text(text = stringResource(id = R.string.save))
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 }

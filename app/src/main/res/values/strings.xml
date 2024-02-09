@@ -60,4 +60,11 @@
     <string name="haptics">Haptics</string>
     <string name="vibrationStrength">Vibration strength</string>
     <string name="vibrationStrengthDescription">Adjust the maximum strength of vibrations &amp; haptics. Switch off to disable vibrations.</string>
+
+    <string name="remapButton">Remap button</string>
+    <string name="remapButtonDescription">Remap button to another key code</string>
+    <string name="m1Button">M1 button</string>
+    <string name="m2Button">M2 button</string>
+    <string name="pressAnyButton">Press any button</string>
+    <string name="setDefault">Set Default</string>
 </resources>

@@ -102,6 +102,15 @@ fun SettingsScreen(
         )
     }
 
+    if (uiState.showRemapButtonDialog) {
+        RemapButtonDialog(
+            initialValue = uiState.currentButtonKeyCode,
+            onCancel = { viewModel.remapButtonDialogDismissed() },
+            onReset = { viewModel.resetButtonKeyCode(uiState.currentButtonSetting) },
+            onSave = { viewModel.saveButtonKeyCode(uiState.currentButtonSetting, it) }
+        )
+    }
+
     Scaffold(topBar = {OdinTopAppBar(deviceVersion = uiState.deviceVersion)}) { contentPadding ->
         Column(
             modifier = Modifier
@@ -150,6 +159,20 @@ fun SettingsScreen(
                 state = uiState.singleHomeEnabled
             ) {
                 viewModel.updateSingleHomePreference(it)
+            }
+            TriggerPreference(
+                icon = R.drawable.ic_gamepad,
+                title = R.string.m1Button,
+                description = R.string.remapButtonDescription
+            ) {
+                viewModel.remapButtonClicked("remap_custom_to_m1_value")
+            }
+            TriggerPreference(
+                icon = R.drawable.ic_gamepad,
+                title = R.string.m2Button,
+                description = R.string.remapButtonDescription
+            ) {
+                viewModel.remapButtonClicked("remap_custom_to_m2_value")
             }
             SettingsHeader(name = R.string.display)
             TriggerPreference(
