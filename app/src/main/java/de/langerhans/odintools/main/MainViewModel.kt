@@ -2,6 +2,7 @@ package de.langerhans.odintools.main
 
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import android.view.KeyEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
@@ -187,13 +188,13 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getDefaultKeyCode(setting: String): Int {
-        if (setting == "remap_custom_to_m1_value")
-            return 98
-
-        if (setting == "remap_custom_to_m2_value")
-            return 101
-
-        return 0
+        if (setting == "remap_custom_to_m1_value") {
+            return KeyEvent.KEYCODE_BUTTON_C
+        }
+        if (setting == "remap_custom_to_m2_value") {
+            return KeyEvent.KEYCODE_BUTTON_Z
+        }
+        return KeyEvent.KEYCODE_UNKNOWN
     }
 
     fun resetButtonKeyCode(setting: String) {
