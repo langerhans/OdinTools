@@ -2,6 +2,7 @@ package de.langerhans.odintools.main
 
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import android.view.KeyEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
@@ -152,7 +153,7 @@ class MainViewModel @Inject constructor(
 
     fun vibrationClicked() {
         _uiState.update {
-            it.copy(showVibrationDialog = true)
+            it.copy(showVibrationDialog = true, currentVibration = executor.getVibrationStrength())
         }
     }
 
@@ -167,6 +168,47 @@ class MainViewModel @Inject constructor(
         executor.setVibrationStrength(newValue)
         _uiState.update {
             it.copy(showVibrationDialog = false, currentVibration = newValue)
+        }
+    }
+
+    fun remapButtonClicked(setting: String) {
+        _uiState.update {
+            it.copy(
+                showRemapButtonDialog = true,
+                currentButtonSetting = setting,
+                currentButtonKeyCode = executor.getSystemSetting(setting, 0)
+            )
+        }
+    }
+
+    fun remapButtonDialogDismissed() {
+        _uiState.update {
+            it.copy(showRemapButtonDialog = false)
+        }
+    }
+
+    private fun getDefaultKeyCode(setting: String): Int {
+        if (setting == "remap_custom_to_m1_value") {
+            return KeyEvent.KEYCODE_BUTTON_C
+        }
+        if (setting == "remap_custom_to_m2_value") {
+            return KeyEvent.KEYCODE_BUTTON_Z
+        }
+        return KeyEvent.KEYCODE_UNKNOWN
+    }
+
+    fun resetButtonKeyCode(setting: String) {
+        val newValue: Int = getDefaultKeyCode(setting)
+        executor.setSystemSetting(setting, newValue)
+        _uiState.update {
+            it.copy(showRemapButtonDialog = false)
+        }
+    }
+
+    fun saveButtonKeyCode(setting: String, newValue: Int) {
+        executor.setSystemSetting(setting, newValue)
+        _uiState.update {
+            it.copy(showRemapButtonDialog = false)
         }
     }
 
