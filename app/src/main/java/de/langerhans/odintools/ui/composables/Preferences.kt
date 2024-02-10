@@ -327,8 +327,7 @@ fun RemapButtonDialog(
                     )
                     Text(
                         text = stringResource(id = R.string.pressAnyButton),
-                        style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier
+                        style = MaterialTheme.typography.labelLarge
                     )
                     Text(
                         text = KeyEvent.keyCodeToString(userValue),
