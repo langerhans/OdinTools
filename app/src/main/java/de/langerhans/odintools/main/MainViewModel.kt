@@ -39,7 +39,7 @@ class MainViewModel @Inject constructor(
         executor.enableA11yService()
         executor.grantAllAppsPermission()
 
-        val deviceType = deviceUtils.getDeviceTpe()
+        val deviceType = deviceUtils.getDeviceType()
         val preventHomePressSetting = executor.getBooleanSystemSetting("prevent_press_home_accidentally", true)
         val vibrationOnSetting = executor.getBooleanSystemSetting("vibrate_on", true)
         val vibrationStrength = executor.getVibrationStrength()

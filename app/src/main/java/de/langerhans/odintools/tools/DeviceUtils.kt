@@ -7,7 +7,7 @@ class DeviceUtils @Inject constructor(
     private val shellExecutor: ShellExecutor
 ) {
 
-    fun getDeviceTpe(): DeviceType {
+    fun getDeviceType(): DeviceType {
         val deviceName = shellExecutor.executeAsRoot("getprop ro.vendor.retro.name").getOrNull()
         return when (deviceName) {
             "Q9" -> ODIN2
