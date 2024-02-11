@@ -1,0 +1,59 @@
+name: Build OdinTools
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      - name: Setup JDK
+        uses: actions/setup-java@v4.0.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          add-job-summary-as-pr-comment: always
+          build-scan-publish: true
+          build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-service-agree: "yes"
+      - name: Build app
+        run: ./gradlew assemble
+      - name: Save debug apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug apk
+          path: app/build/outputs/apk/debug/OdinTools-*.apk
+          if-no-files-found: error
+      - name: Save (unsigned) release apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned release apk
+          path: app/build/outputs/apk/release/OdinTools-*.apk
+          if-no-files-found: error
+  dependencies:
+    name: Dependency graph
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      - name: Setup JDK
+        uses: actions/setup-java@v4.0.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@v3

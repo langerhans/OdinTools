@@ -1,8 +1,9 @@
 # OdinTools
-Collection of utilities for the AYN Odin 2.
+Collection of utilities for the AYN Odin 2.  
 
 Latest release: **[1.2.1](https://github.com/langerhans/OdinTools/releases/latest)**
 
+[![Build OdinTools](https://github.com/langerhans/OdinTools/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/langerhans/OdinTools/actions/workflows/build.yml)
 ### Features
 #### App overrides
 - Per-app overrides for both controller style and L2/R2 style settings. These will be applied and reverted automatically based on the current foreground app.
