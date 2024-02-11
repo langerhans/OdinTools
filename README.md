@@ -1,7 +1,7 @@
 # OdinTools
 Collection of utilities for the AYN Odin 2.
 
-Latest release: **[1.2.0](https://github.com/langerhans/OdinTools/releases/latest)**
+Latest release: **[1.2.1](https://github.com/langerhans/OdinTools/releases/latest)**
 
 ### Features
 #### App overrides

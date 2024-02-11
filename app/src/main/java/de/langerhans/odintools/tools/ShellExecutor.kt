@@ -87,7 +87,7 @@ class ShellExecutor @Inject constructor() {
         val defaultValue = 0
 
         return executeAsRoot("cat /d/haptics/user_vmax_mv")
-            .map { it?.toInt() ?: defaultValue }
+            .mapCatching { it?.toInt() ?: defaultValue } // This throws on RP4 because it has no rumble
             .getOrDefault(defaultValue)
     }
 

@@ -24,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.langerhans.odintools.R
 import de.langerhans.odintools.appsettings.AppOverrideListScreen
 import de.langerhans.odintools.appsettings.AppOverridesScreen
+import de.langerhans.odintools.tools.DeviceType.ODIN2
 import de.langerhans.odintools.ui.composables.*
 import de.langerhans.odintools.ui.theme.OdinToolsTheme
 
@@ -182,15 +183,17 @@ fun SettingsScreen(
             ) {
                 viewModel.saturationClicked()
             }
-            SettingsHeader(name = R.string.haptics)
-            SwitchableTriggerPreference(
-                icon = R.drawable.ic_vibration,
-                title = R.string.vibrationStrength,
-                description = R.string.vibrationStrengthDescription,
-                state = uiState.vibrationEnabled,
-                onClick = { viewModel.vibrationClicked() }
-            ) {
-                viewModel.updateVibrationPreference(it)
+            if (uiState.deviceType == ODIN2) {
+                SettingsHeader(name = R.string.haptics)
+                SwitchableTriggerPreference(
+                    icon = R.drawable.ic_vibration,
+                    title = R.string.vibrationStrength,
+                    description = R.string.vibrationStrengthDescription,
+                    state = uiState.vibrationEnabled,
+                    onClick = { viewModel.vibrationClicked() }
+                ) {
+                    viewModel.updateVibrationPreference(it)
+                }
             }
         }
     }
