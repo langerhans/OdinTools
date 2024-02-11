@@ -17,7 +17,7 @@ sealed class FanMode(
 
     fun enable(executor: ShellExecutor) {
         if (this != Unknown) {
-            executor.setSystemSetting(FAN_MODE, settingsValue)
+            executor.setIntSystemSetting(FAN_MODE, settingsValue)
         }
     }
 
@@ -25,7 +25,7 @@ sealed class FanMode(
         private const val FAN_MODE = "fan_mode"
 
         fun getMode(executor: ShellExecutor) =
-            when (executor.getSystemSetting(FAN_MODE, Quiet.settingsValue)) {
+            when (executor.getIntSystemSetting(FAN_MODE, Quiet.settingsValue)) {
                 Quiet.settingsValue -> Quiet
                 Smart.settingsValue -> Smart
                 Sport.settingsValue -> Sport

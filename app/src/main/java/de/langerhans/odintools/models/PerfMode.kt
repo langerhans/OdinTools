@@ -16,7 +16,7 @@ sealed class PerfMode(
 
     fun enable(executor: ShellExecutor) {
         if (this != Unknown) {
-            executor.setSystemSetting(PERFORMANCE_MODE, settingsValue)
+            executor.setIntSystemSetting(PERFORMANCE_MODE, settingsValue)
         }
     }
 
@@ -24,7 +24,7 @@ sealed class PerfMode(
         private const val PERFORMANCE_MODE = "performance_mode"
 
         fun getMode(executor: ShellExecutor) =
-            when (executor.getSystemSetting(PERFORMANCE_MODE, Standard.settingsValue)) {
+            when (executor.getIntSystemSetting(PERFORMANCE_MODE, Standard.settingsValue)) {
                 Standard.settingsValue -> Standard
                 Performance.settingsValue -> Performance
                 HighPerformance.settingsValue -> HighPerformance
