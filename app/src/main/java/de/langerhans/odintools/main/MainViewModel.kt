@@ -36,8 +36,7 @@ class MainViewModel @Inject constructor(
         get() = _l2r2StyleOptions
 
     init {
-        executor.enableA11yService()
-        executor.grantAllAppsPermission()
+        executor.applyRequiredSettings()
 
         val deviceType = deviceUtils.getDeviceType()
         val preventHomePressSetting = executor.getBooleanSystemSetting("prevent_press_home_accidentally", true)
@@ -178,7 +177,7 @@ class MainViewModel @Inject constructor(
             it.copy(
                 showRemapButtonDialog = true,
                 currentButtonSetting = setting,
-                currentButtonKeyCode = executor.getSystemSetting(setting, 0)
+                currentButtonKeyCode = executor.getIntSystemSetting(setting, 0)
             )
         }
     }
@@ -201,14 +200,14 @@ class MainViewModel @Inject constructor(
 
     fun resetButtonKeyCode(setting: String) {
         val newValue: Int = getDefaultKeyCode(setting)
-        executor.setSystemSetting(setting, newValue)
+        executor.setIntSystemSetting(setting, newValue)
         _uiState.update {
             it.copy(showRemapButtonDialog = false)
         }
     }
 
     fun saveButtonKeyCode(setting: String, newValue: Int) {
-        executor.setSystemSetting(setting, newValue)
+        executor.setIntSystemSetting(setting, newValue)
         _uiState.update {
             it.copy(showRemapButtonDialog = false)
         }

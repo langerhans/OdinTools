@@ -3,6 +3,7 @@ package de.langerhans.odintools.tools
 import android.annotation.SuppressLint
 import android.os.IBinder
 import android.os.Parcel
+import de.langerhans.odintools.BuildConfig
 import java.nio.charset.Charset
 import javax.inject.Inject
 
@@ -33,24 +34,22 @@ class ShellExecutor @Inject constructor() {
             .getOrElse {
                 return Result.failure(it)
             }
-        val result = reply.createByteArray()?.toString(Charset.defaultCharset())?.trim()
+        val result = reply.createByteArray()?.toString(Charset.defaultCharset())?.trim()?.let {
+            if (it == "null") null else it
+        }
         data.recycle()
         reply.recycle()
         return Result.success(result)
     }
 
-    fun getSystemSetting(setting: String, defaultValue: Int): Int {
+    fun getIntSystemSetting(setting: String, defaultValue: Int): Int {
         return executeAsRoot("settings get system $setting")
-            .map { if (it == null || it == "null") defaultValue else it.toInt() }
+            .mapCatching { it?.toInt() ?: defaultValue }
             .getOrDefault(defaultValue)
     }
 
-    fun setSystemSetting(setting: String, value: Int) {
+    fun setIntSystemSetting(setting: String, value: Int) {
         executeAsRoot("settings put system $setting $value")
-    }
-
-    fun setBooleanSystemSetting(setting: String, value: Boolean) {
-        setSystemSetting(setting, if (value) 1 else 0)
     }
 
     fun getBooleanSystemSetting(setting: String, defaultValue: Boolean): Boolean {
@@ -59,15 +58,27 @@ class ShellExecutor @Inject constructor() {
             .getOrDefault(defaultValue)
     }
 
-    fun enableA11yService() {
+    fun setBooleanSystemSetting(setting: String, value: Boolean) {
+        setIntSystemSetting(setting, if (value) 1 else 0)
+    }
+
+    fun getStringSystemSetting(setting: String, defaultValue: String): String {
+        return executeAsRoot("settings get system $setting").map {
+            it ?: defaultValue
+        }.getOrDefault(defaultValue)
+    }
+
+    fun setStringSystemSetting(setting: String, value: String) {
+        executeAsRoot("settings put system $setting $value")
+    }
+
+    private fun enableA11yService() {
         val currentServices =
             executeAsRoot("settings get secure enabled_accessibility_services")
-                .map {
-                    if (it == null || it == "null") "" else it
-                }
+                .map { it ?: "" }
                 .getOrDefault("")
 
-        if (currentServices.contains("de.langerhans.odintools")) return
+        if (currentServices.contains(PACKAGE)) return
 
         executeAsRoot(
             "settings put secure enabled_accessibility_services $PACKAGE/$PACKAGE.service.ForegroundAppWatcherService:$currentServices"
@@ -91,11 +102,28 @@ class ShellExecutor @Inject constructor() {
             .getOrDefault(defaultValue)
     }
 
-    fun grantAllAppsPermission() {
+    private fun grantAllAppsPermission() {
         executeAsRoot("pm grant $PACKAGE android.permission.QUERY_ALL_PACKAGES")
     }
 
+    private fun addOdinToolsToWhitelist() {
+        val currentWhitelist = getStringSystemSetting("app_whiteList", "")
+        if (currentWhitelist.contains(PACKAGE)) return
+
+        val newWhitelist = "$PACKAGE,$currentWhitelist".trimEnd(',')
+        setStringSystemSetting("app_whiteList", newWhitelist)
+    }
+
+    fun applyRequiredSettings() {
+        enableA11yService()
+        grantAllAppsPermission()
+        if (!BuildConfig.DEBUG) {
+            // Don't add to whitelist on debug builds, otherwise even Android Studio can't kill the app
+            addOdinToolsToWhitelist()
+        }
+    }
+
     companion object {
-        private const val PACKAGE = "de.langerhans.odintools"
+        private const val PACKAGE = BuildConfig.APPLICATION_ID
     }
 }

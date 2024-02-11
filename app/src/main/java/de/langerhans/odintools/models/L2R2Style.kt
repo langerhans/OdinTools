@@ -2,7 +2,6 @@ package de.langerhans.odintools.models
 
 import androidx.annotation.StringRes
 import de.langerhans.odintools.R
-import de.langerhans.odintools.tiles.L2R2TileService
 import de.langerhans.odintools.tools.ShellExecutor
 
 sealed class L2R2Style(
@@ -17,7 +16,7 @@ sealed class L2R2Style(
 
     fun enable(executor: ShellExecutor) {
         if (this != Unknown) {
-            executor.setSystemSetting(TRIGGER_INPUT_MODE, settingsValue)
+            executor.setIntSystemSetting(TRIGGER_INPUT_MODE, settingsValue)
         }
     }
 
@@ -25,7 +24,7 @@ sealed class L2R2Style(
         private const val TRIGGER_INPUT_MODE = "trigger_input_mode"
 
         fun getStyle(executor: ShellExecutor) =
-            when (executor.getSystemSetting(TRIGGER_INPUT_MODE, Analog.settingsValue)) {
+            when (executor.getIntSystemSetting(TRIGGER_INPUT_MODE, Analog.settingsValue)) {
                 Analog.settingsValue -> Analog
                 Digital.settingsValue -> Digital
                 Both.settingsValue -> Both

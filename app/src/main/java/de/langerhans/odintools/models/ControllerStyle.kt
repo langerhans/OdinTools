@@ -18,9 +18,9 @@ sealed class ControllerStyle(
 
     fun enable(executor: ShellExecutor) {
         if (this != Unknown) {
-            executor.setSystemSetting(TEMP_ABXY_LAYOUT_MODE, tempAbxyLayout)
-            executor.setSystemSetting(NO_CREATE_GAMEPAD_BUTTON_LAYOUT, noCreateGamepadLayout)
-            executor.setSystemSetting(FLIP_BUTTON_LAYOUT, flipButtonLayout)
+            executor.setIntSystemSetting(TEMP_ABXY_LAYOUT_MODE, tempAbxyLayout)
+            executor.setIntSystemSetting(NO_CREATE_GAMEPAD_BUTTON_LAYOUT, noCreateGamepadLayout)
+            executor.setIntSystemSetting(FLIP_BUTTON_LAYOUT, flipButtonLayout)
         }
     }
 
@@ -30,8 +30,8 @@ sealed class ControllerStyle(
         private const val FLIP_BUTTON_LAYOUT = "flip_button_layout"
 
         fun getStyle(executor: ShellExecutor): ControllerStyle {
-            return if (executor.getSystemSetting(NO_CREATE_GAMEPAD_BUTTON_LAYOUT, 0) == 1) Disconnect
-            else if (executor.getSystemSetting(FLIP_BUTTON_LAYOUT, 0) == 1) Xbox
+            return if (executor.getIntSystemSetting(NO_CREATE_GAMEPAD_BUTTON_LAYOUT, 0) == 1) Disconnect
+            else if (executor.getIntSystemSetting(FLIP_BUTTON_LAYOUT, 0) == 1) Xbox
             else Odin
         }
 
