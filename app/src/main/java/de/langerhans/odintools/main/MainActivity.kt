@@ -24,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.langerhans.odintools.R
 import de.langerhans.odintools.appsettings.AppOverrideListScreen
 import de.langerhans.odintools.appsettings.AppOverridesScreen
+import de.langerhans.odintools.tools.DeviceType.ODIN2
 import de.langerhans.odintools.ui.composables.*
 import de.langerhans.odintools.ui.theme.OdinToolsTheme
 
@@ -160,19 +161,21 @@ fun SettingsScreen(
             ) {
                 viewModel.updateSingleHomePreference(it)
             }
-            TriggerPreference(
-                icon = R.drawable.ic_gamepad,
-                title = R.string.m1Button,
-                description = R.string.remapButtonDescription
-            ) {
-                viewModel.remapButtonClicked("remap_custom_to_m1_value")
-            }
-            TriggerPreference(
-                icon = R.drawable.ic_gamepad,
-                title = R.string.m2Button,
-                description = R.string.remapButtonDescription
-            ) {
-                viewModel.remapButtonClicked("remap_custom_to_m2_value")
+            if (uiState.deviceType == ODIN2) {
+                TriggerPreference(
+                    icon = R.drawable.ic_gamepad,
+                    title = R.string.m1Button,
+                    description = R.string.remapButtonDescription
+                ) {
+                    viewModel.remapButtonClicked("remap_custom_to_m1_value")
+                }
+                TriggerPreference(
+                    icon = R.drawable.ic_gamepad,
+                    title = R.string.m2Button,
+                    description = R.string.remapButtonDescription
+                ) {
+                    viewModel.remapButtonClicked("remap_custom_to_m2_value")
+                }
             }
             SettingsHeader(name = R.string.display)
             TriggerPreference(
@@ -182,15 +185,17 @@ fun SettingsScreen(
             ) {
                 viewModel.saturationClicked()
             }
-            SettingsHeader(name = R.string.haptics)
-            SwitchableTriggerPreference(
-                icon = R.drawable.ic_vibration,
-                title = R.string.vibrationStrength,
-                description = R.string.vibrationStrengthDescription,
-                state = uiState.vibrationEnabled,
-                onClick = { viewModel.vibrationClicked() }
-            ) {
-                viewModel.updateVibrationPreference(it)
+            if (uiState.deviceType == ODIN2) {
+                SettingsHeader(name = R.string.haptics)
+                SwitchableTriggerPreference(
+                    icon = R.drawable.ic_vibration,
+                    title = R.string.vibrationStrength,
+                    description = R.string.vibrationStrengthDescription,
+                    state = uiState.vibrationEnabled,
+                    onClick = { viewModel.vibrationClicked() }
+                ) {
+                    viewModel.updateVibrationPreference(it)
+                }
             }
         }
     }

@@ -1,13 +1,14 @@
 package de.langerhans.odintools.main
 
+import android.view.KeyEvent
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
-import android.view.KeyEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle.*
 import de.langerhans.odintools.models.L2R2Style.*
+import de.langerhans.odintools.tools.DeviceType.ODIN2
 import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,15 +39,16 @@ class MainViewModel @Inject constructor(
         executor.enableA11yService()
         executor.grantAllAppsPermission()
 
-        val isOdin2 = deviceUtils.isOdin2()
+        val deviceType = deviceUtils.getDeviceType()
         val preventHomePressSetting = executor.getBooleanSystemSetting("prevent_press_home_accidentally", true)
         val vibrationOnSetting = executor.getBooleanSystemSetting("vibrate_on", true)
         val vibrationStrength = executor.getVibrationStrength()
 
         _uiState.update { _ ->
             MainUiModel(
+                deviceType = deviceType,
                 deviceVersion = deviceUtils.getDeviceVersion(),
-                showNotAnOdinDialog = !isOdin2,
+                showNotAnOdinDialog = deviceType != ODIN2,
                 singleHomeEnabled = !preventHomePressSetting,
                 showPServerNotAvailableDialog = !deviceUtils.isPServerAvailable(),
                 overrideDelayEnabled = prefs.overrideDelay,

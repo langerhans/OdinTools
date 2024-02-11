@@ -4,8 +4,11 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import de.langerhans.odintools.tools.DeviceType
+import de.langerhans.odintools.tools.DeviceType.ODIN2
 
 data class MainUiModel(
+    val deviceType: DeviceType = ODIN2,
     val deviceVersion: String = "",
     val showNotAnOdinDialog: Boolean = false,
     val showPServerNotAvailableDialog: Boolean = false,
