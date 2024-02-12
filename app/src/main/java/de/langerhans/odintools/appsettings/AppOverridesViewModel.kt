@@ -23,7 +23,7 @@ class AppOverridesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val appOverrideDao: AppOverrideDao,
     private val appOverrideMapper: AppOverrideMapper,
-    private val deviceUtils: DeviceUtils
+    private val deviceUtils: DeviceUtils,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppOverridesUiModel())
@@ -57,7 +57,7 @@ class AppOverridesViewModel @Inject constructor(
                     app = uiModel,
                     isNewApp = app == null,
                     disabledFanModeKeys = getDisabledFanModes(initialPerfMode),
-                    deviceVersion = deviceUtils.getDeviceVersion()
+                    deviceVersion = deviceUtils.getDeviceVersion(),
                 )
             }
         }
@@ -66,13 +66,15 @@ class AppOverridesViewModel @Inject constructor(
     fun saveClicked() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                appOverrideDao.save(AppOverrideEntity(
-                    packageName = packageName,
-                    controllerStyle = _uiState.value.app?.controllerStyle?.id,
-                    l2R2Style = _uiState.value.app?.l2r2Style?.id,
-                    perfMode = _uiState.value.app?.perfMode?.id,
-                    fanMode = _uiState.value.app?.fanMode?.id
-                ))
+                appOverrideDao.save(
+                    AppOverrideEntity(
+                        packageName = packageName,
+                        controllerStyle = _uiState.value.app?.controllerStyle?.id,
+                        l2R2Style = _uiState.value.app?.l2r2Style?.id,
+                        perfMode = _uiState.value.app?.perfMode?.id,
+                        fanMode = _uiState.value.app?.fanMode?.id,
+                    ),
+                )
             }
         }
         _uiState.update {
@@ -107,7 +109,7 @@ class AppOverridesViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 app = it.app?.copy(controllerStyle = ControllerStyle.getById(key)),
-                hasUnsavedChanges = hasUnsavedChanges(controllerStyle = key)
+                hasUnsavedChanges = hasUnsavedChanges(controllerStyle = key),
             )
         }
     }
@@ -116,7 +118,7 @@ class AppOverridesViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 app = it.app?.copy(l2r2Style = L2R2Style.getById(key)),
-                hasUnsavedChanges = hasUnsavedChanges(l2R2Style = key)
+                hasUnsavedChanges = hasUnsavedChanges(l2R2Style = key),
             )
         }
     }
@@ -141,7 +143,7 @@ class AppOverridesViewModel @Inject constructor(
             it.copy(
                 app = it.app?.copy(perfMode = perfMode, fanMode = fixedFanMode),
                 hasUnsavedChanges = hasUnsavedChanges(perfMode = key, fanMode = fixedFanMode?.id),
-                disabledFanModeKeys = disabledFanModes
+                disabledFanModeKeys = disabledFanModes,
             )
         }
     }
@@ -150,7 +152,7 @@ class AppOverridesViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 app = it.app?.copy(fanMode = FanMode.getById(key)),
-                hasUnsavedChanges = hasUnsavedChanges(fanMode = key)
+                hasUnsavedChanges = hasUnsavedChanges(fanMode = key),
             )
         }
     }
@@ -159,13 +161,13 @@ class AppOverridesViewModel @Inject constructor(
         controllerStyle: String? = null,
         l2R2Style: String? = null,
         perfMode: String? = null,
-        fanMode: String? = null
+        fanMode: String? = null,
     ): Boolean {
         return listOf(
             (controllerStyle ?: _uiState.value.app?.controllerStyle?.id) != initialControllerStyle,
             (l2R2Style ?: _uiState.value.app?.l2r2Style?.id) != initialL2R2Style,
             (perfMode ?: _uiState.value.app?.perfMode?.id) != initialPerfMode,
-            (fanMode ?: _uiState.value.app?.fanMode?.id) != initialFanMode
+            (fanMode ?: _uiState.value.app?.fanMode?.id) != initialFanMode,
         ).any { it }
     }
 
@@ -173,7 +175,7 @@ class AppOverridesViewModel @Inject constructor(
         private val systemFanPerfModeMapping = mapOf(
             PerfMode.Standard to FanMode.Off,
             PerfMode.Performance to FanMode.Quiet,
-            PerfMode.HighPerformance to FanMode.Sport
+            PerfMode.HighPerformance to FanMode.Sport,
         )
     }
 }

@@ -29,13 +29,13 @@ data class MainUiModel(
 
     val showRemapButtonDialog: Boolean = false,
     val currentButtonSetting: String = "",
-    val currentButtonKeyCode: Int = 0
+    val currentButtonKeyCode: Int = 0,
 )
 
 class CheckboxPreferenceUiModel(
     val key: String,
     @StringRes val text: Int,
-    initialChecked: Boolean = false
+    initialChecked: Boolean = false,
 ) {
     var checked by mutableStateOf(initialChecked)
 }

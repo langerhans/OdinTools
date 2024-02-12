@@ -24,10 +24,7 @@ import de.langerhans.odintools.ui.composables.DialogButton
 import de.langerhans.odintools.ui.composables.OdinTopAppBar
 
 @Composable
-fun AppOverrideListScreen(
-    viewModel: AppOverrideListViewModel = hiltViewModel(),
-    navigateToOverrides: (packageName: String) -> Unit
-) {
+fun AppOverrideListScreen(viewModel: AppOverrideListViewModel = hiltViewModel(), navigateToOverrides: (packageName: String) -> Unit) {
     val uiState: AppOverrideListUiModel by viewModel.uiState.collectAsState()
     Scaffold(topBar = { OdinTopAppBar(deviceVersion = uiState.deviceVersion) }) { contentPadding ->
 
@@ -37,32 +34,35 @@ fun AppOverrideListScreen(
                 {
                     viewModel.dismissAppSelectDialog()
                     navigateToOverrides(it)
-                }, {
+                },
+                {
                     viewModel.dismissAppSelectDialog()
-                }
+                },
             )
         }
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentPadding)
+                .padding(contentPadding),
         ) {
             item {
-                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { viewModel.addClicked() }
-                    .padding(vertical = 12.dp, horizontal = 16.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { viewModel.addClicked() }
+                        .padding(vertical = 12.dp, horizontal = 16.dp),
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_add),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(LocalContentColor.current),
-                        modifier = Modifier.size(48.dp)
+                        modifier = Modifier.size(48.dp),
                     )
                     Text(
                         text = stringResource(id = R.string.addOverride),
-                        modifier = Modifier.padding(start = 16.dp)
+                        modifier = Modifier.padding(start = 16.dp),
                     )
                 }
             }
@@ -72,7 +72,7 @@ fun AppOverrideListScreen(
                     it.appName,
                     it.appIcon,
                     48.dp,
-                    it.subtitle
+                    it.subtitle,
                 ) { packageName ->
                     navigateToOverrides(packageName)
                 }
@@ -82,18 +82,13 @@ fun AppOverrideListScreen(
 }
 
 @Composable
-fun AppItem(
-    packageName: String,
-    label: String,
-    icon: Drawable,
-    iconSize: Dp = 48.dp,
-    subLabel: String? = "",
-    onClick: (String) -> Unit
-) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onClick(packageName) }
-        .padding(vertical = 12.dp, horizontal = 16.dp)
+fun AppItem(packageName: String, label: String, icon: Drawable, iconSize: Dp = 48.dp, subLabel: String? = "", onClick: (String) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick(packageName) }
+            .padding(vertical = 12.dp, horizontal = 16.dp),
     ) {
         Image(painter = rememberDrawablePainter(drawable = icon), contentDescription = null, Modifier.size(iconSize))
         Column(modifier = Modifier.padding(start = 16.dp)) {
@@ -101,7 +96,7 @@ fun AppItem(
             if (subLabel?.isNotEmpty() == true) {
                 Text(
                     text = subLabel,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
             }
         }
@@ -109,11 +104,7 @@ fun AppItem(
 }
 
 @Composable
-fun AppPickerDialog(
-    apps: List<AppUiModel>,
-    onAppSelected: (String) -> Unit,
-    onDismiss: () -> Unit
-) {
+fun AppPickerDialog(apps: List<AppUiModel>, onAppSelected: (String) -> Unit, onDismiss: () -> Unit) {
     AlertDialog(onDismissRequest = {}, confirmButton = { }, dismissButton = {
         DialogButton(text = stringResource(id = R.string.cancel), onDismiss)
     }, title = {}, text = {
@@ -122,7 +113,7 @@ fun AppPickerDialog(
             return@AlertDialog
         }
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             items(items = apps, itemContent = {
                 AppItem(
@@ -131,7 +122,7 @@ fun AppPickerDialog(
                     it.appIcon,
                     36.dp,
                     "",
-                    onAppSelected
+                    onAppSelected,
                 )
             })
         }

@@ -28,10 +28,7 @@ import de.langerhans.odintools.ui.composables.OdinTopAppBar
 import de.langerhans.odintools.ui.theme.Typography
 
 @Composable
-fun AppOverridesScreen(
-    viewModel: AppOverridesViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
-) {
+fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navigateBack: () -> Unit) {
     val uiState: AppOverridesUiModel by viewModel.uiState.collectAsState()
     val app = uiState.app ?: return run {
         // Shouldn't happen
@@ -45,7 +42,7 @@ fun AppOverridesScreen(
         if (uiState.showDeleteConfirmDialog) {
             DeleteConfirmDialog(
                 onDelete = { viewModel.deleteConfirmed() },
-                onDismiss = { viewModel.deleteDismissed() }
+                onDismiss = { viewModel.deleteDismissed() },
             )
         }
 
@@ -53,31 +50,31 @@ fun AppOverridesScreen(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(contentPadding)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(0.3f)
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Image(
                             painter = rememberDrawablePainter(drawable = app.appIcon),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(72.dp)
-                                .padding(bottom = 8.dp)
+                                .padding(bottom = 8.dp),
                         )
                         Text(
                             text = app.appName,
-                            modifier = Modifier.padding(bottom = 8.dp)
+                            modifier = Modifier.padding(bottom = 8.dp),
                         )
                     }
                 }
@@ -86,7 +83,7 @@ fun AppOverridesScreen(
                     enabled = uiState.hasUnsavedChanges,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 8.dp)
+                        .padding(bottom = 8.dp),
                 ) {
                     Text(text = stringResource(id = R.string.save))
                 }
@@ -94,18 +91,18 @@ fun AppOverridesScreen(
                     onClick = navigateBack,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = if (uiState.isNewApp) 0.dp else 8.dp)
+                        .padding(bottom = if (uiState.isNewApp) 0.dp else 8.dp),
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
                 if (uiState.isNewApp.not()) {
                     OutlinedButton(
                         onClick = { viewModel.deleteClicked() },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
                             color = Color.Red,
-                            text = stringResource(id = R.string.deleteOverride)
+                            text = stringResource(id = R.string.deleteOverride),
                         )
                     }
                 }
@@ -114,12 +111,12 @@ fun AppOverridesScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxHeight()
-                    .width(1.dp)
+                    .width(1.dp),
             )
             Column(
                 modifier = Modifier
                     .weight(0.7f)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
             ) {
                 OverrideSpinnerRow(
                     label = R.string.controllerStyle,
@@ -131,7 +128,7 @@ fun AppOverridesScreen(
                     ),
                     initialSelection = uiState.app?.controllerStyle?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.controllerStyleSelected(it) },
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 16.dp),
                 )
                 OverrideSpinnerRow(
                     label = R.string.l2r2mode,
@@ -143,7 +140,7 @@ fun AppOverridesScreen(
                     ),
                     initialSelection = uiState.app?.l2r2Style?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.l2R2StyleSelected(it) },
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 16.dp),
                 )
                 OverrideSpinnerRow(
                     label = R.string.perfMode,
@@ -155,7 +152,7 @@ fun AppOverridesScreen(
                     ),
                     initialSelection = uiState.app?.perfMode?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.perfModeSelected(it) },
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 16.dp),
                 )
                 if (uiState.app?.perfMode != null && uiState.app?.perfMode != PerfMode.Unknown) {
                     OverrideSpinnerRow(
@@ -168,25 +165,25 @@ fun AppOverridesScreen(
                         ).filterNot { it.first in uiState.disabledFanModeKeys },
                         initialSelection = uiState.app?.fanMode?.id ?: Smart.id,
                         onSelectionChanged = { viewModel.fanModeSelected(it) },
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                     Row(
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding()
+                            .padding(),
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_info),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(18.dp)
-                                .padding(end = 4.dp)
+                                .padding(end = 4.dp),
                         )
                         Text(
                             style = Typography.labelSmall,
-                            text = stringResource(id = R.string.fanModeRequired)
+                            text = stringResource(id = R.string.fanModeRequired),
                         )
                     }
                 }
@@ -196,11 +193,7 @@ fun AppOverridesScreen(
 }
 
 @Composable
-fun Spinner(
-    options: List<Pair<String, String>>,
-    initialSelection: String,
-    onSelectionChanged: (key: String) -> Unit
-) {
+fun Spinner(options: List<Pair<String, String>>, initialSelection: String, onSelectionChanged: (key: String) -> Unit) {
     val initial = options.indexOfFirst { it.first == initialSelection }.coerceAtLeast(0)
     var selectedIndex by remember { mutableIntStateOf(initial) }
 
@@ -218,7 +211,7 @@ fun Spinner(
             onSelectionChanged(item.first)
         },
         selectedIndex = selectedIndex,
-        selectedItemToString = { it.second }
+        selectedItemToString = { it.second },
     )
 }
 
@@ -228,22 +221,22 @@ fun OverrideSpinnerRow(
     spinnerItems: List<Pair<String, String>>,
     initialSelection: String,
     onSelectionChanged: (key: String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = stringResource(id = label),
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 16.dp)
+                .padding(end = 16.dp),
         )
         Spinner(
             options = spinnerItems,
             initialSelection = initialSelection,
-            onSelectionChanged = onSelectionChanged
+            onSelectionChanged = onSelectionChanged,
         )
     }
 }

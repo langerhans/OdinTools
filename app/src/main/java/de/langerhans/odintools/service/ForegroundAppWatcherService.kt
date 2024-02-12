@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() {
+class ForegroundAppWatcherService @Inject constructor() : AccessibilityService() {
 
     @Inject
     lateinit var appOverrideDao: AppOverrideDao
@@ -62,7 +62,7 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         if (shouldIgnore(event)) return
 
         if (overridesDelay) {
-            Handler(Looper.getMainLooper()).postDelayed({ handleEvent(event)}, OVERRIDE_DELAY)
+            Handler(Looper.getMainLooper()).postDelayed({ handleEvent(event) }, OVERRIDE_DELAY)
         } else {
             handleEvent(event)
         }
@@ -158,13 +158,13 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
         contentResolver.registerContentObserver(
             Settings.Secure.getUriFor(Settings.Secure.DEFAULT_INPUT_METHOD),
             false,
-            imeObserver
+            imeObserver,
         )
 
         overridesEnabled = sharedPrefsRepo.appOverridesEnabled
         sharedPrefsRepo.observeAppOverrideEnabledState(
             { overridesEnabled = it },
-            { overridesDelay = it }
+            { overridesDelay = it },
         )
 
         scope.launch {
@@ -188,7 +188,7 @@ class ForegroundAppWatcherService @Inject constructor(): AccessibilityService() 
             "com.android.launcher3",
             "com.odin2.gameassistant",
             "com.android.systemui",
-            "android"
+            "android",
         )
 
         const val OVERRIDE_DELAY = 500L

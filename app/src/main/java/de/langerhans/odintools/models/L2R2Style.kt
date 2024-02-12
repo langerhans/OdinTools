@@ -7,7 +7,7 @@ import de.langerhans.odintools.tools.ShellExecutor
 sealed class L2R2Style(
     val id: String,
     val settingsValue: Int,
-    @StringRes val textRes: Int
+    @StringRes val textRes: Int,
 ) {
     data object Analog : L2R2Style("analog", 0, R.string.analog)
     data object Digital : L2R2Style("digital", 1, R.string.digital)
@@ -23,15 +23,14 @@ sealed class L2R2Style(
     companion object {
         private const val TRIGGER_INPUT_MODE = "trigger_input_mode"
 
-        fun getStyle(executor: ShellExecutor) =
-            when (executor.getIntSystemSetting(TRIGGER_INPUT_MODE, Analog.settingsValue)) {
-                Analog.settingsValue -> Analog
-                Digital.settingsValue -> Digital
-                Both.settingsValue -> Both
-                else -> Unknown
-            }
+        fun getStyle(executor: ShellExecutor) = when (executor.getIntSystemSetting(TRIGGER_INPUT_MODE, Analog.settingsValue)) {
+            Analog.settingsValue -> Analog
+            Digital.settingsValue -> Digital
+            Both.settingsValue -> Both
+            else -> Unknown
+        }
 
-        fun getById(id: String?) = when(id) {
+        fun getById(id: String?) = when (id) {
             Analog.id -> Analog
             Digital.id -> Digital
             Both.id -> Both

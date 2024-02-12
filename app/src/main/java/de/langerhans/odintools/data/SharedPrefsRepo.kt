@@ -6,7 +6,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class SharedPrefsRepo @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
 ) {
 
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -37,10 +37,7 @@ class SharedPrefsRepo @Inject constructor(
 
     private var appOverrideEnabledListener: OnSharedPreferenceChangeListener? = null
 
-    fun observeAppOverrideEnabledState(
-        overridesEnabled: (newState: Boolean) -> Unit,
-        overrideDelayEnabled: (newState: Boolean) -> Unit
-    ) {
+    fun observeAppOverrideEnabledState(overridesEnabled: (newState: Boolean) -> Unit, overrideDelayEnabled: (newState: Boolean) -> Unit) {
         appOverrideEnabledListener = OnSharedPreferenceChangeListener { _, key ->
             if (key == KEY_APP_OVERRIDE_ENABLED) {
                 overridesEnabled(appOverridesEnabled)

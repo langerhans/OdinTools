@@ -1,5 +1,6 @@
 package de.langerhans.odintools.ui.composables
 
+import android.view.KeyEvent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -22,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import android.view.KeyEvent
 import de.langerhans.odintools.R
 import de.langerhans.odintools.main.CheckboxPreferenceUiModel
 
@@ -32,27 +32,24 @@ fun SettingsHeader(@StringRes name: Int) {
         text = stringResource(id = name),
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(start = 16.dp, bottom = 2.dp, top = 8.dp)
+        modifier = Modifier.padding(start = 16.dp, bottom = 2.dp, top = 8.dp),
     )
 }
 
 @Composable
-fun PreferenceDescription(
-    @DrawableRes icon: Int,
-    @StringRes title: Int,
-    @StringRes description: Int,
-    modifier: Modifier = Modifier
-) {
+fun PreferenceDescription(@DrawableRes icon: Int, @StringRes title: Int, @StringRes description: Int, modifier: Modifier = Modifier) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
         Image(painter = painterResource(id = icon), contentDescription = null)
         Column(
-            modifier = Modifier.padding(start = 16.dp)
+            modifier = Modifier.padding(start = 16.dp),
         ) {
             Text(
-                text = stringResource(id = title), modifier = Modifier.padding(bottom = 4.dp)
+                text = stringResource(id = title),
+                modifier = Modifier.padding(bottom = 4.dp),
             )
             Text(
-                text = stringResource(id = description), style = MaterialTheme.typography.bodySmall
+                text = stringResource(id = description),
+                style = MaterialTheme.typography.bodySmall,
             )
         }
     }
@@ -64,7 +61,7 @@ fun SwitchPreference(
     @StringRes title: Int,
     @StringRes description: Int,
     state: Boolean,
-    onChange: (newValue: Boolean) -> Unit
+    onChange: (newValue: Boolean) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -73,7 +70,7 @@ fun SwitchPreference(
             .clickable {
                 onChange(state.not())
             }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         PreferenceDescription(
             icon = icon,
@@ -81,7 +78,7 @@ fun SwitchPreference(
             description = description,
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 16.dp)
+                .padding(end = 16.dp),
         )
         Switch(
             checked = state,
@@ -99,7 +96,7 @@ fun SwitchableTriggerPreference(
     @StringRes description: Int,
     state: Boolean,
     onClick: () -> Unit,
-    onChange: (newValue: Boolean) -> Unit
+    onChange: (newValue: Boolean) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -108,7 +105,7 @@ fun SwitchableTriggerPreference(
             .clickable {
                 onClick()
             }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         PreferenceDescription(
             icon = icon,
@@ -116,14 +113,14 @@ fun SwitchableTriggerPreference(
             description = description,
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 16.dp)
+                .padding(end = 16.dp),
         )
         Row(Modifier.height(IntrinsicSize.Min)) {
             Divider(
                 modifier = Modifier
                     .width(17.dp)
                     .padding(end = 16.dp)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             )
             Switch(
                 checked = state,
@@ -136,19 +133,17 @@ fun SwitchableTriggerPreference(
 }
 
 @Composable
-fun TriggerPreference(
-    @DrawableRes icon: Int,
-    @StringRes title: Int,
-    @StringRes description: Int,
-    onClick: () -> Unit
-) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-        .fillMaxWidth()
-        .clickable {
-            onClick()
-        }
-        .padding(horizontal = 16.dp, vertical = 8.dp)) {
-            PreferenceDescription(icon = icon, title = title, description = description)
+fun TriggerPreference(@DrawableRes icon: Int, @StringRes title: Int, @StringRes description: Int, onClick: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+    ) {
+        PreferenceDescription(icon = icon, title = title, description = description)
     }
 }
 
@@ -157,7 +152,7 @@ fun CheckBoxDialogPreference(
     items: List<CheckboxPreferenceUiModel>,
     minSelected: Int = 2,
     onCancel: () -> Unit,
-    onSave: (items: List<CheckboxPreferenceUiModel>) -> Unit
+    onSave: (items: List<CheckboxPreferenceUiModel>) -> Unit,
 ) {
     AlertDialog(onDismissRequest = {}, confirmButton = {
         DialogButton(text = stringResource(id = R.string.save)) {
@@ -177,7 +172,7 @@ fun CheckBoxDialogPreference(
                 CheckboxDialogRow(
                     text = stringResource(id = item.text),
                     checked = item.checked,
-                    enabled = canChangeCheckbox()
+                    enabled = canChangeCheckbox(),
                 ) {
                     item.checked = it
                 }
@@ -187,17 +182,12 @@ fun CheckBoxDialogPreference(
 }
 
 @Composable
-fun CheckboxDialogRow(
-    text: String,
-    enabled: Boolean,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
+fun CheckboxDialogRow(text: String, enabled: Boolean, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
             if (enabled) onCheckedChange.invoke(!checked)
-        }
+        },
     ) {
         Text(text = text)
         Spacer(modifier = Modifier.weight(1f))
@@ -206,11 +196,7 @@ fun CheckboxDialogRow(
 }
 
 @Composable
-fun SaturationPreferenceDialog(
-    initialValue: Float,
-    onCancel: () -> Unit,
-    onSave: (newVal: Float) -> Unit
-) {
+fun SaturationPreferenceDialog(initialValue: Float, onCancel: () -> Unit, onSave: (newVal: Float) -> Unit) {
     var userValue: Float by remember {
         mutableFloatStateOf(initialValue)
     }
@@ -225,7 +211,7 @@ fun SaturationPreferenceDialog(
         Text(text = stringResource(id = R.string.saturation))
     }, text = {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Slider(
                 value = userValue,
@@ -236,7 +222,7 @@ fun SaturationPreferenceDialog(
                 },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 4.dp)
+                    .padding(end = 4.dp),
             )
             Text(
                 text = String.format("%.1f", userValue),
@@ -247,11 +233,7 @@ fun SaturationPreferenceDialog(
 }
 
 @Composable
-fun VibrationPreferenceDialog(
-    initialValue: Int,
-    onCancel: () -> Unit,
-    onSave: (newValue: Int) -> Unit
-) {
+fun VibrationPreferenceDialog(initialValue: Int, onCancel: () -> Unit, onSave: (newValue: Int) -> Unit) {
     var userValue: Int by remember {
         mutableIntStateOf(initialValue)
     }
@@ -266,7 +248,7 @@ fun VibrationPreferenceDialog(
         Text(text = stringResource(id = R.string.vibrationStrength))
     }, text = {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Slider(
                 value = userValue.toFloat(),
@@ -277,30 +259,25 @@ fun VibrationPreferenceDialog(
                 },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 4.dp)
+                    .padding(end = 4.dp),
             )
             Text(
                 text = "$userValue",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
     })
 }
 
 @Composable
-fun RemapButtonDialog(
-    initialValue: Int,
-    onCancel: () -> Unit,
-    onReset: () -> Unit,
-    onSave: (newValue: Int) -> Unit
-) {
+fun RemapButtonDialog(initialValue: Int, onCancel: () -> Unit, onReset: () -> Unit, onSave: (newValue: Int) -> Unit) {
     val focusRequester = remember { FocusRequester() }
     var userValue: Int by remember {
         mutableIntStateOf(initialValue)
     }
 
     Dialog(onDismissRequest = {}) {
-        Box (
+        Box(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .focusable()
@@ -309,7 +286,7 @@ fun RemapButtonDialog(
                         userValue = it.nativeKeyEvent.keyCode
                     }
                     return@onKeyEvent true
-                }
+                },
         ) {
             Card {
                 Column(
@@ -323,15 +300,15 @@ fun RemapButtonDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
                     )
                     Text(
                         text = stringResource(id = R.string.pressAnyButton),
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.labelLarge,
                     )
                     Text(
                         text = KeyEvent.keyCodeToString(userValue),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
                     )
                     Row(
                         modifier = Modifier
@@ -350,7 +327,6 @@ fun RemapButtonDialog(
                             }
                         }
                     }
-
                 }
             }
         }

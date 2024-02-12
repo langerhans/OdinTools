@@ -9,9 +9,7 @@ import de.langerhans.odintools.R
 import kotlin.system.exitProcess
 
 @Composable
-fun NotAnOdinDialog(
-    onAccept: () -> Unit
-) {
+fun NotAnOdinDialog(onAccept: () -> Unit) {
     AlertDialog(
         onDismissRequest = {},
         confirmButton = {
@@ -29,7 +27,7 @@ fun NotAnOdinDialog(
         },
         text = {
             Text(text = stringResource(id = R.string.incompatibleDevice))
-        }
+        },
     )
 }
 
@@ -47,27 +45,21 @@ fun PServerNotAvailableDialog() {
         },
         text = {
             Text(text = stringResource(id = R.string.pServerNotAvailable))
-        }
+        },
     )
 }
 
 @Composable
-fun DialogButton(
-    text: String,
-    onClick: () -> Unit
-) {
+fun DialogButton(text: String, onClick: () -> Unit) {
     TextButton(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Text(text = text)
     }
 }
 
 @Composable
-fun DeleteConfirmDialog(
-    onDelete: () -> Unit,
-    onDismiss: () -> Unit
-) {
+fun DeleteConfirmDialog(onDelete: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = {},
         confirmButton = {
@@ -78,6 +70,6 @@ fun DeleteConfirmDialog(
         },
         text = {
             Text(text = stringResource(id = R.string.deleteConfirm))
-        }
+        },
     )
 }

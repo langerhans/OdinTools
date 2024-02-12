@@ -4,7 +4,7 @@ import de.langerhans.odintools.tools.DeviceType.*
 import javax.inject.Inject
 
 class DeviceUtils @Inject constructor(
-    private val shellExecutor: ShellExecutor
+    private val shellExecutor: ShellExecutor,
 ) {
 
     fun getDeviceType(): DeviceType {
@@ -25,5 +25,5 @@ class DeviceUtils @Inject constructor(
 enum class DeviceType {
     ODIN2,
     RP4,
-    OTHER
+    OTHER,
 }
