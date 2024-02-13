@@ -21,7 +21,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     deviceUtils: DeviceUtils,
     private val executor: ShellExecutor,
-    private val prefs: SharedPrefsRepo
+    private val prefs: SharedPrefsRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiModel())
@@ -52,7 +52,7 @@ class MainViewModel @Inject constructor(
                 showPServerNotAvailableDialog = !deviceUtils.isPServerAvailable(),
                 overrideDelayEnabled = prefs.overrideDelay,
                 vibrationEnabled = vibrationOnSetting,
-                currentVibration = vibrationStrength
+                currentVibration = vibrationStrength,
             )
         }
     }
@@ -90,7 +90,7 @@ class MainViewModel @Inject constructor(
         return listOf(
             CheckboxPreferenceUiModel(Xbox.id, R.string.xbox, disabled != Xbox.id),
             CheckboxPreferenceUiModel(Odin.id, R.string.odin, disabled != Odin.id),
-            CheckboxPreferenceUiModel(Disconnect.id, R.string.disconnect, disabled != Disconnect.id)
+            CheckboxPreferenceUiModel(Disconnect.id, R.string.disconnect, disabled != Disconnect.id),
         )
     }
 
@@ -116,7 +116,7 @@ class MainViewModel @Inject constructor(
         return listOf(
             CheckboxPreferenceUiModel(Analog.id, R.string.analog, disabled != Analog.id),
             CheckboxPreferenceUiModel(Digital.id, R.string.digital, disabled != Digital.id),
-            CheckboxPreferenceUiModel(Both.id, R.string.both, disabled != Both.id)
+            CheckboxPreferenceUiModel(Both.id, R.string.both, disabled != Both.id),
         )
     }
 
@@ -177,7 +177,7 @@ class MainViewModel @Inject constructor(
             it.copy(
                 showRemapButtonDialog = true,
                 currentButtonSetting = setting,
-                currentButtonKeyCode = executor.getIntSystemSetting(setting, 0)
+                currentButtonKeyCode = executor.getIntSystemSetting(setting, 0),
             )
         }
     }

@@ -10,5 +10,5 @@ data class AppOverrideEntity(
     val controllerStyle: String?,
     val l2R2Style: String?,
     val perfMode: String?,
-    val fanMode: String?
+    val fanMode: String?,
 )

@@ -57,10 +57,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SettingsScreen(
-    viewModel: MainViewModel = hiltViewModel(),
-    navigateToOverrideList: () -> Unit
-) {
+fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrideList: () -> Unit) {
     val uiState: MainUiModel by viewModel.uiState.collectAsState()
 
     if (uiState.showPServerNotAvailableDialog) {
@@ -70,18 +67,24 @@ fun SettingsScreen(
     }
 
     if (uiState.showControllerStyleDialog) {
-        CheckBoxDialogPreference(items = viewModel.controllerStyleOptions, onCancel = {
-            viewModel.hideControllerStylePreference()
-        }) {
+        CheckBoxDialogPreference(
+            items = viewModel.controllerStyleOptions,
+            onCancel = {
+                viewModel.hideControllerStylePreference()
+            },
+        ) {
             viewModel.updateControllerStyles(it)
             viewModel.hideControllerStylePreference()
         }
     }
 
     if (uiState.showL2r2StyleDialog) {
-        CheckBoxDialogPreference(items = viewModel.l2r2StyleOptions, onCancel = {
-            viewModel.hideL2r2StylePreference()
-        }) {
+        CheckBoxDialogPreference(
+            items = viewModel.l2r2StyleOptions,
+            onCancel = {
+                viewModel.hideL2r2StylePreference()
+            },
+        ) {
             viewModel.updateL2r2Styles(it)
             viewModel.hideL2r2StylePreference()
         }
@@ -91,7 +94,7 @@ fun SettingsScreen(
         SaturationPreferenceDialog(
             initialValue = uiState.currentSaturation,
             onCancel = { viewModel.saturationDialogDismissed() },
-            onSave = { viewModel.saveSaturation(it) }
+            onSave = { viewModel.saveSaturation(it) },
         )
     }
 
@@ -99,7 +102,7 @@ fun SettingsScreen(
         VibrationPreferenceDialog(
             initialValue = uiState.currentVibration,
             onCancel = { viewModel.vibrationDialogDismissed() },
-            onSave = { viewModel.saveVibration(it) }
+            onSave = { viewModel.saveVibration(it) },
         )
     }
 
@@ -108,16 +111,16 @@ fun SettingsScreen(
             initialValue = uiState.currentButtonKeyCode,
             onCancel = { viewModel.remapButtonDialogDismissed() },
             onReset = { viewModel.resetButtonKeyCode(uiState.currentButtonSetting) },
-            onSave = { viewModel.saveButtonKeyCode(uiState.currentButtonSetting, it) }
+            onSave = { viewModel.saveButtonKeyCode(uiState.currentButtonSetting, it) },
         )
     }
 
-    Scaffold(topBar = {OdinTopAppBar(deviceVersion = uiState.deviceVersion)}) { contentPadding ->
+    Scaffold(topBar = { OdinTopAppBar(deviceVersion = uiState.deviceVersion) }) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(end = 8.dp) // Extra padding cause of GameAssist bar overlay
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             SettingsHeader(R.string.appOverrides)
             SwitchableTriggerPreference(
@@ -125,7 +128,7 @@ fun SettingsScreen(
                 title = R.string.appOverrides,
                 description = R.string.appOverridesDescription,
                 state = uiState.appOverridesEnabled,
-                onClick = navigateToOverrideList
+                onClick = navigateToOverrideList,
             ) { newValue ->
                 viewModel.appOverridesEnabled(newValue)
             }
@@ -133,7 +136,7 @@ fun SettingsScreen(
                 icon = R.drawable.ic_more_time,
                 title = R.string.overrideDelay,
                 description = R.string.overrideDelayDesc,
-                state = uiState.overrideDelayEnabled
+                state = uiState.overrideDelayEnabled,
             ) {
                 viewModel.overrideDelayEnabled(it)
             }
@@ -141,14 +144,14 @@ fun SettingsScreen(
             TriggerPreference(
                 icon = R.drawable.ic_controllerstyle,
                 title = R.string.controllerStyle,
-                description = R.string.controllerStyleDesc
+                description = R.string.controllerStyleDesc,
             ) {
                 viewModel.showControllerStylePreference()
             }
             TriggerPreference(
                 icon = R.drawable.ic_sliders,
                 title = R.string.l2r2mode,
-                description = R.string.l2r2modeDesc
+                description = R.string.l2r2modeDesc,
             ) {
                 viewModel.showL2r2StylePreference()
             }
@@ -157,7 +160,7 @@ fun SettingsScreen(
                 icon = R.drawable.ic_home,
                 title = R.string.doubleHomeTitle,
                 description = R.string.doubleHomeDescription,
-                state = uiState.singleHomeEnabled
+                state = uiState.singleHomeEnabled,
             ) {
                 viewModel.updateSingleHomePreference(it)
             }
@@ -165,14 +168,14 @@ fun SettingsScreen(
                 TriggerPreference(
                     icon = R.drawable.ic_gamepad,
                     title = R.string.m1Button,
-                    description = R.string.remapButtonDescription
+                    description = R.string.remapButtonDescription,
                 ) {
                     viewModel.remapButtonClicked("remap_custom_to_m1_value")
                 }
                 TriggerPreference(
                     icon = R.drawable.ic_gamepad,
                     title = R.string.m2Button,
-                    description = R.string.remapButtonDescription
+                    description = R.string.remapButtonDescription,
                 ) {
                     viewModel.remapButtonClicked("remap_custom_to_m2_value")
                 }
@@ -181,7 +184,7 @@ fun SettingsScreen(
             TriggerPreference(
                 icon = R.drawable.ic_palette,
                 title = R.string.saturation,
-                description = R.string.saturationDescription
+                description = R.string.saturationDescription,
             ) {
                 viewModel.saturationClicked()
             }
@@ -192,7 +195,7 @@ fun SettingsScreen(
                     title = R.string.vibrationStrength,
                     description = R.string.vibrationStrengthDescription,
                     state = uiState.vibrationEnabled,
-                    onClick = { viewModel.vibrationClicked() }
+                    onClick = { viewModel.vibrationClicked() },
                 ) {
                     viewModel.updateVibrationPreference(it)
                 }

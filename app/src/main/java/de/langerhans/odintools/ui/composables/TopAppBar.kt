@@ -18,28 +18,26 @@ import de.langerhans.odintools.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OdinTopAppBar(
-    deviceVersion: String
-) = TopAppBar(title = {
+fun OdinTopAppBar(deviceVersion: String) = TopAppBar(title = {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.appName),
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = stringResource(id = R.string.topBarVersions),
             style = MaterialTheme.typography.labelMedium,
             textAlign = TextAlign.End,
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier.padding(end = 4.dp),
         )
         Text(
             text = "$deviceVersion\n${BuildConfig.VERSION_NAME}",
             style = MaterialTheme.typography.labelMedium,
             textAlign = TextAlign.End,
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp),
         )
     }
 })

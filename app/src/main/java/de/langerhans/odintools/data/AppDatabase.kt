@@ -8,9 +8,9 @@ import androidx.room.RoomDatabase
     entities = [AppOverrideEntity::class],
     version = 2,
     autoMigrations = [
-        AutoMigration(from = 1, to = 2)
+        AutoMigration(from = 1, to = 2),
     ],
-    exportSchema = true
+    exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appOverrideDao(): AppOverrideDao

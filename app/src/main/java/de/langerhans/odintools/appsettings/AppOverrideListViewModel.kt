@@ -14,7 +14,7 @@ import javax.inject.Inject
 class AppOverrideListViewModel @Inject constructor(
     private val appOverrideDao: AppOverrideDao,
     private val appOverrideMapper: AppOverrideMapper,
-    private val deviceUtils: DeviceUtils
+    private val deviceUtils: DeviceUtils,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppOverrideListUiModel())
@@ -32,7 +32,7 @@ class AppOverrideListViewModel @Inject constructor(
                         it.copy(
                             overrideList = appOverrideMapper.mapAppOverrides(overrides),
                             overrideCandidates = appOverrideMapper.mapOverrideCandidates(overrides),
-                            deviceVersion = deviceUtils.getDeviceVersion()
+                            deviceVersion = deviceUtils.getDeviceVersion(),
                         )
                     }
                 }

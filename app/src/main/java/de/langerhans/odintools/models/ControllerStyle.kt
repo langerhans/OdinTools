@@ -9,11 +9,11 @@ sealed class ControllerStyle(
     private val tempAbxyLayout: Int,
     private val noCreateGamepadLayout: Int,
     private val flipButtonLayout: Int,
-    @StringRes val textRes: Int
+    @StringRes val textRes: Int,
 ) {
     data object Xbox : ControllerStyle("xbox", 0, 0, 1, R.string.xbox)
     data object Odin : ControllerStyle("odin", 1, 0, 0, R.string.odin)
-    data object Disconnect : ControllerStyle("disconnect",2, 1, 0, R.string.disconnect)
+    data object Disconnect : ControllerStyle("disconnect", 2, 1, 0, R.string.disconnect)
     data object Unknown : ControllerStyle("unknown", -1, -1, -1, R.string.unknown)
 
     fun enable(executor: ShellExecutor) {
@@ -30,12 +30,16 @@ sealed class ControllerStyle(
         private const val FLIP_BUTTON_LAYOUT = "flip_button_layout"
 
         fun getStyle(executor: ShellExecutor): ControllerStyle {
-            return if (executor.getIntSystemSetting(NO_CREATE_GAMEPAD_BUTTON_LAYOUT, 0) == 1) Disconnect
-            else if (executor.getIntSystemSetting(FLIP_BUTTON_LAYOUT, 0) == 1) Xbox
-            else Odin
+            return if (executor.getIntSystemSetting(NO_CREATE_GAMEPAD_BUTTON_LAYOUT, 0) == 1) {
+                Disconnect
+            } else if (executor.getIntSystemSetting(FLIP_BUTTON_LAYOUT, 0) == 1) {
+                Xbox
+            } else {
+                Odin
+            }
         }
 
-        fun getById(id: String?) = when(id) {
+        fun getById(id: String?) = when (id) {
             Xbox.id -> Xbox
             Odin.id -> Odin
             Disconnect.id -> Disconnect

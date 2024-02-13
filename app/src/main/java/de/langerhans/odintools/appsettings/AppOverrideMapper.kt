@@ -7,18 +7,16 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.AppOverrideEntity
 import de.langerhans.odintools.models.ControllerStyle
-import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.FanMode
+import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
 import javax.inject.Inject
 
 class AppOverrideMapper @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) {
 
-    fun mapOverrideCandidates(
-        existingOverrides: List<AppOverrideEntity>
-    ): List<AppUiModel> {
+    fun mapOverrideCandidates(existingOverrides: List<AppOverrideEntity>): List<AppUiModel> {
         return context.packageManager.getInstalledApplications(PackageManager.GET_META_DATA).filter {
             it.flags and ApplicationInfo.FLAG_SYSTEM == 0 && it.enabled
         }.filterNot { appInfo ->
@@ -55,13 +53,11 @@ class AppOverrideMapper @Inject constructor(
             controllerStyle = controllerStyle,
             l2r2Style = l2R2Style,
             perfMode = perfMode,
-            fanMode = fanMode
+            fanMode = fanMode,
         )
     }
 
-    fun mapEmptyOverride(
-        packageName: String
-    ): AppUiModel {
+    fun mapEmptyOverride(packageName: String): AppUiModel {
         // If this crashes then something is fishy...
         val appInfo = context.packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
 

@@ -82,7 +82,7 @@ class ShellExecutor @Inject constructor() {
 
         executeAsRoot(
             "settings put secure enabled_accessibility_services $PACKAGE/$PACKAGE.service.ForegroundAppWatcherService:$currentServices"
-                .trimEnd(':')
+                .trimEnd(':'),
         )
     }
 

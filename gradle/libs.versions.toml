@@ -15,6 +15,7 @@ com-google-dagger = "2.50"
 com-google-dagger-hilt-android = "2.50"
 com-google-devtools-ksp = "1.9.22-1.0.17"
 junit = "4.13.2"
+ktlint = "12.1.0"
 nl-littlerobots-version-catalog-update = "0.8.4"
 org-jetbrains-kotlin-android = "1.9.22"
 
@@ -50,6 +51,7 @@ com-android-application = { id = "com.android.application", version.ref = "com-a
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "com-github-ben-manes-versions" }
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger-hilt-android" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-update" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 

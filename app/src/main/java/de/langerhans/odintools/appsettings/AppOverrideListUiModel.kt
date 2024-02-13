@@ -2,15 +2,15 @@ package de.langerhans.odintools.appsettings
 
 import android.graphics.drawable.Drawable
 import de.langerhans.odintools.models.ControllerStyle
-import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.FanMode
+import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
 
 data class AppOverrideListUiModel(
     val deviceVersion: String = "",
     val showAppSelectDialog: Boolean = false,
     val overrideList: List<AppUiModel> = emptyList(),
-    val overrideCandidates: List<AppUiModel> = emptyList()
+    val overrideCandidates: List<AppUiModel> = emptyList(),
 )
 
 data class AppOverridesUiModel(
@@ -21,7 +21,7 @@ data class AppOverridesUiModel(
     val showDeleteConfirmDialog: Boolean = false,
     val navigateBack: Boolean = false,
     val isNewApp: Boolean = false,
-    val disabledFanModeKeys: List<String> = emptyList()
+    val disabledFanModeKeys: List<String> = emptyList(),
 )
 
 data class AppUiModel(
@@ -32,5 +32,5 @@ data class AppUiModel(
     val controllerStyle: ControllerStyle? = null,
     val l2r2Style: L2R2Style? = null,
     val fanMode: FanMode? = null,
-    val perfMode: PerfMode? = null
+    val perfMode: PerfMode? = null,
 )

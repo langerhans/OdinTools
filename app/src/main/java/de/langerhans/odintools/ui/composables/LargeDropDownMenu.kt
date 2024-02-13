@@ -92,7 +92,7 @@ fun <T> LargeDropdownMenu(
                         drawItem(
                             item,
                             selectedItem,
-                            true
+                            true,
                         ) {
                             onItemSelected(index, item)
                             expanded = false
@@ -109,12 +109,7 @@ fun <T> LargeDropdownMenu(
 }
 
 @Composable
-fun LargeDropdownMenuItem(
-    text: String,
-    selected: Boolean,
-    enabled: Boolean,
-    onClick: () -> Unit,
-) {
+fun LargeDropdownMenuItem(text: String, selected: Boolean, enabled: Boolean, onClick: () -> Unit) {
     val contentColor = when {
         !enabled -> MaterialTheme.colorScheme.onSurface.copy(alpha = ALPHA_DISABLED)
         selected -> MaterialTheme.colorScheme.primary.copy(alpha = ALPHA_FULL)
@@ -122,10 +117,12 @@ fun LargeDropdownMenuItem(
     }
 
     CompositionLocalProvider(LocalContentColor provides contentColor) {
-        Box(modifier = Modifier
-            .clickable(enabled) { onClick() }
-            .fillMaxWidth()
-            .padding(16.dp)) {
+        Box(
+            modifier = Modifier
+                .clickable(enabled) { onClick() }
+                .fillMaxWidth()
+                .padding(16.dp),
+        ) {
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleSmall,

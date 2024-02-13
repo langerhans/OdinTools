@@ -7,7 +7,7 @@ import de.langerhans.odintools.tools.ShellExecutor
 sealed class PerfMode(
     val id: String,
     val settingsValue: Int,
-    @StringRes val textRes: Int
+    @StringRes val textRes: Int,
 ) {
     data object Standard : PerfMode("standard", 0, R.string.standard)
     data object Performance : PerfMode("performance", 1, R.string.performance)
@@ -23,15 +23,14 @@ sealed class PerfMode(
     companion object {
         private const val PERFORMANCE_MODE = "performance_mode"
 
-        fun getMode(executor: ShellExecutor) =
-            when (executor.getIntSystemSetting(PERFORMANCE_MODE, Standard.settingsValue)) {
-                Standard.settingsValue -> Standard
-                Performance.settingsValue -> Performance
-                HighPerformance.settingsValue -> HighPerformance
-                else -> Unknown
-            }
+        fun getMode(executor: ShellExecutor) = when (executor.getIntSystemSetting(PERFORMANCE_MODE, Standard.settingsValue)) {
+            Standard.settingsValue -> Standard
+            Performance.settingsValue -> Performance
+            HighPerformance.settingsValue -> HighPerformance
+            else -> Unknown
+        }
 
-        fun getById(id: String?) = when(id) {
+        fun getById(id: String?) = when (id) {
             Standard.id -> Standard
             Performance.id -> Performance
             HighPerformance.id -> HighPerformance
