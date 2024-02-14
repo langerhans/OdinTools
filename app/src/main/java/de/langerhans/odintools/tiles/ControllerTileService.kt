@@ -7,7 +7,6 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.ControllerStyle.*
-import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.tools.ShellExecutor
 import javax.inject.Inject
 
@@ -18,16 +17,13 @@ class ControllerTileService : TileService() {
     lateinit var executor: ShellExecutor
 
     @Inject
-    lateinit var deviceUtils: DeviceUtils
-
-    @Inject
     lateinit var prefs: SharedPrefsRepo
 
     private var disabledStyle: ControllerStyle? = null
 
     override fun onStartListening() {
         super.onStartListening()
-        if (!deviceUtils.isPServerAvailable()) {
+        if (!executor.pServerAvailable) {
             qsTile.state = Tile.STATE_UNAVAILABLE
             qsTile.subtitle = getString(R.string.unknown)
             qsTile.updateTile()

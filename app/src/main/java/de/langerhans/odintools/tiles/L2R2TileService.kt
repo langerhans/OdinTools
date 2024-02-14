@@ -7,7 +7,6 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.L2R2Style.*
-import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.tools.ShellExecutor
 import javax.inject.Inject
 
@@ -18,16 +17,13 @@ class L2R2TileService : TileService() {
     lateinit var executor: ShellExecutor
 
     @Inject
-    lateinit var deviceUtils: DeviceUtils
-
-    @Inject
     lateinit var prefs: SharedPrefsRepo
 
     private var disabledStyle: L2R2Style? = null
 
     override fun onStartListening() {
         super.onStartListening()
-        if (!deviceUtils.isPServerAvailable()) {
+        if (!executor.pServerAvailable) {
             qsTile.state = Tile.STATE_UNAVAILABLE
             qsTile.subtitle = getString(R.string.unknown)
             qsTile.updateTile()
