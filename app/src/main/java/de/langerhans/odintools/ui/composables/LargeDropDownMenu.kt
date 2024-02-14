@@ -99,7 +99,7 @@ fun <T> LargeDropdownMenu(
                         }
 
                         if (index < items.lastIndex) {
-                            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                         }
                     }
                 }

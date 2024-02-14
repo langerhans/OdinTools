@@ -71,6 +71,7 @@ ktlint {
     reporters {
         reporter(ReporterType.SARIF)
     }
+    relative.set(true)
 }
 
 dependencies {

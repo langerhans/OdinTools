@@ -16,8 +16,6 @@ class DeviceUtils @Inject constructor(
         }
     }
 
-    fun isPServerAvailable() = shellExecutor.pServerAvailable
-
     fun getDeviceVersion() = shellExecutor.executeAsRoot("getprop ro.build.odin2.ota.version").map { it ?: "" }
         .getOrDefault("")
 }

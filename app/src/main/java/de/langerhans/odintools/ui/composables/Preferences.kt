@@ -116,7 +116,7 @@ fun SwitchableTriggerPreference(
                 .padding(end = 16.dp),
         )
         Row(Modifier.height(IntrinsicSize.Min)) {
-            Divider(
+            VerticalDivider(
                 modifier = Modifier
                     .width(17.dp)
                     .padding(end = 16.dp)
