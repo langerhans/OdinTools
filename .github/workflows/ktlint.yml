@@ -27,4 +27,3 @@ jobs:
         with:
           sarif_file: ./app/build/reports/ktlint
           category: ktlint
-          checkout_path: /home/runner
