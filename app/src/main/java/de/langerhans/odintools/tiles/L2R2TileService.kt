@@ -18,16 +18,13 @@ class L2R2TileService : TileService() {
     lateinit var executor: ShellExecutor
 
     @Inject
-    lateinit var deviceUtils: DeviceUtils
-
-    @Inject
     lateinit var prefs: SharedPrefsRepo
 
     private var disabledStyle: L2R2Style? = null
 
     override fun onStartListening() {
         super.onStartListening()
-        if (!deviceUtils.isPServerAvailable()) {
+        if (!executor.pServerAvailable) {
             qsTile.state = Tile.STATE_UNAVAILABLE
             qsTile.subtitle = getString(R.string.unknown)
             qsTile.updateTile()

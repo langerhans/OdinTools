@@ -18,16 +18,13 @@ class ControllerTileService : TileService() {
     lateinit var executor: ShellExecutor
 
     @Inject
-    lateinit var deviceUtils: DeviceUtils
-
-    @Inject
     lateinit var prefs: SharedPrefsRepo
 
     private var disabledStyle: ControllerStyle? = null
 
     override fun onStartListening() {
         super.onStartListening()
-        if (!deviceUtils.isPServerAvailable()) {
+        if (!executor.pServerAvailable) {
             qsTile.state = Tile.STATE_UNAVAILABLE
             qsTile.subtitle = getString(R.string.unknown)
             qsTile.updateTile()

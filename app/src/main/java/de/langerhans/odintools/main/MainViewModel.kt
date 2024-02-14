@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
                 deviceVersion = deviceUtils.getDeviceVersion(),
                 showNotAnOdinDialog = deviceType != ODIN2,
                 singleHomeEnabled = !preventHomePressSetting,
-                showPServerNotAvailableDialog = !deviceUtils.isPServerAvailable(),
+                showPServerNotAvailableDialog = !executor.pServerAvailable,
                 overrideDelayEnabled = prefs.overrideDelay,
                 vibrationEnabled = vibrationOnSetting,
                 currentVibration = vibrationStrength,

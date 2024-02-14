@@ -107,7 +107,7 @@ fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navig
                     }
                 }
             }
-            Divider(
+            VerticalDivider(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxHeight()
