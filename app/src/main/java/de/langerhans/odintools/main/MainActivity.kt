@@ -69,6 +69,7 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
     if (uiState.showControllerStyleDialog) {
         CheckBoxDialogPreference(
             items = viewModel.controllerStyleOptions,
+            title = R.string.controllerStyle,
             onCancel = {
                 viewModel.hideControllerStylePreference()
             },
@@ -81,6 +82,7 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
     if (uiState.showL2r2StyleDialog) {
         CheckBoxDialogPreference(
             items = viewModel.l2r2StyleOptions,
+            title = R.string.l2r2mode,
             onCancel = {
                 viewModel.hideL2r2StylePreference()
             },
