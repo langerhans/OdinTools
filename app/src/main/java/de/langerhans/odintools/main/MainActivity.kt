@@ -137,12 +137,12 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             SwitchPreference(
                 icon = R.drawable.ic_more_time,
                 title = R.string.overrideDelay,
-                description = R.string.overrideDelayDesc,
+                description = R.string.overrideDelayDescription,
                 state = uiState.overrideDelayEnabled,
             ) {
                 viewModel.overrideDelayEnabled(it)
             }
-            SettingsHeader(R.string.quicksettings)
+            SettingsHeader(R.string.quickSettings)
             TriggerPreference(
                 icon = R.drawable.ic_face_buttons,
                 title = R.string.controllerStyle,
@@ -160,9 +160,9 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             SettingsHeader(R.string.buttons)
             SwitchPreference(
                 icon = R.drawable.ic_home,
-                title = R.string.doubleHomeTitle,
-                description = R.string.doubleHomeDescription,
                 state = uiState.singleHomeEnabled,
+                title = R.string.singlePressHome,
+                description = R.string.singlePressHomeDescription,
             ) {
                 viewModel.updateSingleHomePreference(it)
             }

@@ -3,16 +3,16 @@
     <string name="xbox">Xbox</string>
     <string name="odin">Odin</string>
     <string name="disconnect">Disconnect</string>
-    <string name="controllerStyle">Controller Style</string>
+    <string name="controllerStyle">Controller style</string>
     <string name="unknown">Unknown</string>
-    <string name="l2r2mode">L2/R2 Mode</string>
+    <string name="l2r2mode">L2/R2 mode</string>
     <string name="analog">Analog</string>
     <string name="digital">Digital</string>
     <string name="both">Both</string>
     <string name="perfMode">Performance Mode</string>
     <string name="standard">Standard</string>
     <string name="performance">Performance</string>
-    <string name="highperformance">High Performance</string>
+    <string name="highPerformance">High Performance</string>
     <string name="fanMode">Fan Mode</string>
     <string name="fanOff">Off</string>
     <string name="quiet">Quiet</string>
@@ -20,13 +20,13 @@
     <string name="sport">Sport</string>
     <string name="topBarVersions">Device version:\nApp version:</string>
 
-    <string name="quicksettings">Quick Settings</string>
-    <string name="controllerStyleDesc">Select which modes to cycle through in the Controller Style quick settings tile</string>
-    <string name="l2r2modeDesc">Select which modes to cycle through in the L2/R2 Mode quick settings tile</string>
+    <string name="quickSettings">Quick Settings</string>
+    <string name="controllerStyleDesc">Select which modes to cycle through in the Controller Style quick settings tile.</string>
+    <string name="l2r2modeDesc">Select which modes to cycle through in the L2/R2 Mode quick settings tile.</string>
 
     <string name="buttons">Buttons</string>
-    <string name="doubleHomeTitle">Single press home button</string>
-    <string name="doubleHomeDescription">When enabled allows using the home button with a single press instead of a double press</string>
+    <string name="singlePressHome">Single-press home button</string>
+    <string name="singlePressHomeDescription">When enabled allows using the home button with a single press instead of a double press.</string>
 
     <string name="warning">Warning</string>
     <string name="incompatibleDevice">This app was made for the Ayn Odin 2. Running it on an incompatible device may cause damage. The author of this app takes no responsibility for any damage caused!</string>
@@ -42,7 +42,7 @@
     <string name="display">Display</string>
     <string name="saturationDescription">Change the saturation of the display. Will be re-applied on reboot. Default value is 1.0.</string>
 
-    <string name="a11yDescription">Used by OdinTools to detect running apps for dynamic switching of button settings</string>
+    <string name="a11yDescription">Used by OdinTools to detect running apps for dynamic switching of button settings.</string>
 
     <string name="appOverrides">App overrides</string>
     <string name="appOverridesDescription">Set up overrides per app. Switch off to globally disable app overrides.</string>
@@ -53,7 +53,7 @@
     <string name="noOverrideCandidates">You already added overrides for all your apps</string>
     <string name="fanModeRequired">Fan mode is required when setting a Performance mode</string>
     <string name="overrideDelay">Override delay</string>
-    <string name="overrideDelayDesc">Delay applying overrides by 0.5s. This can help if apps crash when applying an
+    <string name="overrideDelayDescription">Delay applying overrides by 0.5s. This can help if apps crash when applying an
         override.
     </string>
 
