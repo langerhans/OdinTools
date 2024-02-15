@@ -67,4 +67,8 @@
     <string name="m2Button">M2 button</string>
     <string name="pressAnyButton">Press any button</string>
     <string name="setDefault">Set Default</string>
+
+    <string name="battery">Battery</string>
+    <string name="chargeLimit">Charge limit</string>
+    <string name="chargeLimitDescription">When enabled bypass charging will activate whenever the battery level is 81% or higher.</string>
 </resources>

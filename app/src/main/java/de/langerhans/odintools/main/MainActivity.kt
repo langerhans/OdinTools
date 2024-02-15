@@ -202,6 +202,15 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                 ) {
                     viewModel.updateVibrationPreference(it)
                 }
+                SettingsHeader(R.string.battery)
+                SwitchPreference(
+                    icon = R.drawable.ic_electrical_services,
+                    title = R.string.chargeLimit,
+                    description = R.string.chargeLimitDescription,
+                    state = uiState.chargeLimitEnabled,
+                ) {
+                    viewModel.updateChargeLimitPreference(it)
+                }
             }
         }
     }
