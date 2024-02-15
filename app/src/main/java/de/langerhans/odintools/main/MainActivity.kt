@@ -142,7 +142,7 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             }
             SettingsHeader(R.string.quicksettings)
             TriggerPreference(
-                icon = R.drawable.ic_controllerstyle,
+                icon = R.drawable.ic_face_buttons,
                 title = R.string.controllerStyle,
                 description = R.string.controllerStyleDesc,
             ) {
