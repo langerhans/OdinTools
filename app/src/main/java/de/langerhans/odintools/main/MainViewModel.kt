@@ -10,6 +10,7 @@ import de.langerhans.odintools.models.ControllerStyle.*
 import de.langerhans.odintools.models.L2R2Style.*
 import de.langerhans.odintools.tools.DeviceType.ODIN2
 import de.langerhans.odintools.tools.DeviceUtils
+import de.langerhans.odintools.tools.SettingsRepo
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     deviceUtils: DeviceUtils,
     private val executor: ShellExecutor,
+    private val settings: SettingsRepo,
     private val prefs: SharedPrefsRepo,
 ) : ViewModel() {
 
@@ -36,39 +38,35 @@ class MainViewModel @Inject constructor(
         get() = _l2r2StyleOptions
 
     init {
-        executor.applyRequiredSettings()
-
         val deviceType = deviceUtils.getDeviceType()
-        val preventHomePressSetting = executor.getBooleanSystemSetting("prevent_press_home_accidentally", true)
-        val vibrationOnSetting = executor.getBooleanSystemSetting("vibrate_on", true)
-        val vibrationStrength = executor.getVibrationStrength()
 
         _uiState.update { _ ->
             MainUiModel(
                 deviceType = deviceType,
                 deviceVersion = deviceUtils.getDeviceVersion(),
-                showNotAnOdinDialog = deviceType != ODIN2,
-                singleHomeEnabled = !preventHomePressSetting,
+                showIncompatibleDeviceDialog = deviceType != ODIN2,
+                singlePressHomeEnabled = !settings.preventPressHome,
                 showPServerNotAvailableDialog = !executor.pServerAvailable,
                 overrideDelayEnabled = prefs.overrideDelay,
-                vibrationEnabled = vibrationOnSetting,
-                currentVibration = vibrationStrength,
+                vibrationEnabled = settings.vibrationEnabled,
+                currentVibration = settings.vibrationStrength,
+                chargeLimitEnabled = settings.chargingLimit80Enabled,
             )
         }
     }
 
     fun incompatibleDeviceDialogDismissed() {
         _uiState.update { current ->
-            current.copy(showNotAnOdinDialog = false)
+            current.copy(showIncompatibleDeviceDialog = false)
         }
     }
 
-    fun updateSingleHomePreference(newValue: Boolean) {
+    fun updateSinglePressHomePreference(newValue: Boolean) {
         // Invert here as prevent == double press
-        executor.setBooleanSystemSetting("prevent_press_home_accidentally", !newValue)
+        settings.preventPressHome = !newValue
 
         _uiState.update { current ->
-            current.copy(singleHomeEnabled = newValue)
+            current.copy(singlePressHomeEnabled = newValue)
         }
     }
 
@@ -138,15 +136,14 @@ class MainViewModel @Inject constructor(
 
     fun saveSaturation(newValue: Float) {
         prefs.saturationOverride = newValue
-        executor.setSfSaturation(newValue)
+        settings.saturation = newValue
         _uiState.update {
             it.copy(showSaturationDialog = false)
         }
     }
 
     fun updateVibrationPreference(newValue: Boolean) {
-        executor.setBooleanSystemSetting("vibrate_on", newValue)
-
+        settings.vibrationEnabled = newValue
         _uiState.update { current ->
             current.copy(vibrationEnabled = newValue)
         }
@@ -154,7 +151,7 @@ class MainViewModel @Inject constructor(
 
     fun vibrationClicked() {
         _uiState.update {
-            it.copy(showVibrationDialog = true, currentVibration = executor.getVibrationStrength())
+            it.copy(showVibrationDialog = true, currentVibration = settings.vibrationStrength)
         }
     }
 
@@ -166,7 +163,7 @@ class MainViewModel @Inject constructor(
 
     fun saveVibration(newValue: Int) {
         prefs.vibrationStrength = newValue
-        executor.setVibrationStrength(newValue)
+        settings.vibrationStrength = newValue
         _uiState.update {
             it.copy(showVibrationDialog = false, currentVibration = newValue)
         }
@@ -189,10 +186,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getDefaultKeyCode(setting: String): Int {
-        if (setting == "remap_custom_to_m1_value") {
+        if (setting == SettingsRepo.KEY_CUSTOM_M1_VALUE) {
             return KeyEvent.KEYCODE_BUTTON_C
         }
-        if (setting == "remap_custom_to_m2_value") {
+        if (setting == SettingsRepo.KEY_CUSTOM_M2_VALUE) {
             return KeyEvent.KEYCODE_BUTTON_Z
         }
         return KeyEvent.KEYCODE_UNKNOWN
@@ -224,6 +221,14 @@ class MainViewModel @Inject constructor(
         prefs.overrideDelay = newValue
         _uiState.update {
             it.copy(overrideDelayEnabled = newValue)
+        }
+    }
+
+    fun updateChargeLimitPreference(newValue: Boolean) {
+        settings.chargingLimit80Enabled = newValue
+
+        _uiState.update { current ->
+            current.copy(chargeLimitEnabled = newValue)
         }
     }
 }

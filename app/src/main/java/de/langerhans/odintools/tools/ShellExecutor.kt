@@ -3,7 +3,6 @@ package de.langerhans.odintools.tools
 import android.annotation.SuppressLint
 import android.os.IBinder
 import android.os.Parcel
-import de.langerhans.odintools.BuildConfig
 import java.nio.charset.Charset
 import javax.inject.Inject
 
@@ -42,8 +41,50 @@ class ShellExecutor @Inject constructor() {
         return Result.success(result)
     }
 
-    fun getIntSystemSetting(setting: String, defaultValue: Int): Int {
+    private fun getProperty(property: String): Result<String?> {
+        return executeAsRoot("getprop $property")
+    }
+
+    fun getIntProperty(property: String, defaultValue: Int): Int {
+        return getProperty(property)
+            .mapCatching { it?.toInt() ?: defaultValue }
+            .getOrDefault(defaultValue)
+    }
+
+    fun getFloatProperty(property: String, defaultValue: Float): Float {
+        return getProperty(property)
+            .mapCatching { it?.toFloat() ?: defaultValue }
+            .getOrDefault(defaultValue)
+    }
+
+    fun getBooleanProperty(property: String, defaultValue: Boolean): Boolean {
+        return getProperty(property)
+            .map { if (it == null) defaultValue else it == "1" }
+            .getOrDefault(defaultValue)
+    }
+
+    fun getStringProperty(property: String, defaultValue: String): String {
+        return getProperty(property)
+            .map { it ?: defaultValue }
+            .getOrDefault(defaultValue)
+    }
+
+    private fun getSystemSetting(setting: String): Result<String?> {
         return executeAsRoot("settings get system $setting")
+    }
+
+    fun getStringSystemSetting(setting: String, defaultValue: String): String {
+        return getSystemSetting(setting)
+            .map { it ?: defaultValue }
+            .getOrDefault(defaultValue)
+    }
+
+    fun setStringSystemSetting(setting: String, value: String) {
+        executeAsRoot("settings put system $setting $value")
+    }
+
+    fun getIntSystemSetting(setting: String, defaultValue: Int): Int {
+        return getSystemSetting(setting)
             .mapCatching { it?.toInt() ?: defaultValue }
             .getOrDefault(defaultValue)
     }
@@ -53,7 +94,7 @@ class ShellExecutor @Inject constructor() {
     }
 
     fun getBooleanSystemSetting(setting: String, defaultValue: Boolean): Boolean {
-        return executeAsRoot("settings get system $setting")
+        return getSystemSetting(setting)
             .map { if (it == null) defaultValue else it == "1" }
             .getOrDefault(defaultValue)
     }
@@ -62,68 +103,37 @@ class ShellExecutor @Inject constructor() {
         setIntSystemSetting(setting, if (value) 1 else 0)
     }
 
-    fun getStringSystemSetting(setting: String, defaultValue: String): String {
-        return executeAsRoot("settings get system $setting").map {
-            it ?: defaultValue
-        }.getOrDefault(defaultValue)
+    private fun getValue(file: String): Result<String?> {
+        return executeAsRoot("cat $file")
     }
 
-    fun setStringSystemSetting(setting: String, value: String) {
-        executeAsRoot("settings put system $setting $value")
-    }
-
-    private fun enableA11yService() {
-        val currentServices =
-            executeAsRoot("settings get secure enabled_accessibility_services")
-                .map { it ?: "" }
-                .getOrDefault("")
-
-        if (currentServices.contains(PACKAGE)) return
-
-        executeAsRoot(
-            "settings put secure enabled_accessibility_services $PACKAGE/$PACKAGE.service.ForegroundAppWatcherService:$currentServices"
-                .trimEnd(':'),
-        )
-    }
-
-    fun setSfSaturation(saturation: Float) {
-        executeAsRoot("service call SurfaceFlinger 1022 f ${String.format("%.1f", saturation)}")
-    }
-
-    fun setVibrationStrength(newValue: Int) {
-        executeAsRoot("echo $newValue > /d/haptics/user_vmax_mv")
-    }
-
-    fun getVibrationStrength(): Int {
-        val defaultValue = 0
-
-        return executeAsRoot("cat /d/haptics/user_vmax_mv")
-            .mapCatching { it?.toInt() ?: defaultValue } // This throws on RP4 because it has no rumble
+    fun getStringValue(file: String, defaultValue: String): String {
+        return getValue(file)
+            .map { it ?: defaultValue }
             .getOrDefault(defaultValue)
     }
 
-    private fun grantAllAppsPermission() {
-        executeAsRoot("pm grant $PACKAGE android.permission.QUERY_ALL_PACKAGES")
+    fun setStringValue(file: String, value: String) {
+        executeAsRoot("echo $value > $file")
     }
 
-    private fun addOdinToolsToWhitelist() {
-        val currentWhitelist = getStringSystemSetting("app_whiteList", "")
-        if (currentWhitelist.contains(PACKAGE)) return
-
-        val newWhitelist = "$PACKAGE,$currentWhitelist".trimEnd(',')
-        setStringSystemSetting("app_whiteList", newWhitelist)
+    fun getIntValue(file: String, defaultValue: Int): Int {
+        return getValue(file)
+            .mapCatching { it?.toInt() ?: defaultValue }
+            .getOrDefault(defaultValue)
     }
 
-    fun applyRequiredSettings() {
-        enableA11yService()
-        grantAllAppsPermission()
-        if (!BuildConfig.DEBUG) {
-            // Don't add to whitelist on debug builds, otherwise even Android Studio can't kill the app
-            addOdinToolsToWhitelist()
-        }
+    fun setIntValue(file: String, value: Int) {
+        executeAsRoot("echo $value > $file")
     }
 
-    companion object {
-        private const val PACKAGE = BuildConfig.APPLICATION_ID
+    fun getBooleanValue(file: String, defaultValue: Boolean): Boolean {
+        return getValue(file)
+            .map { if (it == null) defaultValue else it == "1" }
+            .getOrDefault(defaultValue)
+    }
+
+    fun setBooleanValue(file: String, value: Boolean) {
+        setIntValue(file, if (value) 1 else 0)
     }
 }

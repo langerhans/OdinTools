@@ -150,6 +150,7 @@ fun TriggerPreference(@DrawableRes icon: Int, @StringRes title: Int, @StringRes 
 @Composable
 fun CheckBoxDialogPreference(
     items: List<CheckboxPreferenceUiModel>,
+    @StringRes title: Int,
     minSelected: Int = 2,
     onCancel: () -> Unit,
     onSave: (items: List<CheckboxPreferenceUiModel>) -> Unit,
@@ -161,14 +162,13 @@ fun CheckBoxDialogPreference(
     }, dismissButton = {
         DialogButton(text = stringResource(id = R.string.cancel), onCancel)
     }, title = {
-        Text(text = stringResource(id = R.string.controllerStyle))
+        Text(text = stringResource(id = title))
     }, text = {
         LazyColumn {
             items(items = items, key = { item -> item.key }) { item ->
                 fun canChangeCheckbox(): Boolean {
                     return item.checked.not() || items.count { it.checked } == minSelected + 1
                 }
-
                 CheckboxDialogRow(
                     text = stringResource(id = item.text),
                     checked = item.checked,
@@ -312,7 +312,8 @@ fun RemapButtonDialog(initialValue: Int, onCancel: () -> Unit, onReset: () -> Un
                     )
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .padding(top = 24.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         TextButton(onClick = onReset) {
