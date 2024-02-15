@@ -25,6 +25,7 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.appsettings.AppOverrideListScreen
 import de.langerhans.odintools.appsettings.AppOverridesScreen
 import de.langerhans.odintools.tools.DeviceType.ODIN2
+import de.langerhans.odintools.tools.SettingsRepo
 import de.langerhans.odintools.ui.composables.*
 import de.langerhans.odintools.ui.theme.OdinToolsTheme
 
@@ -62,7 +63,7 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
 
     if (uiState.showPServerNotAvailableDialog) {
         PServerNotAvailableDialog()
-    } else if (uiState.showNotAnOdinDialog) {
+    } else if (uiState.showIncompatibleDeviceDialog) {
         NotAnOdinDialog { viewModel.incompatibleDeviceDialogDismissed() }
     }
 
@@ -160,11 +161,11 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             SettingsHeader(R.string.buttons)
             SwitchPreference(
                 icon = R.drawable.ic_home,
-                state = uiState.singleHomeEnabled,
                 title = R.string.singlePressHome,
                 description = R.string.singlePressHomeDescription,
+                state = uiState.singlePressHomeEnabled,
             ) {
-                viewModel.updateSingleHomePreference(it)
+                viewModel.updateSinglePressHomePreference(it)
             }
             if (uiState.deviceType == ODIN2) {
                 TriggerPreference(
@@ -172,14 +173,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     title = R.string.m1Button,
                     description = R.string.remapButtonDescription,
                 ) {
-                    viewModel.remapButtonClicked("remap_custom_to_m1_value")
+                    viewModel.remapButtonClicked(SettingsRepo.KEY_CUSTOM_M1_VALUE)
                 }
                 TriggerPreference(
                     icon = R.drawable.ic_gamepad,
                     title = R.string.m2Button,
                     description = R.string.remapButtonDescription,
                 ) {
-                    viewModel.remapButtonClicked("remap_custom_to_m2_value")
+                    viewModel.remapButtonClicked(SettingsRepo.KEY_CUSTOM_M2_VALUE)
                 }
             }
             SettingsHeader(name = R.string.display)
