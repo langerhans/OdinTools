@@ -8,7 +8,6 @@ class SettingsRepo @Inject constructor(
 ) {
 
     init {
-        println("Settings init")
         enableA11yService()
         grantAllAppsPermission()
         // Don't add to whitelist on debug builds, otherwise even Android Studio can't kill the app
