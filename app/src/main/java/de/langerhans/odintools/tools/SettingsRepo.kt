@@ -7,7 +7,7 @@ class SettingsRepo @Inject constructor(
     private val executor: ShellExecutor,
 ) {
 
-    init {
+    fun applyRequiredSettings() {
         enableA11yService()
         grantAllAppsPermission()
         // Don't add to whitelist on debug builds, otherwise even Android Studio can't kill the app

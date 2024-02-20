@@ -38,6 +38,8 @@ class MainViewModel @Inject constructor(
         get() = _l2r2StyleOptions
 
     init {
+        settings.applyRequiredSettings()
+
         val deviceType = deviceUtils.getDeviceType()
 
         _uiState.update { _ ->
