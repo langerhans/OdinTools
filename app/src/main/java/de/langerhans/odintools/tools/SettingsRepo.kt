@@ -41,12 +41,6 @@ class SettingsRepo @Inject constructor(
         whitelist = newWhitelist
     }
 
-    val buildVersion: String
-        get() = executor.getStringProperty(KEY_BUILD_VERSION, "")
-
-    val vendorName: String
-        get() = executor.getStringProperty(KEY_VENDOR_NAME, "")
-
     fun setSfSaturation(value: Float) {
         executor.executeAsRoot("service call SurfaceFlinger 1022 f ${String.format("%.1f", value)}")
     }
