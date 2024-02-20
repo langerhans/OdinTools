@@ -47,11 +47,9 @@ class SettingsRepo @Inject constructor(
     val vendorName: String
         get() = executor.getStringProperty(KEY_VENDOR_NAME, "")
 
-    var saturation: Float
-        get() = throw UnsupportedOperationException()
-        set(value) {
-            executor.executeAsRoot("service call SurfaceFlinger 1022 f ${String.format("%.1f", value)}")
-        }
+    fun setSfSaturation(value: Float) {
+        executor.executeAsRoot("service call SurfaceFlinger 1022 f ${String.format("%.1f", value)}")
+    }
 
     private var whitelist: String
         get() = executor.getStringSystemSetting(KEY_APP_WHITELIST, "")

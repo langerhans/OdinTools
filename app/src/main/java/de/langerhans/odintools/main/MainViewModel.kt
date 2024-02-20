@@ -138,7 +138,7 @@ class MainViewModel @Inject constructor(
 
     fun saveSaturation(newValue: Float) {
         prefs.saturationOverride = newValue
-        settings.saturation = newValue
+        settings.setSfSaturation(newValue)
         _uiState.update {
             it.copy(showSaturationDialog = false)
         }

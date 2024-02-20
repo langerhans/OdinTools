@@ -23,7 +23,7 @@ class BootReceiver : BroadcastReceiver() {
 
         val saturation = prefs.saturationOverride
         if (saturation != 1.0f) {
-            settings.saturation = saturation
+            settings.setSfSaturation(saturation)
         }
         val vibrationStrength = prefs.vibrationStrength
         if (vibrationStrength != 0) {
