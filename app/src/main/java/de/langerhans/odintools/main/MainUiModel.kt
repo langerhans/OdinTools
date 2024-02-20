@@ -10,10 +10,10 @@ import de.langerhans.odintools.tools.DeviceType.ODIN2
 data class MainUiModel(
     val deviceType: DeviceType = ODIN2,
     val deviceVersion: String = "",
-    val showNotAnOdinDialog: Boolean = false,
+    val showIncompatibleDeviceDialog: Boolean = false,
     val showPServerNotAvailableDialog: Boolean = false,
 
-    val singleHomeEnabled: Boolean = false,
+    val singlePressHomeEnabled: Boolean = false,
     val appOverridesEnabled: Boolean = true,
     val overrideDelayEnabled: Boolean = false,
 
@@ -30,6 +30,8 @@ data class MainUiModel(
     val showRemapButtonDialog: Boolean = false,
     val currentButtonSetting: String = "",
     val currentButtonKeyCode: Int = 0,
+
+    val chargeLimitEnabled: Boolean = false,
 )
 
 class CheckboxPreferenceUiModel(

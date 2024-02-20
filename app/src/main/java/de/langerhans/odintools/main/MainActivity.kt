@@ -25,6 +25,7 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.appsettings.AppOverrideListScreen
 import de.langerhans.odintools.appsettings.AppOverridesScreen
 import de.langerhans.odintools.tools.DeviceType.ODIN2
+import de.langerhans.odintools.tools.SettingsRepo
 import de.langerhans.odintools.ui.composables.*
 import de.langerhans.odintools.ui.theme.OdinToolsTheme
 
@@ -62,13 +63,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
 
     if (uiState.showPServerNotAvailableDialog) {
         PServerNotAvailableDialog()
-    } else if (uiState.showNotAnOdinDialog) {
+    } else if (uiState.showIncompatibleDeviceDialog) {
         NotAnOdinDialog { viewModel.incompatibleDeviceDialogDismissed() }
     }
 
     if (uiState.showControllerStyleDialog) {
         CheckBoxDialogPreference(
             items = viewModel.controllerStyleOptions,
+            title = R.string.controllerStyle,
             onCancel = {
                 viewModel.hideControllerStylePreference()
             },
@@ -81,6 +83,7 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
     if (uiState.showL2r2StyleDialog) {
         CheckBoxDialogPreference(
             items = viewModel.l2r2StyleOptions,
+            title = R.string.l2r2mode,
             onCancel = {
                 viewModel.hideL2r2StylePreference()
             },
@@ -135,14 +138,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             SwitchPreference(
                 icon = R.drawable.ic_more_time,
                 title = R.string.overrideDelay,
-                description = R.string.overrideDelayDesc,
+                description = R.string.overrideDelayDescription,
                 state = uiState.overrideDelayEnabled,
             ) {
                 viewModel.overrideDelayEnabled(it)
             }
-            SettingsHeader(R.string.quicksettings)
+            SettingsHeader(R.string.quickSettings)
             TriggerPreference(
-                icon = R.drawable.ic_controllerstyle,
+                icon = R.drawable.ic_face_buttons,
                 title = R.string.controllerStyle,
                 description = R.string.controllerStyleDesc,
             ) {
@@ -158,11 +161,11 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             SettingsHeader(R.string.buttons)
             SwitchPreference(
                 icon = R.drawable.ic_home,
-                title = R.string.doubleHomeTitle,
-                description = R.string.doubleHomeDescription,
-                state = uiState.singleHomeEnabled,
+                title = R.string.singlePressHome,
+                description = R.string.singlePressHomeDescription,
+                state = uiState.singlePressHomeEnabled,
             ) {
-                viewModel.updateSingleHomePreference(it)
+                viewModel.updateSinglePressHomePreference(it)
             }
             if (uiState.deviceType == ODIN2) {
                 TriggerPreference(
@@ -170,14 +173,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     title = R.string.m1Button,
                     description = R.string.remapButtonDescription,
                 ) {
-                    viewModel.remapButtonClicked("remap_custom_to_m1_value")
+                    viewModel.remapButtonClicked(SettingsRepo.KEY_CUSTOM_M1_VALUE)
                 }
                 TriggerPreference(
                     icon = R.drawable.ic_gamepad,
                     title = R.string.m2Button,
                     description = R.string.remapButtonDescription,
                 ) {
-                    viewModel.remapButtonClicked("remap_custom_to_m2_value")
+                    viewModel.remapButtonClicked(SettingsRepo.KEY_CUSTOM_M2_VALUE)
                 }
             }
             SettingsHeader(name = R.string.display)
@@ -198,6 +201,15 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     onClick = { viewModel.vibrationClicked() },
                 ) {
                     viewModel.updateVibrationPreference(it)
+                }
+                SettingsHeader(R.string.battery)
+                SwitchPreference(
+                    icon = R.drawable.ic_electrical_services,
+                    title = R.string.chargeLimit,
+                    description = R.string.chargeLimitDescription,
+                    state = uiState.chargeLimitEnabled,
+                ) {
+                    viewModel.updateChargeLimitPreference(it)
                 }
             }
         }
