@@ -18,14 +18,14 @@ class SettingsRepo @Inject constructor(
 
     private fun enableA11yService() {
         val currentServices =
-            executor.executeAsRoot("settings get secure enabled_accessibility_services")
+            executor.executeAsRoot("settings get secure $KEY_ACCESSIBILITY_SERVICES")
                 .map { it ?: "" }
                 .getOrDefault("")
 
         if (currentServices.contains(PACKAGE)) return
 
         executor.executeAsRoot(
-            "settings put secure enabled_accessibility_services $PACKAGE/$PACKAGE.service.ForegroundAppWatcherService:$currentServices"
+            "settings put secure $KEY_ACCESSIBILITY_SERVICES $PACKAGE/$PACKAGE.service.ForegroundAppWatcherService:$currentServices"
                 .trimEnd(':'),
         )
     }
@@ -94,6 +94,7 @@ class SettingsRepo @Inject constructor(
         const val KEY_VENDOR_NAME = "ro.vendor.retro.name"
         const val KEY_BUILD_VERSION = "ro.build.odin2.ota.version"
         const val KEY_SATURATION = "persist.sys.sf.color_saturation"
+        const val KEY_ACCESSIBILITY_SERVICES = "enabled_accessibility_services"
         const val KEY_APP_WHITELIST = "app_whiteList"
         const val KEY_PREVENT_PRESS_HOME = "prevent_press_home_accidentally"
         const val KEY_VIBRATE_ON = "vibrate_on"
