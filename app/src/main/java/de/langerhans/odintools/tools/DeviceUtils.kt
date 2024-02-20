@@ -9,10 +9,10 @@ class DeviceUtils @Inject constructor(
 
     fun getDeviceVersion() = executor.getStringProperty(SettingsRepo.KEY_BUILD_VERSION, "")
 
-    fun getDeviceVendor() = executor.getStringProperty(SettingsRepo.KEY_VENDOR_NAME, "")
+    fun getDeviceCodename() = executor.getStringProperty(SettingsRepo.KEY_VENDOR_NAME, "")
 
     fun getDeviceType(): DeviceType {
-        return when (getDeviceVendor()) {
+        return when (getDeviceCodename()) {
             "Q9" -> ODIN2
             "4.0", "4.0P" -> RP4
             else -> OTHER
