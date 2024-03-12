@@ -10,6 +10,7 @@ import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.FanMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
+import de.langerhans.odintools.models.VibrationStrength
 import javax.inject.Inject
 
 class AppOverrideMapper @Inject constructor(
@@ -44,6 +45,7 @@ class AppOverrideMapper @Inject constructor(
         val l2R2Style = L2R2Style.getById(app.l2R2Style)
         val perfMode = PerfMode.getById(app.perfMode)
         val fanMode = FanMode.getById(app.fanMode)
+        val vibrationStrength = VibrationStrength.getById(app.vibrationStrength)
 
         return AppUiModel(
             packageName = app.packageName,
