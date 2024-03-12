@@ -22,6 +22,7 @@ import de.langerhans.odintools.models.L2R2Style.*
 import de.langerhans.odintools.models.NoChange
 import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.models.PerfMode.*
+import de.langerhans.odintools.models.VibrationStrength
 import de.langerhans.odintools.ui.composables.DeleteConfirmDialog
 import de.langerhans.odintools.ui.composables.LargeDropdownMenu
 import de.langerhans.odintools.ui.composables.OdinTopAppBar
@@ -152,6 +153,19 @@ fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navig
                     ),
                     initialSelection = uiState.app?.perfMode?.id ?: NoChange.KEY,
                     onSelectionChanged = { viewModel.perfModeSelected(it) },
+                    modifier = Modifier.padding(bottom = 16.dp),
+                )
+                OverrideSpinnerRow(
+                    label = R.string.vibrationStrength,
+                    spinnerItems = listOf(
+                        NoChange.KEY to stringResource(id = NoChange.textRes),
+                        VibrationStrength.VibrationOff.id to stringResource(id = VibrationStrength.VibrationOff.textRes),
+                        VibrationStrength.VibrationLow.id to stringResource(id = VibrationStrength.VibrationLow.textRes),
+                        VibrationStrength.VibrationMedium.id to stringResource(id = VibrationStrength.VibrationMedium.textRes),
+                        VibrationStrength.VibrationHigh.id to stringResource(id = VibrationStrength.VibrationHigh.textRes),
+                    ),
+                    initialSelection = uiState.app?.vibrationStrength?.id ?: NoChange.KEY,
+                    onSelectionChanged = { viewModel.vibrationStrengthSelected(it) },
                     modifier = Modifier.padding(bottom = 16.dp),
                 )
                 if (uiState.app?.perfMode != null && uiState.app?.perfMode != PerfMode.Unknown) {

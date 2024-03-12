@@ -9,14 +9,14 @@ sealed class VibrationStrength(
     val settingsValue: Int,
     @StringRes val textRes: Int,
 ) {
-    data object Off : VibrationStrength("vibrationOff", 0, R.string.vibrationOff)
-    data object Low : VibrationStrength("lowVibration", 1100, R.string.lowVibration)
-    data object Medium : VibrationStrength("mediumVibration", 2100, R.string.mediumVibration)
-    data object High : VibrationStrength("highVibration", 3100, R.string.highVibration)
-    data object Unknown : VibrationStrength("unknown", -1, R.string.unknown)
+    data object VibrationOff : VibrationStrength("vibrationOff", 0, R.string.vibrationOff)
+    data object VibrationLow : VibrationStrength("lowVibration", 1100, R.string.lowVibration)
+    data object VibrationMedium : VibrationStrength("mediumVibration", 2100, R.string.mediumVibration)
+    data object VibrationHigh : VibrationStrength("highVibration", 3100, R.string.highVibration)
+    data object VibrationUnknown : VibrationStrength("unknown", -1, R.string.unknown)
 
     fun enable(executor: ShellExecutor) {
-        if (this != Unknown) {
+        if (this != VibrationUnknown) {
             executor.setIntSystemSetting(KEY_VIBRATION_STRENGTH, settingsValue)
         }
     }
@@ -24,29 +24,21 @@ sealed class VibrationStrength(
     companion object {
         private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
 
-        fun getMode(executor: ShellExecutor) = when (executor.getIntSystemSetting(KEY_VIBRATION_STRENGTH, Low.settingsValue)) {
-            Low.settingsValue -> Low
-            Medium.settingsValue -> Medium
-            High.settingsValue -> High
-            Off.settingsValue -> Off
-            else -> Unknown
+        fun getMode(executor: ShellExecutor) = when (executor.getIntSystemSetting(KEY_VIBRATION_STRENGTH, VibrationLow.settingsValue)) {
+            VibrationLow.settingsValue -> VibrationLow
+            VibrationMedium.settingsValue -> VibrationMedium
+            VibrationHigh.settingsValue -> VibrationHigh
+            VibrationOff.settingsValue -> VibrationOff
+            else -> VibrationUnknown
         }
 
         fun getById(id: String?) = when (id) {
-            Low.id -> Low
-            Medium.id -> Medium
-            High.id -> High
-            Off.id -> Off
-            else -> Unknown
+            VibrationLow.id -> VibrationLow
+            VibrationMedium.id -> VibrationMedium
+            VibrationHigh.id -> VibrationHigh
+            VibrationOff.id -> VibrationOff
+            else -> VibrationUnknown
         }
 
-        fun getDisabledVibrationStrengths(perfModeKey: String?): List<String> {
-            return when (perfModeKey) {
-                PerfMode.Standard.id -> listOf(NoChange.KEY, Unknown.id)
-                PerfMode.Performance.id -> listOf(NoChange.KEY, Unknown.id, Off.id)
-                PerfMode.HighPerformance.id -> listOf(NoChange.KEY, Unknown.id, Off.id, Low.id)
-                else -> emptyList()
-            }
-        }
     }
 }
