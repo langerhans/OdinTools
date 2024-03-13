@@ -11,8 +11,8 @@ sealed class VibrationStrength(
 ) {
     data object VibrationOff : VibrationStrength("vibrationOff", 0, R.string.vibrationOff)
     data object VibrationLow : VibrationStrength("lowVibration", 1100, R.string.lowVibration)
-    data object VibrationMedium : VibrationStrength("mediumVibration", 2100, R.string.mediumVibration)
-    data object VibrationHigh : VibrationStrength("highVibration", 3100, R.string.highVibration)
+    data object VibrationMedium : VibrationStrength("mediumVibration", 1600, R.string.mediumVibration)
+    data object VibrationHigh : VibrationStrength("highVibration", 2800, R.string.highVibration)
     data object VibrationUnknown : VibrationStrength("unknown", -1, R.string.unknown)
 
     fun enable(executor: ShellExecutor) {
