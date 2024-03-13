@@ -17,14 +17,14 @@ sealed class VibrationStrength(
 
     fun enable(executor: ShellExecutor) {
         if (this != VibrationUnknown) {
-            executor.setIntSystemSetting(KEY_VIBRATION_STRENGTH, settingsValue)
+            executor.setVibrationStrength(settingsValue)
         }
     }
 
     companion object {
         private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
 
-        fun getMode(executor: ShellExecutor) = when (executor.getIntSystemSetting(KEY_VIBRATION_STRENGTH, VibrationLow.settingsValue)) {
+        fun getMode(executor: ShellExecutor) = when (executor.getVibrationStrength()) {
             VibrationLow.settingsValue -> VibrationLow
             VibrationMedium.settingsValue -> VibrationMedium
             VibrationHigh.settingsValue -> VibrationHigh
