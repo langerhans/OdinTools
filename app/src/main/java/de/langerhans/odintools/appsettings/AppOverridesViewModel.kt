@@ -33,6 +33,7 @@ class AppOverridesViewModel @Inject constructor(
     private var initialControllerStyle = NoChange.KEY
     private var initialL2R2Style = NoChange.KEY
     private var initialPerfMode = NoChange.KEY
+    private var initialVibrationStrength = NoChange.KEY
     private var initialFanMode = NoChange.KEY
 
     init {
@@ -47,6 +48,7 @@ class AppOverridesViewModel @Inject constructor(
                 initialControllerStyle = app.controllerStyle ?: NoChange.KEY
                 initialL2R2Style = app.l2R2Style ?: NoChange.KEY
                 initialPerfMode = app.perfMode ?: NoChange.KEY
+                initialVibrationStrength = app.vibrationStrength ?: NoChange.KEY
                 initialFanMode = app.fanMode ?: NoChange.KEY
 
                 appOverrideMapper.mapAppOverride(app)
@@ -73,6 +75,7 @@ class AppOverridesViewModel @Inject constructor(
                         l2R2Style = _uiState.value.app?.l2r2Style?.id,
                         perfMode = _uiState.value.app?.perfMode?.id,
                         fanMode = _uiState.value.app?.fanMode?.id,
+                        vibrationStrength = _uiState.value.app?.vibrationStrength?.id,
                     ),
                 )
             }
@@ -157,17 +160,28 @@ class AppOverridesViewModel @Inject constructor(
         }
     }
 
+    fun vibrationStrengthSelected(key: String) {
+        _uiState.update {
+            it.copy(
+                app = it.app?.copy(vibrationStrength = VibrationStrength.getById(key)),
+                hasUnsavedChanges = hasUnsavedChanges(vibrationStrength = key),
+            )
+        }
+    }
+
     private fun hasUnsavedChanges(
         controllerStyle: String? = null,
         l2R2Style: String? = null,
         perfMode: String? = null,
         fanMode: String? = null,
+        vibrationStrength: String? = null,
     ): Boolean {
         return listOf(
             (controllerStyle ?: _uiState.value.app?.controllerStyle?.id) != initialControllerStyle,
             (l2R2Style ?: _uiState.value.app?.l2r2Style?.id) != initialL2R2Style,
             (perfMode ?: _uiState.value.app?.perfMode?.id) != initialPerfMode,
             (fanMode ?: _uiState.value.app?.fanMode?.id) != initialFanMode,
+            (vibrationStrength ?: _uiState.value.app?.vibrationStrength?.id) != initialVibrationStrength,
         ).any { it }
     }
 

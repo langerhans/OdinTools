@@ -15,6 +15,11 @@
     <string name="highperformance">High Performance</string>
     <string name="fanMode">Fan Mode</string>
     <string name="fanOff">Off</string>
+    <string name="vibrationOff">Off</string>
+    <string name="lowVibration">Low</string>
+    <string name="mediumVibration">Medium</string>
+    <string name="highVibration">High</string>
+
     <string name="quiet">Quiet</string>
     <string name="smart">Smart</string>
     <string name="sport">Sport</string>

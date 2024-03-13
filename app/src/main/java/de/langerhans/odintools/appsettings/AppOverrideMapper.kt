@@ -10,6 +10,7 @@ import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.FanMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
+import de.langerhans.odintools.models.VibrationStrength
 import javax.inject.Inject
 
 class AppOverrideMapper @Inject constructor(
@@ -44,16 +45,18 @@ class AppOverrideMapper @Inject constructor(
         val l2R2Style = L2R2Style.getById(app.l2R2Style)
         val perfMode = PerfMode.getById(app.perfMode)
         val fanMode = FanMode.getById(app.fanMode)
+        val vibrationStrength = VibrationStrength.getById(app.vibrationStrength)
 
         return AppUiModel(
             packageName = app.packageName,
             appName = context.packageManager.getApplicationLabel(appInfo).toString(),
             appIcon = context.packageManager.getApplicationIcon(appInfo),
-            subtitle = getSubtitle(controllerStyle, l2R2Style, perfMode, fanMode),
+            subtitle = getSubtitle(controllerStyle, l2R2Style, perfMode, fanMode, vibrationStrength),
             controllerStyle = controllerStyle,
             l2r2Style = l2R2Style,
             perfMode = perfMode,
             fanMode = fanMode,
+            vibrationStrength = vibrationStrength,
         )
     }
 
@@ -68,7 +71,7 @@ class AppOverrideMapper @Inject constructor(
         )
     }
 
-    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfMode: PerfMode, fanMode: FanMode): String? {
+    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfMode: PerfMode, fanMode: FanMode, vibrationStrength: VibrationStrength): String? {
         return buildString {
             if (controllerStyle != ControllerStyle.Unknown) {
                 append(context.getString(R.string.controllerStyle))
@@ -86,6 +89,12 @@ class AppOverrideMapper @Inject constructor(
                 append(context.getString(R.string.perfMode))
                 append(": ")
                 append(context.getString(perfMode.textRes))
+                append(" | ")
+            }
+            if (vibrationStrength != VibrationStrength.VibrationUnknown) {
+                append(context.getString(R.string.vibrationStrength))
+                append(": ")
+                append(context.getString(vibrationStrength.textRes))
                 append(" | ")
             }
             if (fanMode != FanMode.Unknown) {
