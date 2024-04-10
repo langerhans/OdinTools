@@ -42,9 +42,11 @@ fun AppOverrideListScreen(viewModel: AppOverrideListViewModel = hiltViewModel(),
         }
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(contentPadding),
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(
+                top = contentPadding.calculateTopPadding(),
+                bottom = contentPadding.calculateBottomPadding(),
+            ),
         ) {
             item {
                 Row(
