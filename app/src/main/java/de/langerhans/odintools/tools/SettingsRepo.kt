@@ -45,6 +45,18 @@ class SettingsRepo @Inject constructor(
         executor.executeAsRoot("service call SurfaceFlinger 1022 f ${String.format("%.1f", value)}")
     }
 
+    fun enableChargingSeparation() {
+        chargingSeparationEnabled = true
+        restrictCurrent = 1000
+        restrictCharge = true
+    }
+
+    fun disableChargingSeparation() {
+        chargingSeparationEnabled = false
+        restrictCurrent = 1000000
+        restrictCharge = false
+    }
+
     private var whitelist: String
         get() = executor.getStringSystemSetting(KEY_APP_WHITELIST, "")
         set(value) = executor.setStringSystemSetting(KEY_APP_WHITELIST, value)

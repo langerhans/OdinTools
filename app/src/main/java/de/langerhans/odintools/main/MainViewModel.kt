@@ -253,6 +253,12 @@ class MainViewModel @Inject constructor(
     fun saveChargeLimit(newValue: ClosedRange<Int>) {
         prefs.minBatteryLevel = newValue.start
         prefs.maxBatteryLevel = newValue.endInclusive
+
+        // Reset charging separation to re-apply settings
+        if (settings.chargingSeparationEnabled) {
+            settings.disableChargingSeparation()
+        }
+
         _uiState.update {
             it.copy(showChargeLimitDialog = false, currentChargeLimit = newValue)
         }

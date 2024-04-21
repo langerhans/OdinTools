@@ -399,7 +399,7 @@ fun ChargeLimitPreferenceDialog(initialValue: ClosedRange<Int>, onCancel: () -> 
                             userValue = it
                         },
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(1f),
                     )
                 }
                 Row {

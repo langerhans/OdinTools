@@ -74,7 +74,7 @@
     <string name="chargeLimitPreferenceDialogOffAt">Off at %1$d%&#37;</string>
     <string name="chargeLimitPreferenceDialogOnAt">On at %1$d%&#37;</string>
     <string name="chargeLimitPreferenceDialogDescription">
-        Charge separation or passthrough charging means the power is going directly to the system without passing through the battery first.
+        Charging separation or passthrough charging means the power is going directly to the system without passing through the battery first.
         Keep in mind that battery drain will occur regardless.
     </string>
 </resources>

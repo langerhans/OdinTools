@@ -58,8 +58,18 @@
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>
             <meta-data android:name="android.accessibilityservice"
-                       android:resource="@xml/accessibility_service_config" />
+                       android:resource="@xml/accessibility_service_config"/>
         </service>
+        <receiver
+            android:name=".tools.BatteryLevelReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED"/>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
         <receiver
                 android:name=".tools.BootReceiver"
                 android:enabled="true"
