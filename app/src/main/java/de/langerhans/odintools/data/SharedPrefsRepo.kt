@@ -76,6 +76,6 @@ class SharedPrefsRepo @Inject constructor(
         private const val KEY_OVERRIDE_DELAY = "override_delay"
         private const val KEY_CHARGE_LIMIT_ENABLED = "charge_limit_enabled"
         private const val KEY_MIN_BATTERY_LEVEL = "min_battery_level"
-        private const val KEY_MAX_BATTERY_LEVEL = "max-battery_level"
+        private const val KEY_MAX_BATTERY_LEVEL = "max_battery_level"
     }
 }
