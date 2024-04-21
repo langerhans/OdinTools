@@ -47,10 +47,6 @@ class SharedPrefsRepo @Inject constructor(
         get() = prefs.getInt(KEY_MAX_BATTERY_LEVEL, 80)
         set(value) = prefs.edit().putInt(KEY_MAX_BATTERY_LEVEL, value).apply()
 
-    var currentBatteryLevel
-        get() = prefs.getInt(KEY_CURRENT_BATTERY_LEVEL, -1)
-        set(value) = prefs.edit().putInt(KEY_CURRENT_BATTERY_LEVEL, value).apply()
-
     private var appOverrideEnabledListener: OnSharedPreferenceChangeListener? = null
 
     fun observeAppOverrideEnabledState(overridesEnabled: (newState: Boolean) -> Unit, overrideDelayEnabled: (newState: Boolean) -> Unit) {
@@ -81,6 +77,5 @@ class SharedPrefsRepo @Inject constructor(
         private const val KEY_CHARGE_LIMIT_ENABLED = "charge_limit_enabled"
         private const val KEY_MIN_BATTERY_LEVEL = "min_battery_level"
         private const val KEY_MAX_BATTERY_LEVEL = "max_battery_level"
-        private const val KEY_CURRENT_BATTERY_LEVEL = "current_battery_level"
     }
 }
