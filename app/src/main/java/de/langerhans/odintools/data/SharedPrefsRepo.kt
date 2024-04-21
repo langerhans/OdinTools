@@ -35,6 +35,18 @@ class SharedPrefsRepo @Inject constructor(
         get() = prefs.getBoolean(KEY_OVERRIDE_DELAY, false)
         set(value) = prefs.edit().putBoolean(KEY_OVERRIDE_DELAY, value).apply()
 
+    var chargeLimitEnabled
+        get() = prefs.getBoolean(KEY_CHARGE_LIMIT_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(KEY_CHARGE_LIMIT_ENABLED, value).apply()
+
+    var minBatteryLevel
+        get() = prefs.getInt(KEY_MIN_BATTERY_LEVEL, 20)
+        set(value) = prefs.edit().putInt(KEY_MIN_BATTERY_LEVEL, value).apply()
+
+    var maxBatteryLevel
+        get() = prefs.getInt(KEY_MAX_BATTERY_LEVEL, 80)
+        set(value) = prefs.edit().putInt(KEY_MAX_BATTERY_LEVEL, value).apply()
+
     private var appOverrideEnabledListener: OnSharedPreferenceChangeListener? = null
 
     fun observeAppOverrideEnabledState(overridesEnabled: (newState: Boolean) -> Unit, overrideDelayEnabled: (newState: Boolean) -> Unit) {
@@ -62,5 +74,8 @@ class SharedPrefsRepo @Inject constructor(
         private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
         private const val KEY_APP_OVERRIDE_ENABLED = "app_override_enabled"
         private const val KEY_OVERRIDE_DELAY = "override_delay"
+        private const val KEY_CHARGE_LIMIT_ENABLED = "charge_limit_enabled"
+        private const val KEY_MIN_BATTERY_LEVEL = "min_battery_level"
+        private const val KEY_MAX_BATTERY_LEVEL = "max-battery_level"
     }
 }

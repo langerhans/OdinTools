@@ -31,7 +31,9 @@ data class MainUiModel(
     val currentButtonSetting: String = "",
     val currentButtonKeyCode: Int = 0,
 
+    val showChargeLimitDialog: Boolean = false,
     val chargeLimitEnabled: Boolean = false,
+    val currentChargeLimit: ClosedRange<Int> = 20..80,
 )
 
 class CheckboxPreferenceUiModel(

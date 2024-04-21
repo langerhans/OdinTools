@@ -135,6 +135,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
         )
     }
 
+    if (uiState.showChargeLimitDialog) {
+        ChargeLimitPreferenceDialog(
+            initialValue = uiState.currentChargeLimit,
+            onCancel = { viewModel.chargeLimitDialogDismissed() },
+            onSave = { viewModel.saveChargeLimit(it) },
+        )
+    }
+
     Scaffold(topBar = { OdinTopAppBar(deviceVersion = uiState.deviceVersion) }) { contentPadding ->
         Column(
             modifier = Modifier
@@ -220,11 +228,12 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     viewModel.updateVibrationPreference(it)
                 }
                 SettingsHeader(R.string.battery)
-                SwitchPreference(
+                SwitchableTriggerPreference(
                     icon = R.drawable.ic_electrical_services,
                     title = R.string.chargeLimit,
                     description = R.string.chargeLimitDescription,
                     state = uiState.chargeLimitEnabled,
+                    onClick = { viewModel.chargeLimitClicked() },
                 ) {
                     viewModel.updateChargeLimitPreference(it)
                 }

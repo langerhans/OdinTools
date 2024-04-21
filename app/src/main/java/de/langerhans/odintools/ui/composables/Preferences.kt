@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -52,6 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import de.langerhans.odintools.R
 import de.langerhans.odintools.main.CheckboxPreferenceUiModel
+import de.langerhans.odintools.ui.theme.Typography
+import kotlin.math.roundToInt
 
 @Composable
 fun SettingsHeader(@StringRes name: Int) {
@@ -362,4 +363,57 @@ fun RemapButtonDialog(initialValue: Int, onCancel: () -> Unit, onReset: () -> Un
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+}
+
+@Composable
+fun ChargeLimitPreferenceDialog(initialValue: ClosedRange<Int>, onCancel: () -> Unit, onSave: (newValue: ClosedRange<Int>) -> Unit) {
+    var userValue by remember {
+        mutableStateOf(initialValue.start.toFloat()..initialValue.endInclusive.toFloat())
+    }
+    val start = userValue.start.roundToInt()
+    val end = userValue.endInclusive.roundToInt()
+
+    AlertDialog(
+        onDismissRequest = {},
+        confirmButton = {
+            DialogButton(text = stringResource(id = R.string.save)) {
+                onSave(start..end)
+            }
+        },
+        dismissButton = {
+            DialogButton(text = stringResource(id = R.string.cancel), onCancel)
+        },
+        title = {
+            Text(text = stringResource(id = R.string.chargeLimit))
+        },
+        text = {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    RangeSlider(
+                        value = userValue,
+                        valueRange = 0f..100f,
+                        steps = 9,
+                        onValueChange = {
+                            userValue = it
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                }
+                Row {
+                    Text(text = stringResource(id = R.string.chargeLimitPreferenceDialogOffAt, start))
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(text = stringResource(id = R.string.chargeLimitPreferenceDialogOnAt, end))
+                }
+                Row {
+                    Text(
+                        style = Typography.labelSmall,
+                        text = stringResource(id = R.string.chargeLimitPreferenceDialogDescription),
+                    )
+                }
+            }
+        },
+    )
 }

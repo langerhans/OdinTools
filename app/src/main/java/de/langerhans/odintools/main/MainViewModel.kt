@@ -56,7 +56,7 @@ class MainViewModel @Inject constructor(
                 overrideDelayEnabled = prefs.overrideDelay,
                 vibrationEnabled = settings.vibrationEnabled,
                 currentVibration = settings.vibrationStrength,
-                chargeLimitEnabled = settings.chargingLimit80Enabled,
+                chargeLimitEnabled = prefs.chargeLimitEnabled,
             )
         }
     }
@@ -231,10 +231,30 @@ class MainViewModel @Inject constructor(
     }
 
     fun updateChargeLimitPreference(newValue: Boolean) {
-        settings.chargingLimit80Enabled = newValue
+        prefs.chargeLimitEnabled = newValue
 
         _uiState.update { current ->
             current.copy(chargeLimitEnabled = newValue)
+        }
+    }
+
+    fun chargeLimitClicked() {
+        _uiState.update {
+            it.copy(showChargeLimitDialog = true, currentChargeLimit = prefs.minBatteryLevel..prefs.maxBatteryLevel)
+        }
+    }
+
+    fun chargeLimitDialogDismissed() {
+        _uiState.update {
+            it.copy(showChargeLimitDialog = false)
+        }
+    }
+
+    fun saveChargeLimit(newValue: ClosedRange<Int>) {
+        prefs.minBatteryLevel = newValue.start
+        prefs.maxBatteryLevel = newValue.endInclusive
+        _uiState.update {
+            it.copy(showChargeLimitDialog = false, currentChargeLimit = newValue)
         }
     }
 }
