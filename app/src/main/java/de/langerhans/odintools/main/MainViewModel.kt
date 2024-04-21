@@ -6,8 +6,12 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
-import de.langerhans.odintools.models.ControllerStyle.*
-import de.langerhans.odintools.models.L2R2Style.*
+import de.langerhans.odintools.models.ControllerStyle.Disconnect
+import de.langerhans.odintools.models.ControllerStyle.Odin
+import de.langerhans.odintools.models.ControllerStyle.Xbox
+import de.langerhans.odintools.models.L2R2Style.Analog
+import de.langerhans.odintools.models.L2R2Style.Both
+import de.langerhans.odintools.models.L2R2Style.Digital
 import de.langerhans.odintools.tools.DeviceType.ODIN2
 import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.tools.SettingsRepo

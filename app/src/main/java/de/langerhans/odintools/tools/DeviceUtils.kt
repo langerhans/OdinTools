@@ -1,6 +1,8 @@
 package de.langerhans.odintools.tools
 
-import de.langerhans.odintools.tools.DeviceType.*
+import de.langerhans.odintools.tools.DeviceType.ODIN2
+import de.langerhans.odintools.tools.DeviceType.OTHER
+import de.langerhans.odintools.tools.DeviceType.RP4
 import javax.inject.Inject
 
 class DeviceUtils @Inject constructor(

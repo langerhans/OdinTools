@@ -6,8 +6,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.data.AppOverrideDao
 import de.langerhans.odintools.data.AppOverrideEntity
-import de.langerhans.odintools.models.*
+import de.langerhans.odintools.models.ControllerStyle
+import de.langerhans.odintools.models.FanMode
 import de.langerhans.odintools.models.FanMode.Companion.getDisabledFanModes
+import de.langerhans.odintools.models.L2R2Style
+import de.langerhans.odintools.models.NoChange
+import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.tools.DeviceUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

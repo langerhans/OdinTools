@@ -6,7 +6,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.ControllerStyle
-import de.langerhans.odintools.models.ControllerStyle.*
+import de.langerhans.odintools.models.ControllerStyle.Disconnect
+import de.langerhans.odintools.models.ControllerStyle.Odin
+import de.langerhans.odintools.models.ControllerStyle.Unknown
+import de.langerhans.odintools.models.ControllerStyle.Xbox
 import de.langerhans.odintools.tools.ShellExecutor
 import javax.inject.Inject
 
