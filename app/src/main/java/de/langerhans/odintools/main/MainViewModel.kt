@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    deviceUtils: DeviceUtils,
+    private val deviceUtils: DeviceUtils,
     private val executor: ShellExecutor,
     private val settings: SettingsRepo,
     private val prefs: SharedPrefsRepo,
