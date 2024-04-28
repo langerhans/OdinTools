@@ -77,4 +77,6 @@
         Charging separation or passthrough charging means the power is going directly to the system without passing through the battery first.
         Keep in mind that battery drain will occur regardless.
     </string>
+    <string name="dumpLogToFile">Dump log to file</string>
+    <string name="dumpLogToFileDescription">Dump log output to a text file in the internal memory.</string>
 </resources>

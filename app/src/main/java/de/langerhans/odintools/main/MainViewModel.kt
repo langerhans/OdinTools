@@ -20,6 +20,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -262,5 +265,15 @@ class MainViewModel @Inject constructor(
         _uiState.update {
             it.copy(showChargeLimitDialog = false, currentChargeLimit = newValue)
         }
+    }
+
+    fun dumpLogToFile() {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
+        val timeStamp = dateFormat.format(currentDate)
+        val directory = "/storage/emulated/0"
+        val fileName = "$directory/OdinTools_$timeStamp.log"
+        executor
+            .executeAsRoot("logcat -d -v threadtime > $fileName")
     }
 }

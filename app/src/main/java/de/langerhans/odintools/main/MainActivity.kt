@@ -27,6 +27,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import de.langerhans.odintools.BuildConfig
 import de.langerhans.odintools.R
 import de.langerhans.odintools.appsettings.AppOverrideListScreen
 import de.langerhans.odintools.appsettings.AppOverridesScreen
@@ -252,6 +253,15 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     onClick = { viewModel.chargeLimitClicked() },
                 ) {
                     viewModel.updateChargeLimitPreference(it)
+                }
+            }
+            if (BuildConfig.DEBUG) {
+                TriggerPreference(
+                    icon = R.drawable.ic_file_save,
+                    title = R.string.dumpLogToFile,
+                    description = R.string.dumpLogToFileDescription,
+                ) {
+                    viewModel.dumpLogToFile()
                 }
             }
 
