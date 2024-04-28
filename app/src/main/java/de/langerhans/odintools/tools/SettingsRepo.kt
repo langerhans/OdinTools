@@ -46,15 +46,19 @@ class SettingsRepo @Inject constructor(
     }
 
     fun enableChargingSeparation() {
-        chargingSeparationEnabled = true
+        isChargingSeparation = true
         restrictCurrent = 1000
         restrictCharge = true
     }
 
     fun disableChargingSeparation() {
-        chargingSeparationEnabled = false
+        isChargingSeparation = false
         restrictCurrent = 1000000
         restrictCharge = false
+    }
+
+    fun chargingSeparationEnabled(): Boolean {
+        return isChargingSeparation && restrictCharge && restrictCurrent == 1000
     }
 
     private var whitelist: String
@@ -73,7 +77,7 @@ class SettingsRepo @Inject constructor(
         get() = executor.getIntValue(KEY_VIBRATION_STRENGTH, 0)
         set(value) = executor.setIntValue(KEY_VIBRATION_STRENGTH, value)
 
-    var chargingSeparationEnabled: Boolean
+    var isChargingSeparation: Boolean
         get() = executor.getBooleanSystemSetting(KEY_CHARGING_SEPARATION, false)
         set(value) = executor.setBooleanSystemSetting(KEY_CHARGING_SEPARATION, value)
 

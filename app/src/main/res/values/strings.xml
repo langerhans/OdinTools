@@ -74,9 +74,11 @@
     <string name="chargeLimitPreferenceDialogOffAt">Off at %1$d%&#37;</string>
     <string name="chargeLimitPreferenceDialogOnAt">On at %1$d%&#37;</string>
     <string name="chargeLimitPreferenceDialogDescription">
-        Charging separation or passthrough charging means the power is going directly to the system without passing through the battery first.
-        Keep in mind that battery drain will occur regardless.
+        Charging separation means the power goes straight to the device, bypassing the battery.
+        Notice that if the power source is insufficient, battery drain will occur.
     </string>
     <string name="dumpLogToFile">Dump log to file</string>
     <string name="dumpLogToFileDescription">Dump log output to a text file in the internal memory.</string>
+    <string name="chargeLimitChannelName">Charge limit monitor service</string>
+    <string name="chargeLimitChannelDescription">Monitors battery level to automatically trigger charging separation.</string>
 </resources>

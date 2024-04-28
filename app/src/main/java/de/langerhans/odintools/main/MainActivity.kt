@@ -1,6 +1,5 @@
 package de.langerhans.odintools.main
 
-import android.content.IntentFilter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,7 +30,6 @@ import de.langerhans.odintools.BuildConfig
 import de.langerhans.odintools.R
 import de.langerhans.odintools.appsettings.AppOverrideListScreen
 import de.langerhans.odintools.appsettings.AppOverridesScreen
-import de.langerhans.odintools.tools.BatteryLevelReceiver
 import de.langerhans.odintools.tools.DeviceType.ODIN2
 import de.langerhans.odintools.tools.SettingsRepo
 import de.langerhans.odintools.ui.composables.ChargeLimitPreferenceDialog
@@ -50,18 +48,8 @@ import de.langerhans.odintools.ui.theme.OdinToolsTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private lateinit var batteryLevelReceiver: BatteryLevelReceiver
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val batteryLevelIntentFilter = IntentFilter().apply {
-            BatteryLevelReceiver.ALLOWED_INTENTS.forEach { action ->
-                addAction(action)
-            }
-        }
-        batteryLevelReceiver = BatteryLevelReceiver()
-        registerReceiver(batteryLevelReceiver, batteryLevelIntentFilter)
         enableEdgeToEdge()
         setContent {
             OdinToolsTheme {
@@ -83,11 +71,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(batteryLevelReceiver)
     }
 }
 
