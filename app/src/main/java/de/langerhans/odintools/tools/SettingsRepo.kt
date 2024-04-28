@@ -78,8 +78,8 @@ class SettingsRepo @Inject constructor(
         set(value) = executor.setBooleanSystemSetting(KEY_CHARGING_SEPARATION, value)
 
     var restrictCharge: Boolean
-        get() = executor.getBooleanSystemSetting(KEY_RESTRICT_CHARGE, false)
-        set(value) = executor.setBooleanSystemSetting(KEY_RESTRICT_CHARGE, value)
+        get() = executor.getBooleanValue(KEY_RESTRICT_CHARGE, false)
+        set(value) = executor.setBooleanValue(KEY_RESTRICT_CHARGE, value)
 
     var restrictCurrent: Int
         get() = executor.getIntValue(KEY_RESTRICT_CURRENT, 0)
