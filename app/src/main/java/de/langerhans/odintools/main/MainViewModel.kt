@@ -12,7 +12,6 @@ import de.langerhans.odintools.models.ControllerStyle.Xbox
 import de.langerhans.odintools.models.L2R2Style.Analog
 import de.langerhans.odintools.models.L2R2Style.Both
 import de.langerhans.odintools.models.L2R2Style.Digital
-import de.langerhans.odintools.service.ServiceHelper
 import de.langerhans.odintools.tools.DeviceType.ODIN2
 import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.tools.SettingsRepo
@@ -32,7 +31,6 @@ class MainViewModel @Inject constructor(
     private val executor: ShellExecutor,
     private val settings: SettingsRepo,
     private val prefs: SharedPrefsRepo,
-    private val services: ServiceHelper,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiModel())
@@ -48,7 +46,6 @@ class MainViewModel @Inject constructor(
 
     init {
         settings.applyRequiredSettings()
-        services.applyRequiredServices()
 
         val deviceType = deviceUtils.getDeviceType()
 
@@ -110,14 +107,14 @@ class MainViewModel @Inject constructor(
 
     fun showL2r2StylePreference() {
         _l2r2StyleOptions = getCurrentL2r2Styles().toMutableStateList()
-        _uiState.update { current ->
-            current.copy(showL2r2StyleDialog = true)
+        _uiState.update {
+            it.copy(showL2r2StyleDialog = true)
         }
     }
 
     fun hideL2r2StylePreference() {
-        _uiState.update { current ->
-            current.copy(showL2r2StyleDialog = false)
+        _uiState.update {
+            it.copy(showL2r2StyleDialog = false)
         }
     }
 
@@ -156,8 +153,8 @@ class MainViewModel @Inject constructor(
 
     fun updateVibrationPreference(newValue: Boolean) {
         settings.vibrationEnabled = newValue
-        _uiState.update { current ->
-            current.copy(vibrationEnabled = newValue)
+        _uiState.update {
+            it.copy(vibrationEnabled = newValue)
         }
     }
 
@@ -238,10 +235,9 @@ class MainViewModel @Inject constructor(
 
     fun updateChargeLimitPreference(newValue: Boolean) {
         prefs.chargeLimitEnabled = newValue
-        _uiState.update { current ->
-            current.copy(chargeLimitEnabled = newValue)
+        _uiState.update {
+            it.copy(chargeLimitEnabled = newValue)
         }
-        services.applyRequiredServices()
     }
 
     fun chargeLimitClicked() {

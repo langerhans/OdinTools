@@ -80,6 +80,4 @@
     <string name="debug">Debug</string>
     <string name="dumpLogToFile">Dump log to file</string>
     <string name="dumpLogToFileDescription">Dump log output to a text file in the internal memory.</string>
-    <string name="chargeLimitChannelName">Charge limit monitor service</string>
-    <string name="chargeLimitChannelDescription">Monitors battery level to automatically trigger charging separation.</string>
 </resources>

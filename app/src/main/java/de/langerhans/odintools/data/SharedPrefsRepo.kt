@@ -47,14 +47,33 @@ class SharedPrefsRepo @Inject constructor(
         get() = prefs.getInt(KEY_MAX_BATTERY_LEVEL, 80)
         set(value) = prefs.edit().putInt(KEY_MAX_BATTERY_LEVEL, value).apply()
 
+    private var chargeLimitEnabledListener: OnSharedPreferenceChangeListener? = null
+
+    fun observeChargeLimitEnabledState(onChargeLimitEnabled: (newState: Boolean) -> Unit) {
+        chargeLimitEnabledListener = OnSharedPreferenceChangeListener { _, key ->
+            if (key == KEY_CHARGE_LIMIT_ENABLED) {
+                onChargeLimitEnabled(chargeLimitEnabled)
+            }
+        }
+        prefs.registerOnSharedPreferenceChangeListener(chargeLimitEnabledListener)
+    }
+
+    fun removeChargeLimitEnabledObserver() {
+        prefs.unregisterOnSharedPreferenceChangeListener(chargeLimitEnabledListener)
+        chargeLimitEnabledListener = null
+    }
+
     private var appOverrideEnabledListener: OnSharedPreferenceChangeListener? = null
 
-    fun observeAppOverrideEnabledState(overridesEnabled: (newState: Boolean) -> Unit, overrideDelayEnabled: (newState: Boolean) -> Unit) {
+    fun observeAppOverrideEnabledState(
+        onAppOverridesEnabled: (newState: Boolean) -> Unit,
+        onOverrideDelayEnabled: (newState: Boolean) -> Unit,
+    ) {
         appOverrideEnabledListener = OnSharedPreferenceChangeListener { _, key ->
             if (key == KEY_APP_OVERRIDE_ENABLED) {
-                overridesEnabled(appOverridesEnabled)
+                onAppOverridesEnabled(appOverridesEnabled)
             } else if (key == KEY_OVERRIDE_DELAY) {
-                overrideDelayEnabled(overrideDelay)
+                onOverrideDelayEnabled(overrideDelay)
             }
         }
         prefs.registerOnSharedPreferenceChangeListener(appOverrideEnabledListener)
