@@ -56,6 +56,8 @@
     <string name="overrideDelayDescription">Delay applying overrides by 0.5s. This can help if apps crash when applying an
         override.
     </string>
+    <string name="searchApp">Search</string>
+    <string name="noMatches">No matches.</string>
 
     <string name="haptics">Haptics</string>
     <string name="vibrationStrength">Vibration strength</string>

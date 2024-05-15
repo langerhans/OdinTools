@@ -6,30 +6,40 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.langerhans.odintools.R
-import de.langerhans.odintools.ui.composables.DialogButton
 import de.langerhans.odintools.ui.composables.OdinTopAppBar
 
 @Composable
@@ -116,26 +126,71 @@ fun AppItem(packageName: String, label: String, icon: Drawable, iconSize: Dp = 4
 
 @Composable
 fun AppPickerDialog(apps: List<AppUiModel>, onAppSelected: (String) -> Unit, onDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = {}, confirmButton = { }, dismissButton = {
-        DialogButton(text = stringResource(id = R.string.cancel), onDismiss)
-    }, title = {}, text = {
-        if (apps.isEmpty()) {
-            Text(text = stringResource(id = R.string.noOverrideCandidates))
-            return@AlertDialog
-        }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            items(items = apps, itemContent = {
-                AppItem(
-                    it.packageName,
-                    it.appName,
-                    it.appIcon,
-                    36.dp,
-                    "",
-                    onAppSelected,
+    var searchText by rememberSaveable { mutableStateOf("") }
+    val filteredApps = apps.filter {
+        it.appName.contains(searchText, ignoreCase = true)
+    }.ifEmpty {
+        apps.filter { it.packageName.contains(searchText, ignoreCase = true) }
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {},
+        text = {
+            val focusManager = LocalFocusManager.current
+            if (apps.isEmpty()) {
+                Text(text = stringResource(id = R.string.noOverrideCandidates))
+                return@AlertDialog
+            }
+            Column {
+                OutlinedTextField(
+                    value = searchText,
+                    onValueChange = {
+                        searchText = it
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.searchApp))
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                        keyboardType = KeyboardType.Text,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            searchText = searchText.trim()
+                            focusManager.clearFocus()
+                        },
+                    ),
+                    singleLine = true,
                 )
-            })
-        }
-    })
+                Spacer(modifier = Modifier.height(4.dp))
+                if (filteredApps.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.noMatches),
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        items(
+                            items = filteredApps,
+                            itemContent = {
+                                AppItem(
+                                    it.packageName,
+                                    it.appName,
+                                    it.appIcon,
+                                    36.dp,
+                                    "",
+                                    onAppSelected,
+                                )
+                            },
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {},
+    )
 }
