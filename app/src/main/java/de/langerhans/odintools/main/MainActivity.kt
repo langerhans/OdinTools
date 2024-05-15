@@ -238,14 +238,12 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     viewModel.updateChargeLimitPreference(it)
                 }
             }
-            if (BuildConfig.DEBUG) {
-                TriggerPreference(
-                    icon = R.drawable.ic_file_save,
-                    title = R.string.dumpLogToFile,
-                    description = R.string.dumpLogToFileDescription,
-                ) {
-                    viewModel.dumpLogToFile()
-                }
+            TriggerPreference(
+                icon = R.drawable.ic_file_save,
+                title = R.string.dumpLogToFile,
+                description = R.string.dumpLogToFileDescription,
+            ) {
+                viewModel.dumpLogToFile()
             }
 
             // Navigation bar padding
