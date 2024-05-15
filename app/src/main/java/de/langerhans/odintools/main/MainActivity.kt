@@ -238,6 +238,7 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     viewModel.updateChargeLimitPreference(it)
                 }
             }
+            SettingsHeader(R.string.debug)
             TriggerPreference(
                 icon = R.drawable.ic_file_save,
                 title = R.string.dumpLogToFile,
