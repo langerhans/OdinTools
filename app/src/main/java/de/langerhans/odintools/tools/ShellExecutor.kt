@@ -127,6 +127,16 @@ class ShellExecutor @Inject constructor() {
         executeAsRoot("echo $value > $file")
     }
 
+    fun getFloatValue(file: String, defaultValue: Float): Float {
+        return getValue(file)
+            .mapCatching { it?.toFloat() ?: defaultValue }
+            .getOrDefault(defaultValue)
+    }
+
+    fun setFloatValue(file: String, value: Float) {
+        executeAsRoot("echo $value > $file")
+    }
+
     fun getBooleanValue(file: String, defaultValue: Boolean): Boolean {
         return getValue(file)
             .map { if (it == null) defaultValue else it == "1" }
