@@ -1,23 +1,25 @@
 package de.langerhans.odintools.tools
 
-import de.langerhans.odintools.tools.DeviceType.*
+import de.langerhans.odintools.tools.DeviceType.ODIN2
+import de.langerhans.odintools.tools.DeviceType.OTHER
+import de.langerhans.odintools.tools.DeviceType.RP4
 import javax.inject.Inject
 
 class DeviceUtils @Inject constructor(
-    private val shellExecutor: ShellExecutor,
+    private val executor: ShellExecutor,
 ) {
 
+    fun getDeviceVersion() = executor.getStringProperty(SettingsRepo.KEY_BUILD_VERSION, "")
+
+    fun getDeviceCodename() = executor.getStringProperty(SettingsRepo.KEY_VENDOR_NAME, "")
+
     fun getDeviceType(): DeviceType {
-        val deviceName = shellExecutor.executeAsRoot("getprop ro.vendor.retro.name").getOrNull()
-        return when (deviceName) {
+        return when (getDeviceCodename()) {
             "Q9" -> ODIN2
             "4.0", "4.0P" -> RP4
             else -> OTHER
         }
     }
-
-    fun getDeviceVersion() = shellExecutor.executeAsRoot("getprop ro.build.odin2.ota.version").map { it ?: "" }
-        .getOrDefault("")
 }
 
 enum class DeviceType {

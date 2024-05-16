@@ -3,9 +3,14 @@ package de.langerhans.odintools.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -25,14 +30,26 @@ import de.langerhans.odintools.R
 import de.langerhans.odintools.appsettings.AppOverrideListScreen
 import de.langerhans.odintools.appsettings.AppOverridesScreen
 import de.langerhans.odintools.tools.DeviceType.ODIN2
-import de.langerhans.odintools.ui.composables.*
+import de.langerhans.odintools.tools.SettingsRepo
+import de.langerhans.odintools.ui.composables.ChargeLimitPreferenceDialog
+import de.langerhans.odintools.ui.composables.CheckBoxDialogPreference
+import de.langerhans.odintools.ui.composables.NotAnOdinDialog
+import de.langerhans.odintools.ui.composables.OdinTopAppBar
+import de.langerhans.odintools.ui.composables.PServerNotAvailableDialog
+import de.langerhans.odintools.ui.composables.RemapButtonDialog
+import de.langerhans.odintools.ui.composables.SaturationPreferenceDialog
+import de.langerhans.odintools.ui.composables.SettingsHeader
+import de.langerhans.odintools.ui.composables.SwitchPreference
+import de.langerhans.odintools.ui.composables.SwitchableTriggerPreference
+import de.langerhans.odintools.ui.composables.TriggerPreference
+import de.langerhans.odintools.ui.composables.VibrationPreferenceDialog
 import de.langerhans.odintools.ui.theme.OdinToolsTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             OdinToolsTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -62,13 +79,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
 
     if (uiState.showPServerNotAvailableDialog) {
         PServerNotAvailableDialog()
-    } else if (uiState.showNotAnOdinDialog) {
+    } else if (uiState.showIncompatibleDeviceDialog) {
         NotAnOdinDialog { viewModel.incompatibleDeviceDialogDismissed() }
     }
 
     if (uiState.showControllerStyleDialog) {
         CheckBoxDialogPreference(
             items = viewModel.controllerStyleOptions,
+            title = R.string.controllerStyle,
             onCancel = {
                 viewModel.hideControllerStylePreference()
             },
@@ -81,6 +99,7 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
     if (uiState.showL2r2StyleDialog) {
         CheckBoxDialogPreference(
             items = viewModel.l2r2StyleOptions,
+            title = R.string.l2r2mode,
             onCancel = {
                 viewModel.hideL2r2StylePreference()
             },
@@ -115,10 +134,18 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
         )
     }
 
+    if (uiState.showChargeLimitDialog) {
+        ChargeLimitPreferenceDialog(
+            initialValue = uiState.currentChargeLimit,
+            onCancel = { viewModel.chargeLimitDialogDismissed() },
+            onSave = { viewModel.saveChargeLimit(it) },
+        )
+    }
+
     Scaffold(topBar = { OdinTopAppBar(deviceVersion = uiState.deviceVersion) }) { contentPadding ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding(top = contentPadding.calculateTopPadding()) // Top app bar padding
                 .padding(end = 8.dp) // Extra padding cause of GameAssist bar overlay
                 .verticalScroll(rememberScrollState()),
         ) {
@@ -135,14 +162,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             SwitchPreference(
                 icon = R.drawable.ic_more_time,
                 title = R.string.overrideDelay,
-                description = R.string.overrideDelayDesc,
+                description = R.string.overrideDelayDescription,
                 state = uiState.overrideDelayEnabled,
             ) {
                 viewModel.overrideDelayEnabled(it)
             }
-            SettingsHeader(R.string.quicksettings)
+            SettingsHeader(R.string.quickSettings)
             TriggerPreference(
-                icon = R.drawable.ic_controllerstyle,
+                icon = R.drawable.ic_face_buttons,
                 title = R.string.controllerStyle,
                 description = R.string.controllerStyleDesc,
             ) {
@@ -158,11 +185,11 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             SettingsHeader(R.string.buttons)
             SwitchPreference(
                 icon = R.drawable.ic_home,
-                title = R.string.doubleHomeTitle,
-                description = R.string.doubleHomeDescription,
-                state = uiState.singleHomeEnabled,
+                title = R.string.singlePressHome,
+                description = R.string.singlePressHomeDescription,
+                state = uiState.singlePressHomeEnabled,
             ) {
-                viewModel.updateSingleHomePreference(it)
+                viewModel.updateSinglePressHomePreference(it)
             }
             if (uiState.deviceType == ODIN2) {
                 TriggerPreference(
@@ -170,14 +197,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                     title = R.string.m1Button,
                     description = R.string.remapButtonDescription,
                 ) {
-                    viewModel.remapButtonClicked("remap_custom_to_m1_value")
+                    viewModel.remapButtonClicked(SettingsRepo.KEY_CUSTOM_M1_VALUE)
                 }
                 TriggerPreference(
                     icon = R.drawable.ic_gamepad,
                     title = R.string.m2Button,
                     description = R.string.remapButtonDescription,
                 ) {
-                    viewModel.remapButtonClicked("remap_custom_to_m2_value")
+                    viewModel.remapButtonClicked(SettingsRepo.KEY_CUSTOM_M2_VALUE)
                 }
             }
             SettingsHeader(name = R.string.display)
@@ -199,7 +226,28 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                 ) {
                     viewModel.updateVibrationPreference(it)
                 }
+                SettingsHeader(R.string.battery)
+                SwitchableTriggerPreference(
+                    icon = R.drawable.ic_electrical_services,
+                    title = R.string.chargeLimit,
+                    description = R.string.chargeLimitDescription,
+                    state = uiState.chargeLimitEnabled,
+                    onClick = { viewModel.chargeLimitClicked() },
+                ) {
+                    viewModel.updateChargeLimitPreference(it)
+                }
             }
+            SettingsHeader(R.string.debug)
+            TriggerPreference(
+                icon = R.drawable.ic_file_save,
+                title = R.string.dumpLogToFile,
+                description = R.string.dumpLogToFileDescription,
+            ) {
+                viewModel.dumpLogToFile()
+            }
+
+            // Navigation bar padding
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
         }
     }
 }

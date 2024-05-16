@@ -1,6 +1,7 @@
 package de.langerhans.odintools.service
 
 import android.accessibilityservice.AccessibilityService
+import android.content.IntentFilter
 import android.database.ContentObserver
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +17,7 @@ import de.langerhans.odintools.models.FanMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.models.VibrationStrength
+import de.langerhans.odintools.tools.BatteryLevelReceiver
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,10 +33,12 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     lateinit var appOverrideDao: AppOverrideDao
 
     @Inject
-    lateinit var shellExecutor: ShellExecutor
+    lateinit var executor: ShellExecutor
 
     @Inject
-    lateinit var sharedPrefsRepo: SharedPrefsRepo
+    lateinit var prefs: SharedPrefsRepo
+
+    private var batteryLevelReceiver: BatteryLevelReceiver = BatteryLevelReceiver()
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -54,11 +58,13 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     private var currentIme = ""
     private val imeObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean) {
-            currentIme = shellExecutor
+            currentIme = executor
                 .executeAsRoot("settings get secure default_input_method")
                 .getOrDefault("") ?: ""
         }
     }
+
+    private var chargeLimitEnabled: Boolean = false
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         if (shouldIgnore(event)) return
@@ -92,39 +98,39 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     private fun applyOverride(override: AppOverrideEntity) {
         // This check makes sure that we don't override the "defaults" when switching between apps with overrides
         if (!hasSetOverride) {
-            savedControllerStyle = ControllerStyle.getStyle(shellExecutor)
-            savedL2R2Style = L2R2Style.getStyle(shellExecutor)
-            savedPerfMode = PerfMode.getMode(shellExecutor)
-            savedFanMode = FanMode.getMode(shellExecutor)
-            savedVibrationStrength = VibrationStrength.getMode(shellExecutor)
+            savedControllerStyle = ControllerStyle.getStyle(executor)
+            savedL2R2Style = L2R2Style.getStyle(executor)
+            savedPerfMode = PerfMode.getMode(executor)
+            savedFanMode = FanMode.getMode(executor)
+            savedVibrationStrength = VibrationStrength.getMode(executor)
         }
 
         ControllerStyle.getById(override.controllerStyle).takeIf {
             it != Unknown
-        }?.enable(shellExecutor) ?: run {
+        }?.enable(executor) ?: run {
             // Reset to default if we switch between override and NoChange app
-            savedControllerStyle?.enable(shellExecutor)
+            savedControllerStyle?.enable(executor)
         }
 
         L2R2Style.getById(override.l2R2Style).takeIf {
             it != L2R2Style.Unknown
-        }?.enable(shellExecutor) ?: run {
+        }?.enable(executor) ?: run {
             // Reset to default if we switch between override and NoChange app
-            savedL2R2Style?.enable(shellExecutor)
+            savedL2R2Style?.enable(executor)
         }
 
         PerfMode.getById(override.perfMode).takeIf {
             it != PerfMode.Unknown
-        }?.enable(shellExecutor) ?: run {
+        }?.enable(executor) ?: run {
             // Reset to default if we switch between override and NoChange app
-            savedPerfMode?.enable(shellExecutor)
+            savedPerfMode?.enable(executor)
         }
 
         FanMode.getById(override.fanMode).takeIf {
             it != FanMode.Unknown
-        }?.enable(shellExecutor) ?: run {
+        }?.enable(executor) ?: run {
             // Reset to default if we switch between override and NoChange app
-            savedFanMode?.enable(shellExecutor)
+            savedFanMode?.enable(executor)
         }
 
         VibrationStrength.getById(override.vibrationStrength).takeIf {
@@ -139,19 +145,33 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     private fun resetOverrides() {
         if (!hasSetOverride) return
 
-        savedControllerStyle?.enable(shellExecutor)
+        savedControllerStyle?.enable(executor)
         savedControllerStyle = null
 
-        savedL2R2Style?.enable(shellExecutor)
+        savedL2R2Style?.enable(executor)
         savedL2R2Style = null
 
-        savedPerfMode?.enable(shellExecutor)
+        savedPerfMode?.enable(executor)
         savedPerfMode = null
 
-        savedFanMode?.enable(shellExecutor)
+        savedFanMode?.enable(executor)
         savedFanMode = null
 
         hasSetOverride = false
+    }
+
+    private fun applyChargeLimit(newValue: Boolean) {
+        if (newValue && !chargeLimitEnabled) {
+            val intentFilter = IntentFilter().apply {
+                BatteryLevelReceiver.ALLOWED_INTENTS.forEach { action ->
+                    addAction(action)
+                }
+            }
+            registerReceiver(batteryLevelReceiver, intentFilter)
+        } else if (!newValue && chargeLimitEnabled) {
+            unregisterReceiver(batteryLevelReceiver)
+        }
+        chargeLimitEnabled = newValue
     }
 
     override fun onInterrupt() {
@@ -161,7 +181,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     override fun onServiceConnected() {
         super.onServiceConnected()
 
-        currentIme = shellExecutor
+        currentIme = executor
             .executeAsRoot("settings get secure default_input_method")
             .getOrDefault("") ?: ""
         contentResolver.registerContentObserver(
@@ -170,11 +190,16 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
             imeObserver,
         )
 
-        overridesEnabled = sharedPrefsRepo.appOverridesEnabled
-        sharedPrefsRepo.observeAppOverrideEnabledState(
+        overridesEnabled = prefs.appOverridesEnabled
+        prefs.observeAppOverrideEnabledState(
             { overridesEnabled = it },
             { overridesDelay = it },
         )
+
+        applyChargeLimit(prefs.chargeLimitEnabled)
+        prefs.observeChargeLimitEnabledState {
+            applyChargeLimit(it)
+        }
 
         scope.launch {
             appOverrideDao.getAll()
@@ -189,7 +214,8 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
         super.onDestroy()
         job.cancel()
         contentResolver.unregisterContentObserver(imeObserver)
-        sharedPrefsRepo.removeAppOverrideEnabledObserver()
+        prefs.removeAppOverrideEnabledObserver()
+        prefs.removeChargeLimitEnabledObserver()
     }
 
     companion object {

@@ -11,23 +11,22 @@ import javax.inject.Inject
 class BootReceiver : BroadcastReceiver() {
 
     @Inject
-    lateinit var sharedPrefsRepo: SharedPrefsRepo
+    lateinit var settings: SettingsRepo
 
     @Inject
-    lateinit var executor: ShellExecutor
+    lateinit var prefs: SharedPrefsRepo
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) {
             return
         }
-
-        val saturation = sharedPrefsRepo.saturationOverride
+        val saturation = prefs.saturationOverride
         if (saturation != 1.0f) {
-            executor.setSfSaturation(saturation)
+            settings.setSfSaturation(saturation)
         }
-        val vibrationStrength = sharedPrefsRepo.vibrationStrength
+        val vibrationStrength = prefs.vibrationStrength
         if (vibrationStrength != 0) {
-            executor.setVibrationStrength(vibrationStrength)
+            settings.vibrationStrength = vibrationStrength
         }
     }
 }

@@ -6,7 +6,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
 import de.langerhans.odintools.models.L2R2Style
-import de.langerhans.odintools.models.L2R2Style.*
+import de.langerhans.odintools.models.L2R2Style.Analog
+import de.langerhans.odintools.models.L2R2Style.Both
+import de.langerhans.odintools.models.L2R2Style.Digital
+import de.langerhans.odintools.models.L2R2Style.Unknown
 import de.langerhans.odintools.tools.ShellExecutor
 import javax.inject.Inject
 

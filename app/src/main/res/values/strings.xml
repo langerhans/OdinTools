@@ -3,16 +3,16 @@
     <string name="xbox">Xbox</string>
     <string name="odin">Odin</string>
     <string name="disconnect">Disconnect</string>
-    <string name="controllerStyle">Controller Style</string>
+    <string name="controllerStyle">Controller style</string>
     <string name="unknown">Unknown</string>
-    <string name="l2r2mode">L2/R2 Mode</string>
+    <string name="l2r2mode">L2/R2 mode</string>
     <string name="analog">Analog</string>
     <string name="digital">Digital</string>
     <string name="both">Both</string>
     <string name="perfMode">Performance Mode</string>
     <string name="standard">Standard</string>
     <string name="performance">Performance</string>
-    <string name="highperformance">High Performance</string>
+    <string name="highPerformance">High Performance</string>
     <string name="fanMode">Fan Mode</string>
     <string name="fanOff">Off</string>
     <string name="vibrationOff">Off</string>
@@ -25,13 +25,13 @@
     <string name="sport">Sport</string>
     <string name="topBarVersions">Device version:\nApp version:</string>
 
-    <string name="quicksettings">Quick Settings</string>
-    <string name="controllerStyleDesc">Select which modes to cycle through in the Controller Style quick settings tile</string>
-    <string name="l2r2modeDesc">Select which modes to cycle through in the L2/R2 Mode quick settings tile</string>
+    <string name="quickSettings">Quick Settings</string>
+    <string name="controllerStyleDesc">Select which modes to cycle through in the Controller Style quick settings tile.</string>
+    <string name="l2r2modeDesc">Select which modes to cycle through in the L2/R2 Mode quick settings tile.</string>
 
     <string name="buttons">Buttons</string>
-    <string name="doubleHomeTitle">Single press home button</string>
-    <string name="doubleHomeDescription">When enabled allows using the home button with a single press instead of a double press</string>
+    <string name="singlePressHome">Single-press home button</string>
+    <string name="singlePressHomeDescription">When enabled allows using the home button with a single press instead of a double press.</string>
 
     <string name="warning">Warning</string>
     <string name="incompatibleDevice">This app was made for the Ayn Odin 2. Running it on an incompatible device may cause damage. The author of this app takes no responsibility for any damage caused!</string>
@@ -47,7 +47,7 @@
     <string name="display">Display</string>
     <string name="saturationDescription">Change the saturation of the display. Will be re-applied on reboot. Default value is 1.0.</string>
 
-    <string name="a11yDescription">Used by OdinTools to detect running apps for dynamic switching of button settings</string>
+    <string name="a11yDescription">Used by OdinTools to detect running apps for dynamic switching of button settings.</string>
 
     <string name="appOverrides">App overrides</string>
     <string name="appOverridesDescription">Set up overrides per app. Switch off to globally disable app overrides.</string>
@@ -58,9 +58,11 @@
     <string name="noOverrideCandidates">You already added overrides for all your apps</string>
     <string name="fanModeRequired">Fan mode is required when setting a Performance mode</string>
     <string name="overrideDelay">Override delay</string>
-    <string name="overrideDelayDesc">Delay applying overrides by 0.5s. This can help if apps crash when applying an
+    <string name="overrideDelayDescription">Delay applying overrides by 0.5s. This can help if apps crash when applying an
         override.
     </string>
+    <string name="searchApp">Search</string>
+    <string name="noMatches">No matches.</string>
 
     <string name="haptics">Haptics</string>
     <string name="vibrationStrength">Vibration strength</string>
@@ -72,4 +74,17 @@
     <string name="m2Button">M2 button</string>
     <string name="pressAnyButton">Press any button</string>
     <string name="setDefault">Set Default</string>
+
+    <string name="battery">Battery</string>
+    <string name="chargeLimit">Charge limit</string>
+    <string name="chargeLimitDescription">When enabled activates charging separation at the specified battery levels.</string>
+    <string name="chargeLimitPreferenceDialogOffAt">Off at %1$d%&#37;</string>
+    <string name="chargeLimitPreferenceDialogOnAt">On at %1$d%&#37;</string>
+    <string name="chargeLimitPreferenceDialogDescription">
+        Charging separation means the power goes straight to the device, bypassing the battery.
+        Notice that if the power source is insufficient, battery drain will occur.
+    </string>
+    <string name="debug">Debug</string>
+    <string name="dumpLogToFile">Dump log to file</string>
+    <string name="dumpLogToFileDescription">Dump log output to a text file in the internal memory.</string>
 </resources>
