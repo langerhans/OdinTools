@@ -153,7 +153,8 @@ class ShellExecutor @Inject constructor() {
             .mapCatching { it?.toInt() ?: defaultValue } // This throws on RP4 because it has no rumble
     }
 
-    fun setVibrationStrength(newValue: Int) {
+    fun setVibrationStrength(newValue: Int?) {
+        if (newValue == null) return
         executeAsRoot("echo $newValue > /d/haptics/user_vmax_mv")
     }
 }

@@ -134,6 +134,8 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
 
         if (override.vibrationStrength != null) {
             executor.setVibrationStrength(override.vibrationStrength)
+        } else {
+            executor.setVibrationStrength(savedVibrationStrength)
         }
 
         hasSetOverride = true
@@ -153,6 +155,9 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
 
         savedFanMode?.enable(executor)
         savedFanMode = null
+
+        executor.setVibrationStrength(savedVibrationStrength)
+        savedVibrationStrength = null
 
         hasSetOverride = false
     }
