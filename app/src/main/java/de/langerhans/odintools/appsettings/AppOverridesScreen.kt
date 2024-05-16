@@ -187,7 +187,7 @@ fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navig
                     onSelectionChanged = { viewModel.perfModeSelected(it) },
                     modifier = Modifier.padding(bottom = 16.dp),
                 )
-//                if (viewModel.getDeviceType() == DeviceType.ODIN2) {
+               if (viewModel.getDeviceType() == DeviceType.ODIN2) {
                     Column {
                         VibrationPreferenceRow(
                             label = stringResource(id = R.string.vibrationStrength),
@@ -197,7 +197,7 @@ fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navig
                             }
                         )
                     }
-//                }
+               }
                 if (uiState.app?.perfMode != null && uiState.app?.perfMode != PerfMode.Unknown) {
                     OverrideSpinnerRow(
                         label = R.string.fanMode,
