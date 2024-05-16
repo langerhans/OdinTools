@@ -52,6 +52,7 @@ import androidx.compose.ui.window.Dialog
 import de.langerhans.odintools.R
 import de.langerhans.odintools.main.CheckboxPreferenceUiModel
 import de.langerhans.odintools.ui.theme.Typography
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
@@ -253,7 +254,7 @@ fun SaturationPreferenceDialog(initialValue: Float, onCancel: () -> Unit, onSave
                     .padding(end = 4.dp),
             )
             Text(
-                text = String.format("%.1f", userValue),
+                text = String.format(Locale.getDefault(), "%.1f", userValue),
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
