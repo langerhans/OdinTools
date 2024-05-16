@@ -146,4 +146,14 @@ class ShellExecutor @Inject constructor() {
     fun setBooleanValue(file: String, value: Boolean) {
         setIntValue(file, if (value) 1 else 0)
     }
+
+    fun getVibrationStrength(): Result<Int> {
+        val defaultValue = 0
+        return executeAsRoot("cat /d/haptics/user_vmax_mv")
+            .mapCatching { it?.toInt() ?: defaultValue } // This throws on RP4 because it has no rumble
+    }
+
+    fun setVibrationStrength(newValue: Int) {
+        executeAsRoot("echo $newValue > /d/haptics/user_vmax_mv")
+    }
 }

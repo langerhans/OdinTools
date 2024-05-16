@@ -2,6 +2,7 @@ package de.langerhans.odintools.appsettings
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,13 +49,15 @@ import de.langerhans.odintools.models.L2R2Style.Both
 import de.langerhans.odintools.models.L2R2Style.Digital
 import de.langerhans.odintools.models.NoChange
 import de.langerhans.odintools.models.PerfMode
-import de.langerhans.odintools.models.VibrationStrength
 import de.langerhans.odintools.models.PerfMode.HighPerformance
 import de.langerhans.odintools.models.PerfMode.Performance
 import de.langerhans.odintools.models.PerfMode.Standard
+import de.langerhans.odintools.tools.DeviceType
+import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.ui.composables.DeleteConfirmDialog
 import de.langerhans.odintools.ui.composables.LargeDropdownMenu
 import de.langerhans.odintools.ui.composables.OdinTopAppBar
+import de.langerhans.odintools.ui.composables.VibrationPreferenceDialog
 import de.langerhans.odintools.ui.theme.Typography
 
 @Composable
@@ -182,19 +187,17 @@ fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navig
                     onSelectionChanged = { viewModel.perfModeSelected(it) },
                     modifier = Modifier.padding(bottom = 16.dp),
                 )
-                OverrideSpinnerRow(
-                    label = R.string.vibrationStrength,
-                    spinnerItems = listOf(
-                        NoChange.KEY to stringResource(id = NoChange.textRes),
-                        VibrationStrength.VibrationOff.id to stringResource(id = VibrationStrength.VibrationOff.textRes),
-                        VibrationStrength.VibrationLow.id to stringResource(id = VibrationStrength.VibrationLow.textRes),
-                        VibrationStrength.VibrationMedium.id to stringResource(id = VibrationStrength.VibrationMedium.textRes),
-                        VibrationStrength.VibrationHigh.id to stringResource(id = VibrationStrength.VibrationHigh.textRes),
-                    ),
-                    initialSelection = uiState.app?.vibrationStrength?.id ?: NoChange.KEY,
-                    onSelectionChanged = { viewModel.vibrationStrengthSelected(it) },
-                    modifier = Modifier.padding(bottom = 16.dp),
-                )
+//                if (viewModel.getDeviceType() == DeviceType.ODIN2) {
+                    Column {
+                        VibrationPreferenceRow(
+                            label = stringResource(id = R.string.vibrationStrength),
+                            initialValue = uiState.app?.vibrationStrength?: 0,
+                            onSave = { newValue ->
+                                viewModel.vibrationStrengthSelected(newValue)
+                            }
+                        )
+                    }
+//                }
                 if (uiState.app?.perfMode != null && uiState.app?.perfMode != PerfMode.Unknown) {
                     OverrideSpinnerRow(
                         label = R.string.fanMode,
@@ -278,6 +281,45 @@ fun OverrideSpinnerRow(
             options = spinnerItems,
             initialSelection = initialSelection,
             onSelectionChanged = onSelectionChanged,
+        )
+    }
+}
+
+@Composable
+fun VibrationPreferenceRow(
+    label: String,
+    initialValue: Int,
+    onSave: (newValue: Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .padding(8.dp)
+    ) {
+        Text(
+            text = label,
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 16.dp),
+        )
+        OutlinedButton(
+            onClick = { showDialog = true }
+        ) {
+            Text(text = "$initialValue")
+        }
+    }
+
+    if (showDialog) {
+        VibrationPreferenceDialog(
+            initialValue = initialValue,
+            onCancel = { showDialog = false },
+            onSave = { newValue ->
+                onSave(newValue)
+                showDialog = false
+            }
         )
     }
 }

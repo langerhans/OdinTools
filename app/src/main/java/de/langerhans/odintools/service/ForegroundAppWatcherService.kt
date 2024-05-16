@@ -16,7 +16,6 @@ import de.langerhans.odintools.models.ControllerStyle.Unknown
 import de.langerhans.odintools.models.FanMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
-import de.langerhans.odintools.models.VibrationStrength
 import de.langerhans.odintools.tools.BatteryLevelReceiver
 import de.langerhans.odintools.tools.ShellExecutor
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +52,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     private var savedL2R2Style: L2R2Style? = null
     private var savedPerfMode: PerfMode? = null
     private var savedFanMode: FanMode? = null
-    private var savedVibrationStrength: VibrationStrength? = null
+    private var savedVibrationStrength: Int? = null
 
     private var currentIme = ""
     private val imeObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
@@ -102,7 +101,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
             savedL2R2Style = L2R2Style.getStyle(executor)
             savedPerfMode = PerfMode.getMode(executor)
             savedFanMode = FanMode.getMode(executor)
-            savedVibrationStrength = VibrationStrength.getMode(executor)
+            savedVibrationStrength = executor.getVibrationStrength().getOrNull()
         }
 
         ControllerStyle.getById(override.controllerStyle).takeIf {
@@ -133,10 +132,8 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
             savedFanMode?.enable(executor)
         }
 
-        VibrationStrength.getById(override.vibrationStrength).takeIf {
-            it != VibrationStrength.VibrationUnknown
-        }?.enable(shellExecutor) ?: run {
-            savedVibrationStrength?.enable(shellExecutor)
+        if (override.vibrationStrength != null) {
+            executor.setVibrationStrength(override.vibrationStrength)
         }
 
         hasSetOverride = true

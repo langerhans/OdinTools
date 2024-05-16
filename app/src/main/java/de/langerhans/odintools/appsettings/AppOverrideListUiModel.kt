@@ -5,7 +5,6 @@ import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.FanMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
-import de.langerhans.odintools.models.VibrationStrength
 
 data class AppOverrideListUiModel(
     val deviceVersion: String = "",
@@ -34,5 +33,5 @@ data class AppUiModel(
     val l2r2Style: L2R2Style? = null,
     val fanMode: FanMode? = null,
     val perfMode: PerfMode? = null,
-    val vibrationStrength: VibrationStrength? = null,
+    val vibrationStrength: Int? = null,
 )

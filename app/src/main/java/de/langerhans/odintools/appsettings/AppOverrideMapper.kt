@@ -10,7 +10,6 @@ import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.FanMode
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
-import de.langerhans.odintools.models.VibrationStrength
 import javax.inject.Inject
 
 class AppOverrideMapper @Inject constructor(
@@ -45,7 +44,7 @@ class AppOverrideMapper @Inject constructor(
         val l2R2Style = L2R2Style.getById(app.l2R2Style)
         val perfMode = PerfMode.getById(app.perfMode)
         val fanMode = FanMode.getById(app.fanMode)
-        val vibrationStrength = VibrationStrength.getById(app.vibrationStrength)
+        val vibrationStrength = app.vibrationStrength
 
         return AppUiModel(
             packageName = app.packageName,
@@ -71,7 +70,7 @@ class AppOverrideMapper @Inject constructor(
         )
     }
 
-    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfMode: PerfMode, fanMode: FanMode, vibrationStrength: VibrationStrength): String? {
+    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfMode: PerfMode, fanMode: FanMode, vibrationStrength: Int?): String? {
         return buildString {
             if (controllerStyle != ControllerStyle.Unknown) {
                 append(context.getString(R.string.controllerStyle))
@@ -91,10 +90,10 @@ class AppOverrideMapper @Inject constructor(
                 append(context.getString(perfMode.textRes))
                 append(" | ")
             }
-            if (vibrationStrength != VibrationStrength.VibrationUnknown) {
+            if (vibrationStrength != null) {
                 append(context.getString(R.string.vibrationStrength))
                 append(": ")
-                append(context.getString(vibrationStrength.textRes))
+                append(vibrationStrength.toString())
                 append(" | ")
             }
             if (fanMode != FanMode.Unknown) {
