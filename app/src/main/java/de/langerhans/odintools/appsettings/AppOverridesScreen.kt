@@ -2,7 +2,6 @@ package de.langerhans.odintools.appsettings
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,7 +51,6 @@ import de.langerhans.odintools.models.PerfMode.HighPerformance
 import de.langerhans.odintools.models.PerfMode.Performance
 import de.langerhans.odintools.models.PerfMode.Standard
 import de.langerhans.odintools.tools.DeviceType
-import de.langerhans.odintools.tools.DeviceUtils
 import de.langerhans.odintools.ui.composables.DeleteConfirmDialog
 import de.langerhans.odintools.ui.composables.LargeDropdownMenu
 import de.langerhans.odintools.ui.composables.OdinTopAppBar
@@ -187,17 +184,17 @@ fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navig
                     onSelectionChanged = { viewModel.perfModeSelected(it) },
                     modifier = Modifier.padding(bottom = 16.dp),
                 )
-               if (viewModel.getDeviceType() == DeviceType.ODIN2) {
+                if (viewModel.getDeviceType() == DeviceType.ODIN2) {
                     Column {
                         VibrationPreferenceRow(
                             label = stringResource(id = R.string.vibrationStrength),
-                            initialValue = uiState.app?.vibrationStrength?: 0,
+                            initialValue = uiState.app?.vibrationStrength ?: 0,
                             onSave = { newValue ->
                                 viewModel.vibrationStrengthSelected(newValue)
-                            }
+                            },
                         )
                     }
-               }
+                }
                 if (uiState.app?.perfMode != null && uiState.app?.perfMode != PerfMode.Unknown) {
                     OverrideSpinnerRow(
                         label = R.string.fanMode,
@@ -286,18 +283,13 @@ fun OverrideSpinnerRow(
 }
 
 @Composable
-fun VibrationPreferenceRow(
-    label: String,
-    initialValue: Int,
-    onSave: (newValue: Int) -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun VibrationPreferenceRow(label: String, initialValue: Int, onSave: (newValue: Int) -> Unit, modifier: Modifier = Modifier) {
     var showDialog by remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         Text(
             text = label,
@@ -306,7 +298,7 @@ fun VibrationPreferenceRow(
                 .padding(end = 16.dp),
         )
         OutlinedButton(
-            onClick = { showDialog = true }
+            onClick = { showDialog = true },
         ) {
             Text(text = "$initialValue")
         }
@@ -319,7 +311,7 @@ fun VibrationPreferenceRow(
             onSave = { newValue ->
                 onSave(newValue)
                 showDialog = false
-            }
+            },
         )
     }
 }

@@ -70,7 +70,13 @@ class AppOverrideMapper @Inject constructor(
         )
     }
 
-    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfMode: PerfMode, fanMode: FanMode, vibrationStrength: Int?): String? {
+    private fun getSubtitle(
+        controllerStyle: ControllerStyle,
+        l2R2Style: L2R2Style,
+        perfMode: PerfMode,
+        fanMode: FanMode,
+        vibrationStrength: Int?,
+    ): String? {
         return buildString {
             if (controllerStyle != ControllerStyle.Unknown) {
                 append(context.getString(R.string.controllerStyle))

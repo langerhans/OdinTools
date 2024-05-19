@@ -11,5 +11,5 @@ data class AppOverrideEntity(
     val l2R2Style: String?,
     val perfMode: String?,
     val fanMode: String?,
-    val vibrationStrength: Int?
+    val vibrationStrength: Int?,
 )
