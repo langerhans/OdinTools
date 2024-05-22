@@ -42,6 +42,9 @@
     <string name="display">Display</string>
     <string name="saturationDescription">Change the saturation of the display. Will be re-applied on reboot. Default value is 1.0.</string>
 
+    <string name="videoOutputOverride">External override</string>
+    <string name="videoOutputOverrideDescription">Set up override when connected to an external display. Switch off to disable.</string>
+
     <string name="a11yDescription">Used by OdinTools to detect running apps for dynamic switching of button settings.</string>
 
     <string name="appOverrides">App overrides</string>
