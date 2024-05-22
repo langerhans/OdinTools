@@ -171,14 +171,6 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
             ) { newValue ->
                 viewModel.appOverridesEnabled(newValue)
             }
-            SwitchPreference(
-                icon = R.drawable.ic_more_time,
-                title = R.string.overrideDelay,
-                description = R.string.overrideDelayDescription,
-                state = uiState.overrideDelayEnabled,
-            ) {
-                viewModel.overrideDelayEnabled(it)
-            }
             SwitchableTriggerPreference(
                 icon = R.drawable.ic_gamepad_docked,
                 title = R.string.videoOutputOverride,
@@ -187,6 +179,14 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                 onClick = { viewModel.videoOutputOverrideClicked() },
             ) {
                 viewModel.updateVideoOutputOverridePreference(it)
+            }
+            SwitchPreference(
+                icon = R.drawable.ic_more_time,
+                title = R.string.overrideDelay,
+                description = R.string.overrideDelayDescription,
+                state = uiState.overrideDelayEnabled,
+            ) {
+                viewModel.overrideDelayEnabled(it)
             }
             SettingsHeader(R.string.quickSettings)
             TriggerPreference(
