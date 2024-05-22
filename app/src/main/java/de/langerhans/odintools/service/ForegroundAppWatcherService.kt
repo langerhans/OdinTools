@@ -106,7 +106,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
         }
 
         // Avoid conflicts with Video Output Override
-        if (!videoOutputOverrideEnabled) {
+        if (!videoOutputReceiver.overrideEnabled) {
             ControllerStyle.getById(override.controllerStyle).takeIf {
                 it != Unknown
             }?.enable(executor) ?: run {

@@ -15,7 +15,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class VideoOutputReceiver : BroadcastReceiver() {
 
-    private var overrideEnabled = false
+    var overrideEnabled = false
+
     private var savedControllerStyle: ControllerStyle? = null
     private var savedL2R2Style: L2R2Style? = null
 
