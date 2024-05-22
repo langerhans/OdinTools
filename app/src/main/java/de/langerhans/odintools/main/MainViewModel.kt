@@ -61,6 +61,7 @@ class MainViewModel @Inject constructor(
                 overrideDelayEnabled = prefs.overrideDelay,
                 vibrationEnabled = settings.vibrationEnabled,
                 chargeLimitEnabled = prefs.chargeLimitEnabled,
+                videoOutputOverrideEnabled = prefs.videoOutputOverrideEnabled,
             )
         }
     }
