@@ -98,20 +98,20 @@ class SharedPrefsRepo @Inject constructor(
         get() = prefs.getString(KEY_VIDEO_OUTPUT_L2R2_STYLE, L2R2Style.Unknown.id)
         set(value) = prefs.edit().putString(KEY_VIDEO_OUTPUT_L2R2_STYLE, value).apply()
 
-    private var externalControllerProfileEnabledListener: OnSharedPreferenceChangeListener? = null
+    private var videoOutputOverrideEnabledListener: OnSharedPreferenceChangeListener? = null
 
-    fun observeVideoOutputOverrideEnabledState(onExternalControllerProfileEnabled: (newState: Boolean) -> Unit) {
-        externalControllerProfileEnabledListener = OnSharedPreferenceChangeListener { _, key ->
+    fun observeVideoOutputOverrideEnabledState(onVideoOutputOverrideEnabled: (newState: Boolean) -> Unit) {
+        videoOutputOverrideEnabledListener = OnSharedPreferenceChangeListener { _, key ->
             if (key == KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED) {
-                onExternalControllerProfileEnabled(videoOutputOverrideEnabled)
+                onVideoOutputOverrideEnabled(videoOutputOverrideEnabled)
             }
         }
-        prefs.registerOnSharedPreferenceChangeListener(externalControllerProfileEnabledListener)
+        prefs.registerOnSharedPreferenceChangeListener(videoOutputOverrideEnabledListener)
     }
 
-    fun removeExternalControllerProfileEnabledObserver() {
-        prefs.unregisterOnSharedPreferenceChangeListener(externalControllerProfileEnabledListener)
-        externalControllerProfileEnabledListener = null
+    fun removeVideoOutputOverrideEnabledObserver() {
+        prefs.unregisterOnSharedPreferenceChangeListener(videoOutputOverrideEnabledListener)
+        videoOutputOverrideEnabledListener = null
     }
 
     companion object {
