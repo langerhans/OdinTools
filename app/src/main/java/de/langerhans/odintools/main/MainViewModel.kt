@@ -58,7 +58,6 @@ class MainViewModel @Inject constructor(
                 showPServerNotAvailableDialog = !executor.pServerAvailable,
                 overrideDelayEnabled = prefs.overrideDelay,
                 vibrationEnabled = settings.vibrationEnabled,
-                currentVibration = settings.vibrationStrength,
                 chargeLimitEnabled = prefs.chargeLimitEnabled,
             )
         }
