@@ -43,6 +43,7 @@ import de.langerhans.odintools.ui.composables.SwitchPreference
 import de.langerhans.odintools.ui.composables.SwitchableTriggerPreference
 import de.langerhans.odintools.ui.composables.TriggerPreference
 import de.langerhans.odintools.ui.composables.VibrationPreferenceDialog
+import de.langerhans.odintools.ui.composables.VideoOutputOverridePreferenceDialog
 import de.langerhans.odintools.ui.theme.OdinToolsTheme
 
 @AndroidEntryPoint
@@ -117,6 +118,17 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
         )
     }
 
+    if (uiState.showVideoOutputOverrideDialog) {
+        VideoOutputOverridePreferenceDialog(
+            initialControllerStyle = uiState.videoOutputControllerStyle,
+            initialL2R2Style = uiState.videoOutputL2R2Style,
+            onCancel = { viewModel.videoOutputControllerProfileDialogDismissed() },
+            onSave = { newControllerStyle, newL2R2Style ->
+                viewModel.saveVideoOutputControllerProfile(newControllerStyle, newL2R2Style)
+            },
+        )
+    }
+
     if (uiState.showVibrationDialog) {
         VibrationPreferenceDialog(
             initialValue = uiState.currentVibration,
@@ -166,6 +178,15 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                 state = uiState.overrideDelayEnabled,
             ) {
                 viewModel.overrideDelayEnabled(it)
+            }
+            SwitchableTriggerPreference(
+                icon = R.drawable.ic_gamepad_docked,
+                title = R.string.videoOutputOverride,
+                description = R.string.videoOutputOverrideDescription,
+                state = uiState.videoOutputOverrideEnabled,
+                onClick = { viewModel.videoOutputControllerProfileClicked() },
+            ) {
+                viewModel.updateExternalControllerProfilePreference(it)
             }
             SettingsHeader(R.string.quickSettings)
             TriggerPreference(

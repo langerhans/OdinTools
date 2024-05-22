@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.langerhans.odintools.R
 import de.langerhans.odintools.data.SharedPrefsRepo
+import de.langerhans.odintools.models.ControllerStyle
 import de.langerhans.odintools.models.ControllerStyle.Disconnect
 import de.langerhans.odintools.models.ControllerStyle.Odin
 import de.langerhans.odintools.models.ControllerStyle.Xbox
+import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.L2R2Style.Analog
 import de.langerhans.odintools.models.L2R2Style.Both
 import de.langerhans.odintools.models.L2R2Style.Digital
@@ -215,6 +217,41 @@ class MainViewModel @Inject constructor(
         executor.setIntSystemSetting(setting, newValue)
         _uiState.update {
             it.copy(showRemapButtonDialog = false)
+        }
+    }
+
+    fun updateExternalControllerProfilePreference(newValue: Boolean) {
+        prefs.videoOutputOverrideEnabled = newValue
+        _uiState.update {
+            it.copy(videoOutputOverrideEnabled = newValue)
+        }
+    }
+
+    fun videoOutputControllerProfileClicked() {
+        _uiState.update {
+            it.copy(
+                showVideoOutputOverrideDialog = true,
+                videoOutputControllerStyle = ControllerStyle.getById(prefs.videoOutputControllerStyle),
+                videoOutputL2R2Style = L2R2Style.getById(prefs.videoOutputL2R2Style),
+            )
+        }
+    }
+
+    fun videoOutputControllerProfileDialogDismissed() {
+        _uiState.update {
+            it.copy(showVideoOutputOverrideDialog = false)
+        }
+    }
+
+    fun saveVideoOutputControllerProfile(newControllerStyle: ControllerStyle, newL2R2Style: L2R2Style) {
+        prefs.videoOutputControllerStyle = newControllerStyle.id
+        prefs.videoOutputL2R2Style = newL2R2Style.id
+        _uiState.update {
+            it.copy(
+                showVideoOutputOverrideDialog = false,
+                videoOutputControllerStyle = newControllerStyle,
+                videoOutputL2R2Style = newL2R2Style,
+            )
         }
     }
 

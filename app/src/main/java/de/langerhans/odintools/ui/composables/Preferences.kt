@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,10 +21,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -52,6 +59,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import de.langerhans.odintools.R
 import de.langerhans.odintools.main.CheckboxPreferenceUiModel
+import de.langerhans.odintools.models.ControllerStyle
+import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.ui.theme.Typography
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -422,4 +431,141 @@ fun ChargeLimitPreferenceDialog(initialValue: ClosedRange<Int>, onCancel: () -> 
             }
         },
     )
+}
+
+@Composable
+fun SpinnerDialogPreference(
+    @StringRes label: Int,
+    enabled: Boolean = true,
+    items: List<Pair<String, String>>,
+    selectedKey: String,
+    onItemSelected: (selectedItem: String) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val selectedIndex = items.indexOfFirst { it.first == selectedKey }.coerceAtLeast(0)
+    val selectedItem = items.getOrNull(selectedIndex)
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Box(
+        modifier = Modifier
+            .padding(8.dp),
+    ) {
+        OutlinedTextField(
+            label = { Text(text = stringResource(id = label)) },
+            value = selectedItem?.second ?: "",
+            enabled = enabled,
+            readOnly = true,
+            onValueChange = { },
+            trailingIcon = { Icon(Icons.Default.ArrowDropDown, contentDescription = null) },
+            interactionSource = interactionSource,
+        )
+
+        LaunchedEffect(interactionSource) {
+            interactionSource.interactions.collect {
+                expanded = it is PressInteraction.Release
+            }
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            items.forEach {
+                DropdownMenuItem(
+                    text = {
+                        Text(text = it.second)
+                    },
+                    onClick = {
+                        expanded = false
+                        onItemSelected(it.first)
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun VideoOutputOverridePreferenceDialog(
+    initialControllerStyle: ControllerStyle,
+    initialL2R2Style: L2R2Style,
+    onCancel: () -> Unit,
+    onSave: (newControllerStyle: ControllerStyle, newL2R2Style: L2R2Style) -> Unit,
+) {
+    var controllerStyle: String by remember {
+        mutableStateOf(initialControllerStyle.id)
+    }
+    var l2R2Style: String by remember {
+        mutableStateOf(initialL2R2Style.id)
+    }
+
+    val controllerStyleList = listOf(
+        ControllerStyle.Unknown.id to stringResource(id = R.string.noChange),
+        ControllerStyle.Odin.id to stringResource(id = ControllerStyle.Odin.textRes),
+        ControllerStyle.Xbox.id to stringResource(id = ControllerStyle.Xbox.textRes),
+        ControllerStyle.Disconnect.id to stringResource(id = ControllerStyle.Disconnect.textRes),
+    )
+    val l2R2StyleList = listOf(
+        L2R2Style.Unknown.id to stringResource(id = R.string.noChange),
+        L2R2Style.Analog.id to stringResource(id = L2R2Style.Analog.textRes),
+        L2R2Style.Digital.id to stringResource(id = L2R2Style.Digital.textRes),
+        L2R2Style.Both.id to stringResource(id = L2R2Style.Both.textRes),
+    )
+
+    Dialog(onDismissRequest = {}) {
+        Surface(
+            modifier = Modifier,
+            shape = AlertDialogDefaults.shape,
+            color = AlertDialogDefaults.containerColor,
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(24.dp),
+            ) {
+                // Title
+                Text(
+                    text = stringResource(id = R.string.videoOutputOverride),
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+                // Content
+                SpinnerDialogPreference(
+                    label = R.string.controllerStyle,
+                    items = controllerStyleList,
+                    selectedKey = controllerStyle,
+                ) {
+                    controllerStyle = it
+                }
+                SpinnerDialogPreference(
+                    label = R.string.l2r2mode,
+                    items = l2R2StyleList,
+                    selectedKey = l2R2Style,
+                ) {
+                    l2R2Style = it
+                }
+                Spacer(modifier = Modifier.padding(12.dp))
+                // Buttons
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.End),
+                ) {
+                    TextButton(onClick = onCancel) {
+                        Text(text = stringResource(id = R.string.cancel))
+                    }
+                    TextButton(onClick = {
+                        onSave(
+                            ControllerStyle.getById(controllerStyle),
+                            L2R2Style.getById(l2R2Style),
+                        )
+                    }) {
+                        Text(text = stringResource(id = R.string.save))
+                    }
+                }
+            }
+        }
+    }
 }
