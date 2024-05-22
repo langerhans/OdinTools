@@ -21,11 +21,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -306,7 +307,7 @@ fun RemapButtonDialog(initialValue: Int, onCancel: () -> Unit, onReset: () -> Un
     }
 
     Dialog(onDismissRequest = {}) {
-        Box(
+        Surface(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .focusable()
@@ -316,45 +317,49 @@ fun RemapButtonDialog(initialValue: Int, onCancel: () -> Unit, onReset: () -> Un
                     }
                     return@onKeyEvent true
                 },
+            shape = AlertDialogDefaults.shape,
+            color = AlertDialogDefaults.containerColor,
+            tonalElevation = AlertDialogDefaults.TonalElevation,
         ) {
-            Card {
-                Column(
+            Column(
+                modifier = Modifier
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                // Title
+                Text(
+                    text = stringResource(id = R.string.remapButton),
                     modifier = Modifier
-                        .padding(24.dp),
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+                // Body
+                Text(
+                    text = stringResource(id = R.string.pressAnyButton),
+                    style = MaterialTheme.typography.labelLarge,
+                )
+                Text(
+                    text = KeyEvent.keyCodeToString(userValue),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Spacer(modifier = Modifier.padding(12.dp))
+                // Buttons
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.remapButton),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                    Text(
-                        text = stringResource(id = R.string.pressAnyButton),
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                    Text(
-                        text = KeyEvent.keyCodeToString(userValue),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        TextButton(onClick = onReset) {
-                            Text(text = stringResource(id = R.string.setDefault))
+                    TextButton(onClick = onReset) {
+                        Text(text = stringResource(id = R.string.setDefault))
+                    }
+                    Row {
+                        TextButton(onClick = onCancel) {
+                            Text(text = stringResource(id = R.string.cancel))
                         }
-                        Row {
-                            TextButton(onClick = onCancel) {
-                                Text(text = stringResource(id = R.string.cancel))
-                            }
-                            TextButton(onClick = { onSave(userValue) }) {
-                                Text(text = stringResource(id = R.string.save))
-                            }
+                        TextButton(onClick = { onSave(userValue) }) {
+                            Text(text = stringResource(id = R.string.save))
                         }
                     }
                 }
