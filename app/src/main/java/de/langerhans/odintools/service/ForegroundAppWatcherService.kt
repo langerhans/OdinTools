@@ -232,6 +232,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
         contentResolver.unregisterContentObserver(imeObserver)
         prefs.removeAppOverrideEnabledObserver()
         prefs.removeChargeLimitEnabledObserver()
+        prefs.removeVideoOutputOverrideEnabledObserver()
     }
 
     companion object {
