@@ -122,9 +122,9 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
         VideoOutputOverridePreferenceDialog(
             initialControllerStyle = uiState.videoOutputControllerStyle,
             initialL2R2Style = uiState.videoOutputL2R2Style,
-            onCancel = { viewModel.videoOutputControllerProfileDialogDismissed() },
+            onCancel = { viewModel.videoOutputOverrideDialogDismissed() },
             onSave = { newControllerStyle, newL2R2Style ->
-                viewModel.saveVideoOutputControllerProfile(newControllerStyle, newL2R2Style)
+                viewModel.saveVideoOutputOverride(newControllerStyle, newL2R2Style)
             },
         )
     }
@@ -184,9 +184,9 @@ fun SettingsScreen(viewModel: MainViewModel = hiltViewModel(), navigateToOverrid
                 title = R.string.videoOutputOverride,
                 description = R.string.videoOutputOverrideDescription,
                 state = uiState.videoOutputOverrideEnabled,
-                onClick = { viewModel.videoOutputControllerProfileClicked() },
+                onClick = { viewModel.videoOutputOverrideClicked() },
             ) {
-                viewModel.updateExternalControllerProfilePreference(it)
+                viewModel.updateVideoOutputOverridePreference(it)
             }
             SettingsHeader(R.string.quickSettings)
             TriggerPreference(

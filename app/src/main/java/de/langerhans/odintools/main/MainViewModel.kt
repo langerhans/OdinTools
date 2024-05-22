@@ -220,14 +220,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun updateExternalControllerProfilePreference(newValue: Boolean) {
+    fun updateVideoOutputOverridePreference(newValue: Boolean) {
         prefs.videoOutputOverrideEnabled = newValue
         _uiState.update {
             it.copy(videoOutputOverrideEnabled = newValue)
         }
     }
 
-    fun videoOutputControllerProfileClicked() {
+    fun videoOutputOverrideClicked() {
         _uiState.update {
             it.copy(
                 showVideoOutputOverrideDialog = true,
@@ -237,13 +237,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun videoOutputControllerProfileDialogDismissed() {
+    fun videoOutputOverrideDialogDismissed() {
         _uiState.update {
             it.copy(showVideoOutputOverrideDialog = false)
         }
     }
 
-    fun saveVideoOutputControllerProfile(newControllerStyle: ControllerStyle, newL2R2Style: L2R2Style) {
+    fun saveVideoOutputOverride(newControllerStyle: ControllerStyle, newL2R2Style: L2R2Style) {
         prefs.videoOutputControllerStyle = newControllerStyle.id
         prefs.videoOutputL2R2Style = newL2R2Style.id
         _uiState.update {

@@ -87,8 +87,8 @@ class SharedPrefsRepo @Inject constructor(
     }
 
     var videoOutputOverrideEnabled
-        get() = prefs.getBoolean(KEY_EXTERNAL_CONTROLLER_PROFILE_ENABLED, false)
-        set(value) = prefs.edit().putBoolean(KEY_EXTERNAL_CONTROLLER_PROFILE_ENABLED, value).apply()
+        get() = prefs.getBoolean(KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED, value).apply()
 
     var videoOutputControllerStyle
         get() = prefs.getString(KEY_VIDEO_OUTPUT_CONTROLLER_STYLE, ControllerStyle.Unknown.id)
@@ -102,7 +102,7 @@ class SharedPrefsRepo @Inject constructor(
 
     fun observeVideoOutputOverrideEnabledState(onExternalControllerProfileEnabled: (newState: Boolean) -> Unit) {
         externalControllerProfileEnabledListener = OnSharedPreferenceChangeListener { _, key ->
-            if (key == KEY_EXTERNAL_CONTROLLER_PROFILE_ENABLED) {
+            if (key == KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED) {
                 onExternalControllerProfileEnabled(videoOutputOverrideEnabled)
             }
         }
@@ -126,7 +126,7 @@ class SharedPrefsRepo @Inject constructor(
         private const val KEY_CHARGE_LIMIT_ENABLED = "charge_limit_enabled"
         private const val KEY_MIN_BATTERY_LEVEL = "min_battery_level"
         private const val KEY_MAX_BATTERY_LEVEL = "max_battery_level"
-        private const val KEY_EXTERNAL_CONTROLLER_PROFILE_ENABLED = "video_output_override_enabled"
+        private const val KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED = "video_output_override_enabled"
         private const val KEY_VIDEO_OUTPUT_CONTROLLER_STYLE = "video_output_override_controller_style"
         private const val KEY_VIDEO_OUTPUT_L2R2_STYLE = "video_output_override_l2r2_style"
     }
