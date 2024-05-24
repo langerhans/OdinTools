@@ -18,6 +18,7 @@ import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.tools.BatteryLevelReceiver
 import de.langerhans.odintools.tools.ShellExecutor
+import de.langerhans.odintools.tools.VideoOutputReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -38,6 +39,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     lateinit var prefs: SharedPrefsRepo
 
     private var batteryLevelReceiver: BatteryLevelReceiver = BatteryLevelReceiver()
+    private var videoOutputReceiver: VideoOutputReceiver = VideoOutputReceiver()
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -63,6 +65,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     }
 
     private var chargeLimitEnabled: Boolean = false
+    private var videoOutputOverrideEnabled: Boolean = false
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         if (shouldIgnore(event)) return
@@ -102,18 +105,21 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
             savedFanMode = FanMode.getMode(executor)
         }
 
-        ControllerStyle.getById(override.controllerStyle).takeIf {
-            it != Unknown
-        }?.enable(executor) ?: run {
-            // Reset to default if we switch between override and NoChange app
-            savedControllerStyle?.enable(executor)
-        }
+        // Avoid conflicts with Video Output Override
+        if (!videoOutputOverrideEnabled || !videoOutputReceiver.overrideEnabled) {
+            ControllerStyle.getById(override.controllerStyle).takeIf {
+                it != Unknown
+            }?.enable(executor) ?: run {
+                // Reset to default if we switch between override and NoChange app
+                savedControllerStyle?.enable(executor)
+            }
 
-        L2R2Style.getById(override.l2R2Style).takeIf {
-            it != L2R2Style.Unknown
-        }?.enable(executor) ?: run {
-            // Reset to default if we switch between override and NoChange app
-            savedL2R2Style?.enable(executor)
+            L2R2Style.getById(override.l2R2Style).takeIf {
+                it != L2R2Style.Unknown
+            }?.enable(executor) ?: run {
+                // Reset to default if we switch between override and NoChange app
+                savedL2R2Style?.enable(executor)
+            }
         }
 
         PerfMode.getById(override.perfMode).takeIf {
@@ -165,6 +171,20 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
         chargeLimitEnabled = newValue
     }
 
+    private fun applyVideoOutputOverride(newValue: Boolean) {
+        if (newValue && !videoOutputOverrideEnabled) {
+            val intentFilter = IntentFilter().apply {
+                VideoOutputReceiver.ALLOWED_INTENTS.forEach { action ->
+                    addAction(action)
+                }
+            }
+            registerReceiver(videoOutputReceiver, intentFilter)
+        } else if (!newValue && videoOutputOverrideEnabled) {
+            unregisterReceiver(videoOutputReceiver)
+        }
+        videoOutputOverrideEnabled = newValue
+    }
+
     override fun onInterrupt() {
         // Nothing here
     }
@@ -192,6 +212,11 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
             applyChargeLimit(it)
         }
 
+        applyVideoOutputOverride(prefs.videoOutputOverrideEnabled)
+        prefs.observeVideoOutputOverrideEnabledState {
+            applyVideoOutputOverride(it)
+        }
+
         scope.launch {
             appOverrideDao.getAll()
                 .flowOn(Dispatchers.IO)
@@ -207,6 +232,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
         contentResolver.unregisterContentObserver(imeObserver)
         prefs.removeAppOverrideEnabledObserver()
         prefs.removeChargeLimitEnabledObserver()
+        prefs.removeVideoOutputOverrideEnabledObserver()
     }
 
     companion object {

@@ -4,6 +4,8 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import de.langerhans.odintools.models.ControllerStyle
+import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.tools.DeviceType
 import de.langerhans.odintools.tools.DeviceType.ODIN2
 
@@ -22,6 +24,11 @@ data class MainUiModel(
 
     val showSaturationDialog: Boolean = false,
     val currentSaturation: Float = 1.0f,
+
+    val showVideoOutputOverrideDialog: Boolean = false,
+    val videoOutputOverrideEnabled: Boolean = false,
+    val videoOutputControllerStyle: ControllerStyle = ControllerStyle.Unknown,
+    val videoOutputL2R2Style: L2R2Style = L2R2Style.Unknown,
 
     val showVibrationDialog: Boolean = false,
     val vibrationEnabled: Boolean = false,

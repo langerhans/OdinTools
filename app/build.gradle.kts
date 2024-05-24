@@ -84,4 +84,8 @@ dependencies {
     ksp(libs.bundles.appKsp)
     testImplementation(libs.bundles.appUnitTest)
     androidTestImplementation(libs.bundles.appAndroidTest)
+
+    // Hilt dependencies
+    implementation(libs.com.google.dagger.hilt.android)
+    ksp(libs.com.google.dagger.hilt.android.compiler)
 }

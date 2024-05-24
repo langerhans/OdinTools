@@ -3,6 +3,8 @@ package de.langerhans.odintools.data
 import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import dagger.hilt.android.qualifiers.ApplicationContext
+import de.langerhans.odintools.models.ControllerStyle
+import de.langerhans.odintools.models.L2R2Style
 import javax.inject.Inject
 
 class SharedPrefsRepo @Inject constructor(
@@ -84,6 +86,34 @@ class SharedPrefsRepo @Inject constructor(
         appOverrideEnabledListener = null
     }
 
+    var videoOutputOverrideEnabled
+        get() = prefs.getBoolean(KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED, value).apply()
+
+    var videoOutputControllerStyle
+        get() = prefs.getString(KEY_VIDEO_OUTPUT_CONTROLLER_STYLE, ControllerStyle.Unknown.id)
+        set(value) = prefs.edit().putString(KEY_VIDEO_OUTPUT_CONTROLLER_STYLE, value).apply()
+
+    var videoOutputL2R2Style
+        get() = prefs.getString(KEY_VIDEO_OUTPUT_L2R2_STYLE, L2R2Style.Unknown.id)
+        set(value) = prefs.edit().putString(KEY_VIDEO_OUTPUT_L2R2_STYLE, value).apply()
+
+    private var videoOutputOverrideEnabledListener: OnSharedPreferenceChangeListener? = null
+
+    fun observeVideoOutputOverrideEnabledState(onVideoOutputOverrideEnabled: (newState: Boolean) -> Unit) {
+        videoOutputOverrideEnabledListener = OnSharedPreferenceChangeListener { _, key ->
+            if (key == KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED) {
+                onVideoOutputOverrideEnabled(videoOutputOverrideEnabled)
+            }
+        }
+        prefs.registerOnSharedPreferenceChangeListener(videoOutputOverrideEnabledListener)
+    }
+
+    fun removeVideoOutputOverrideEnabledObserver() {
+        prefs.unregisterOnSharedPreferenceChangeListener(videoOutputOverrideEnabledListener)
+        videoOutputOverrideEnabledListener = null
+    }
+
     companion object {
         private const val PREFS_NAME = "odintools"
 
@@ -96,5 +126,8 @@ class SharedPrefsRepo @Inject constructor(
         private const val KEY_CHARGE_LIMIT_ENABLED = "charge_limit_enabled"
         private const val KEY_MIN_BATTERY_LEVEL = "min_battery_level"
         private const val KEY_MAX_BATTERY_LEVEL = "max_battery_level"
+        private const val KEY_VIDEO_OUTPUT_OVERRIDE_ENABLED = "video_output_override_enabled"
+        private const val KEY_VIDEO_OUTPUT_CONTROLLER_STYLE = "video_output_override_controller_style"
+        private const val KEY_VIDEO_OUTPUT_L2R2_STYLE = "video_output_override_l2r2_style"
     }
 }

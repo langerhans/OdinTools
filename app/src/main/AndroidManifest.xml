@@ -6,8 +6,8 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="com.odin2.permission.RECEIVE_VIDEO_OUTPUT_PORT_CHANGE"/>
+    <uses-permission android:name="com.retrostation.permission.RECEIVE_VIDEO_OUTPUT_PORT_CHANGE"/>
 
     <application
         android:name=".OdinToolsApplication"
