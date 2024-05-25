@@ -1,7 +1,7 @@
 # OdinTools
 Collection of utilities for the AYN Odin 2.  
 
-Latest release: **[1.3.0](https://github.com/langerhans/OdinTools/releases/latest)**
+Latest release: **[1.3.1](https://github.com/langerhans/OdinTools/releases/latest)**
 
 [![Build OdinTools](https://github.com/langerhans/OdinTools/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/langerhans/OdinTools/actions/workflows/build.yml)
 ### Features
