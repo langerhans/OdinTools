@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.com.google.devtools.ksp) apply false
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.compose.compiler) apply false
 
     alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
