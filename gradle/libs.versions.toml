@@ -1,23 +1,23 @@
 [versions]
 androidx-activity = "1.9.0"
-androidx-annotation-annotation-jvm = "1.7.1"
-androidx-compose-bom = "2024.02.00"
+androidx-annotation-annotation-jvm = "1.8.0"
+androidx-compose-bom = "2024.05.00"
 androidx-hilt = "1.2.0"
-androidx-lifecycle = "2.7.0"
+androidx-lifecycle = "2.8.0"
 androidx-navigation = "2.7.7"
 androidx-room = "2.6.1"
 androidx-test-espresso-espresso-core = "3.5.1"
 androidx-test-ext-junit = "1.1.5"
-com-android-application = "8.3.2"
+com-android-application = "8.4.1"
 com-github-ben-manes-versions = "0.51.0"
 com-google-accompanist-accompanist-drawablepainter = "0.34.0"
 com-google-dagger = "2.51.1"
-com-google-dagger-hilt-android = "2.50"
-com-google-devtools-ksp = "1.9.22-1.0.17"
+com-google-dagger-hilt-android = "2.51.1"
+com-google-devtools-ksp = "2.0.0-1.0.21"
 junit = "4.13.2"
-ktlint = "12.1.0"
+ktlint = "12.1.1"
 nl-littlerobots-version-catalog-update = "0.8.4"
-org-jetbrains-kotlin-android = "1.9.22"
+kotlin = "2.0.0"
 
 [libraries]
 androidx-activity-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -51,9 +51,10 @@ com-android-application = { id = "com.android.application", version.ref = "com-a
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "com-github-ben-manes-versions" }
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger-hilt-android" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "nl-littlerobots-version-catalog-update" }
-org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 [bundles]
 app = [
