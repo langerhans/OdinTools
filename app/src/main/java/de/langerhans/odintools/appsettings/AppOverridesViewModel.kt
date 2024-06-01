@@ -12,6 +12,7 @@ import de.langerhans.odintools.models.FanMode.Companion.getDisabledFanModes
 import de.langerhans.odintools.models.L2R2Style
 import de.langerhans.odintools.models.NoChange
 import de.langerhans.odintools.models.PerfMode
+import de.langerhans.odintools.tools.DeviceType
 import de.langerhans.odintools.tools.DeviceUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +38,7 @@ class AppOverridesViewModel @Inject constructor(
     private var initialControllerStyle = NoChange.KEY
     private var initialL2R2Style = NoChange.KEY
     private var initialPerfMode = NoChange.KEY
+    private var initialVibrationStrength: Int? = null
     private var initialFanMode = NoChange.KEY
 
     init {
@@ -51,6 +53,7 @@ class AppOverridesViewModel @Inject constructor(
                 initialControllerStyle = app.controllerStyle ?: NoChange.KEY
                 initialL2R2Style = app.l2R2Style ?: NoChange.KEY
                 initialPerfMode = app.perfMode ?: NoChange.KEY
+                initialVibrationStrength = app.vibrationStrength ?: null
                 initialFanMode = app.fanMode ?: NoChange.KEY
 
                 appOverrideMapper.mapAppOverride(app)
@@ -77,6 +80,7 @@ class AppOverridesViewModel @Inject constructor(
                         l2R2Style = _uiState.value.app?.l2r2Style?.id,
                         perfMode = _uiState.value.app?.perfMode?.id,
                         fanMode = _uiState.value.app?.fanMode?.id,
+                        vibrationStrength = _uiState.value.app?.vibrationStrength,
                     ),
                 )
             }
@@ -161,17 +165,32 @@ class AppOverridesViewModel @Inject constructor(
         }
     }
 
+    fun vibrationStrengthSelected(strength: Int) {
+        _uiState.update {
+            it.copy(
+                app = it.app?.copy(vibrationStrength = strength),
+                hasUnsavedChanges = hasUnsavedChanges(vibrationStrength = strength),
+            )
+        }
+    }
+
+    fun getDeviceType(): DeviceType {
+        return deviceUtils.getDeviceType()
+    }
+
     private fun hasUnsavedChanges(
         controllerStyle: String? = null,
         l2R2Style: String? = null,
         perfMode: String? = null,
         fanMode: String? = null,
+        vibrationStrength: Int? = null,
     ): Boolean {
         return listOf(
             (controllerStyle ?: _uiState.value.app?.controllerStyle?.id) != initialControllerStyle,
             (l2R2Style ?: _uiState.value.app?.l2r2Style?.id) != initialL2R2Style,
             (perfMode ?: _uiState.value.app?.perfMode?.id) != initialPerfMode,
             (fanMode ?: _uiState.value.app?.fanMode?.id) != initialFanMode,
+            (vibrationStrength ?: _uiState.value.app?.vibrationStrength) != initialVibrationStrength,
         ).any { it }
     }
 

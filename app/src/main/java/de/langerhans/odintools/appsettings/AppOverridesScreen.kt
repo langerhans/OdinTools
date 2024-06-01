@@ -23,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,9 +50,11 @@ import de.langerhans.odintools.models.PerfMode
 import de.langerhans.odintools.models.PerfMode.HighPerformance
 import de.langerhans.odintools.models.PerfMode.Performance
 import de.langerhans.odintools.models.PerfMode.Standard
+import de.langerhans.odintools.tools.DeviceType
 import de.langerhans.odintools.ui.composables.DeleteConfirmDialog
 import de.langerhans.odintools.ui.composables.LargeDropdownMenu
 import de.langerhans.odintools.ui.composables.OdinTopAppBar
+import de.langerhans.odintools.ui.composables.VibrationPreferenceDialog
 import de.langerhans.odintools.ui.theme.Typography
 
 @Composable
@@ -181,6 +184,17 @@ fun AppOverridesScreen(viewModel: AppOverridesViewModel = hiltViewModel(), navig
                     onSelectionChanged = { viewModel.perfModeSelected(it) },
                     modifier = Modifier.padding(bottom = 16.dp),
                 )
+                if (viewModel.getDeviceType() == DeviceType.ODIN2) {
+                    Column {
+                        VibrationPreferenceRow(
+                            label = stringResource(id = R.string.vibrationStrength),
+                            initialValue = uiState.app?.vibrationStrength ?: 0,
+                            onSave = { newValue ->
+                                viewModel.vibrationStrengthSelected(newValue)
+                            },
+                        )
+                    }
+                }
                 if (uiState.app?.perfMode != null && uiState.app?.perfMode != PerfMode.Unknown) {
                     OverrideSpinnerRow(
                         label = R.string.fanMode,
@@ -264,6 +278,40 @@ fun OverrideSpinnerRow(
             options = spinnerItems,
             initialSelection = initialSelection,
             onSelectionChanged = onSelectionChanged,
+        )
+    }
+}
+
+@Composable
+fun VibrationPreferenceRow(label: String, initialValue: Int, onSave: (newValue: Int) -> Unit, modifier: Modifier = Modifier) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .padding(8.dp),
+    ) {
+        Text(
+            text = label,
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 16.dp),
+        )
+        OutlinedButton(
+            onClick = { showDialog = true },
+        ) {
+            Text(text = "$initialValue")
+        }
+    }
+
+    if (showDialog) {
+        VibrationPreferenceDialog(
+            initialValue = initialValue,
+            onCancel = { showDialog = false },
+            onSave = { newValue ->
+                onSave(newValue)
+                showDialog = false
+            },
         )
     }
 }

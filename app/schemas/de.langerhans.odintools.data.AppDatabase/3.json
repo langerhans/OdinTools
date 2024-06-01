@@ -1,0 +1,64 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "83c89ea9294a5f18c12f79b54aecff49",
+    "entities": [
+      {
+        "tableName": "appoverride",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `controllerStyle` TEXT, `l2R2Style` TEXT, `perfMode` TEXT, `fanMode` TEXT, `vibrationStrength` INTEGER, PRIMARY KEY(`packageName`))",
+        "fields": [
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "controllerStyle",
+            "columnName": "controllerStyle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "l2R2Style",
+            "columnName": "l2R2Style",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "perfMode",
+            "columnName": "perfMode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fanMode",
+            "columnName": "fanMode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "vibrationStrength",
+            "columnName": "vibrationStrength",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "packageName"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83c89ea9294a5f18c12f79b54aecff49')"
+    ]
+  }
+}

@@ -44,16 +44,18 @@ class AppOverrideMapper @Inject constructor(
         val l2R2Style = L2R2Style.getById(app.l2R2Style)
         val perfMode = PerfMode.getById(app.perfMode)
         val fanMode = FanMode.getById(app.fanMode)
+        val vibrationStrength = app.vibrationStrength
 
         return AppUiModel(
             packageName = app.packageName,
             appName = context.packageManager.getApplicationLabel(appInfo).toString(),
             appIcon = context.packageManager.getApplicationIcon(appInfo),
-            subtitle = getSubtitle(controllerStyle, l2R2Style, perfMode, fanMode),
+            subtitle = getSubtitle(controllerStyle, l2R2Style, perfMode, fanMode, vibrationStrength),
             controllerStyle = controllerStyle,
             l2r2Style = l2R2Style,
             perfMode = perfMode,
             fanMode = fanMode,
+            vibrationStrength = vibrationStrength,
         )
     }
 
@@ -68,7 +70,13 @@ class AppOverrideMapper @Inject constructor(
         )
     }
 
-    private fun getSubtitle(controllerStyle: ControllerStyle, l2R2Style: L2R2Style, perfMode: PerfMode, fanMode: FanMode): String? {
+    private fun getSubtitle(
+        controllerStyle: ControllerStyle,
+        l2R2Style: L2R2Style,
+        perfMode: PerfMode,
+        fanMode: FanMode,
+        vibrationStrength: Int?,
+    ): String? {
         return buildString {
             if (controllerStyle != ControllerStyle.Unknown) {
                 append(context.getString(R.string.controllerStyle))
@@ -86,6 +94,12 @@ class AppOverrideMapper @Inject constructor(
                 append(context.getString(R.string.perfMode))
                 append(": ")
                 append(context.getString(perfMode.textRes))
+                append(" | ")
+            }
+            if (vibrationStrength != null) {
+                append(context.getString(R.string.vibrationStrength))
+                append(": ")
+                append(vibrationStrength.toString())
                 append(" | ")
             }
             if (fanMode != FanMode.Unknown) {

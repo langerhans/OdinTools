@@ -54,6 +54,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
     private var savedL2R2Style: L2R2Style? = null
     private var savedPerfMode: PerfMode? = null
     private var savedFanMode: FanMode? = null
+    private var savedVibrationStrength: Int? = null
 
     private var currentIme = ""
     private val imeObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
@@ -103,6 +104,7 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
             savedL2R2Style = L2R2Style.getStyle(executor)
             savedPerfMode = PerfMode.getMode(executor)
             savedFanMode = FanMode.getMode(executor)
+            savedVibrationStrength = executor.getVibrationStrength().getOrNull()
         }
 
         // Avoid conflicts with Video Output Override
@@ -136,6 +138,12 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
             savedFanMode?.enable(executor)
         }
 
+        if (override.vibrationStrength != null) {
+            executor.setVibrationStrength(override.vibrationStrength)
+        } else {
+            executor.setVibrationStrength(savedVibrationStrength)
+        }
+
         hasSetOverride = true
     }
 
@@ -153,6 +161,9 @@ class ForegroundAppWatcherService @Inject constructor() : AccessibilityService()
 
         savedFanMode?.enable(executor)
         savedFanMode = null
+
+        executor.setVibrationStrength(savedVibrationStrength)
+        savedVibrationStrength = null
 
         hasSetOverride = false
     }

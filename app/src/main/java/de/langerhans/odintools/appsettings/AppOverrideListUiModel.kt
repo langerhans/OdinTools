@@ -33,4 +33,5 @@ data class AppUiModel(
     val l2r2Style: L2R2Style? = null,
     val fanMode: FanMode? = null,
     val perfMode: PerfMode? = null,
+    val vibrationStrength: Int? = null,
 )
