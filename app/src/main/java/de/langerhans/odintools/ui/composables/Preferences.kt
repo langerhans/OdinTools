@@ -311,8 +311,34 @@ fun VibrationPreferenceDialog(initialValue: Int, onCancel: () -> Unit, onSave: (
 @Composable
 fun RemapButtonDialog(initialValue: Int, onCancel: () -> Unit, onReset: () -> Unit, onSave: (newValue: Int) -> Unit) {
     val focusRequester = remember { FocusRequester() }
-    var userValue: Int by remember {
-        mutableIntStateOf(initialValue)
+    var userValue: Int by remember { mutableIntStateOf(initialValue) }
+
+    val keyCodeList = listOf(
+        KeyEvent.KEYCODE_BUTTON_A to stringResource(id = R.string.keyA),
+        KeyEvent.KEYCODE_BUTTON_B to stringResource(id = R.string.keyB),
+        KeyEvent.KEYCODE_BUTTON_C to stringResource(id = R.string.keyC),
+        KeyEvent.KEYCODE_BUTTON_X to stringResource(id = R.string.keyX),
+        KeyEvent.KEYCODE_BUTTON_Y to stringResource(id = R.string.keyY),
+        KeyEvent.KEYCODE_BUTTON_Z to stringResource(id = R.string.keyZ),
+        KeyEvent.KEYCODE_BUTTON_L1 to stringResource(id = R.string.keyL1),
+        KeyEvent.KEYCODE_BUTTON_L2 to stringResource(id = R.string.keyL2),
+        KeyEvent.KEYCODE_BUTTON_THUMBL to stringResource(id = R.string.keyL3),
+        KeyEvent.KEYCODE_BUTTON_R1 to stringResource(id = R.string.keyR1),
+        KeyEvent.KEYCODE_BUTTON_R2 to stringResource(id = R.string.keyR2),
+        KeyEvent.KEYCODE_BUTTON_THUMBR to stringResource(id = R.string.keyR3),
+        KeyEvent.KEYCODE_BUTTON_START to stringResource(id = R.string.keyStart),
+        KeyEvent.KEYCODE_BUTTON_SELECT to stringResource(id = R.string.keySelect),
+        KeyEvent.KEYCODE_BUTTON_MODE to stringResource(id = R.string.keyMode),
+        KeyEvent.KEYCODE_DPAD_UP to stringResource(id = R.string.keyDPadUp),
+        KeyEvent.KEYCODE_DPAD_DOWN to stringResource(id = R.string.keyDPadDown),
+        KeyEvent.KEYCODE_DPAD_LEFT to stringResource(id = R.string.keyDPadLeft),
+        KeyEvent.KEYCODE_DPAD_RIGHT to stringResource(id = R.string.keyDPadRight),
+        KeyEvent.KEYCODE_BACK to stringResource(id = R.string.keyBack),
+        KeyEvent.KEYCODE_HOME to stringResource(id = R.string.keyHome),
+        KeyEvent.KEYCODE_MENU to stringResource(id = R.string.keyMenu),
+    )
+    val keyCodeToStringList = keyCodeList.map { (code, resource) ->
+        KeyEvent.keyCodeToString(code) to resource
     }
 
     Dialog(onDismissRequest = {}) {
@@ -349,10 +375,13 @@ fun RemapButtonDialog(initialValue: Int, onCancel: () -> Unit, onReset: () -> Un
                     text = stringResource(id = R.string.pressAnyButton),
                     style = MaterialTheme.typography.labelLarge,
                 )
-                Text(
-                    text = KeyEvent.keyCodeToString(userValue),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
+                SpinnerDialogPreference(
+                    label = R.string.selectButton,
+                    items = keyCodeToStringList,
+                    selectedKey = KeyEvent.keyCodeToString(userValue),
+                ) {
+                    userValue = KeyEvent.keyCodeFromString(it)
+                }
                 Spacer(modifier = Modifier.padding(12.dp))
                 // Buttons
                 Row(

@@ -70,7 +70,8 @@
     <string name="remapButtonDescription">Remap button to another key code</string>
     <string name="m1Button">M1 button</string>
     <string name="m2Button">M2 button</string>
-    <string name="pressAnyButton">Press any button</string>
+    <string name="pressAnyButton">Press any button or…</string>
+    <string name="selectButton">Select button</string>
     <string name="setDefault">Set Default</string>
 
     <string name="battery">Battery</string>
@@ -85,4 +86,27 @@
     <string name="debug">Debug</string>
     <string name="dumpLogToFile">Dump log to file</string>
     <string name="dumpLogToFileDescription">Dump log output to a text file in the internal memory.</string>
+
+    <string name="keyA">A Button</string>
+    <string name="keyB">B Button</string>
+    <string name="keyC">C Button</string>
+    <string name="keyX">X Button</string>
+    <string name="keyY">Y Button</string>
+    <string name="keyZ">Z Button</string>
+    <string name="keyL1">L1 Button</string>
+    <string name="keyL2">L2 Button</string>
+    <string name="keyL3">Left Stick Button</string>
+    <string name="keyR1">R1 Button</string>
+    <string name="keyR2">R2 Button</string>
+    <string name="keyR3">Right Stick Button</string>
+    <string name="keyDPadUp">D-Pad Up</string>
+    <string name="keyDPadDown">D-Pad Down</string>
+    <string name="keyDPadLeft">D-Pad Left</string>
+    <string name="keyDPadRight">D-Pad Right</string>
+    <string name="keyStart">Start</string>
+    <string name="keySelect">Select</string>
+    <string name="keyBack">Back</string>
+    <string name="keyHome">Home</string>
+    <string name="keyMode">Guide</string>
+    <string name="keyMenu">Menu</string>
 </resources>
